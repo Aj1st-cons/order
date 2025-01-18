@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Grocery</title>
+  <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
+    #welcome, #emirates-screen, #abudhabi, #dubai, #sharjah, #ajman, #um-al-quain, #ras-al-khaimah, #fujairah {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        color: #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+        text-align: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+    }
+    #welcome.visible, #emirates-screen.visible, #abudhabi.visible, #sharjah.visible, #dubai.visible, #ajman.visible, #um-al-quain.visible, #ras-al-khaimah.visible, #fujairah.visible {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease-in-out, visibility 0s linear 0s;
+    }
+    #welcome img {
+        max-width: 300px;
+        margin-left: 50px;
+        animation: fade-in 0.5s ease-in-out forwards;
+    }
+    h1 {
+        display: flex;
+        gap: 1px;
+        font-size: 50px;
+        color: #009500;
+        margin-top: -5px;
+        text-shadow: 1px 1px 2px black;
+    }
+    h1 span {
+        opacity: 0;
+        transform: scale(0.8);
+        animation: letter-emerge 0.3s ease-in-out forwards;
+    }
+    h1 span.space {
+        width: 10px;
+    }
+    h1 span:nth-child(1) { animation-delay: 0.5s; }
+h1 span:nth-child(2) { animation-delay: 0.55s; }
+h1 span:nth-child(3) { animation-delay: 0.6s; }
+h1 span:nth-child(4) { animation-delay: 0.65s; }
+h1 span:nth-child(5) { animation-delay: 0.7s; }
+h1 span:nth-child(6) { animation-delay: 0.75s; }
+h1 span:nth-child(7) { animation-delay: 0.8s; }
+h1 span:nth-child(8) { animation-delay: 0.85s; }
+h1 span:nth-child(9) { animation-delay: 0.9s; }
+h1 span:nth-child(10) { animation-delay: 0.95s; }
+        
+    #emirates-screen, #abudhabi, #dubai, #sharjah, #ajman, #um-al-quain, #ras-al-khaimah, #fujairah {
+        overflow: hidden;
+        font-size: 18px;
+    }
+
+    #abudhabi, #dubai, #sharjah, #ajman, #um-al-quain, #ras-al-khaimah, #fujairah {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .city-heading {
+        position: absolute;
+        top: 15%;
+        width: 100%;
+        text-align: center;
+        font-style: italic;
+        font-weight: bold;
+        color: #000;
+    }
+
+    .city-list {
+        position: absolute;
+        top: 20%;
+        bottom: 10%;
+        width: 100%;
+        overflow-y: auto;
+        padding: 0 20px;
+    }
+    .close-btn {
+        position: absolute; 
+        top: 10px; right: 10px; 
+        padding: 5px 10px; 
+        cursor: pointer; 
+        background: none; 
+        border: none;
+    }
+
+    .emirate {
+        font-weight: bold;
+        color: #009500;
+        line-height: 2;
+        text-decoration: none;
+        cursor: pointer;
+        margin-bottom: 10px;
+        display: block;
+        text-align: center;
+    }
+
+    .emirate:hover {
+        color: #005500;
+    }
+
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    @keyframes letter-emerge {
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+  </style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">  
+</head>
+<body>
+  <!-- Welcome Screen -->
+  <div id="welcome" class="visible">
+    <img src="https://cdn.shopify.com/s/files/1/0702/6055/5812/files/1737187541446.png?v=1737188824" alt="Welcome Image">
+    <h1>
+  <span>O</span><span>r</span><span>d</span><span>e</span><span>r</span>
+  <span>-</span>
+  <span>A</span><span>p</span><span>p</span>
+</h1>
+  </div>
+
+  <!-- Emirates Screen -->
+  <div id="emirates-screen">
+    <div class="city-heading"><b>select your Emirates:</b></div>
+    
+<span class="emirate" id="du">Dubai</span>    
+<span class="emirate" id="shj">Sharjah</span>
+<span class="emirate" id="ad">Abu Dhabi</span>
+<span class="emirate" id="aj">Ajman</span>
+<span class="emirate" id="uaq">Um Al Quain</span>
+<span class="emirate" id="rak">Ras Al Khaimah</span>
+<span class="emirate" id="fuj">Fujairah</span>    
+  </div>
+
+  <!-- Abu Dhabi Cities Screen -->
+  <div id="abudhabi">
+    <div class="city-heading"><b>select your City:</b><button class="close-btn" data-target="emirates-screen">
+    <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i>
+</button></div>
+    <div class="city-list">
+      <a class="emirate" href="https://example.com/city1" target="_blank">City 1</a>
+      <a class="emirate" href="https://example.com/city2" target="_blank">City 2</a>
+      <a class="emirate" href="https://example.com/city3" target="_blank">City 3</a>
+      <a class="emirate" href="https://example.com/city4" target="_blank">City 4</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 5</a>
+      <a class="emirate" href="https://example.com/city6" target="_blank">City 6</a>
+      <a class="emirate" href="https://example.com/city7" target="_blank">City 7</a>
+      <a class="emirate" href="https://example.com/city8" target="_blank">City 8</a>
+      <a class="emirate" href="https://example.com/city9" target="_blank">City 9</a>
+      <a class="emirate" href="https://example.com/city10" target="_blank">City 10</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 11</a>
+    <a class="emirate" href="https://example.com/city6" target="_blank">City 12</a>
+    <a class="emirate" href="https://example.com/city7" target="_blank">City 13</a>
+    <a class="emirate" href="https://example.com/city8" target="_blank">City 14</a>
+    <a class="emirate" href="https://example.com/city9" target="_blank">City 15</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 16</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 17</a>
+    </div>
+  </div>
+  
+    <!-- dubai Cities Screen -->
+  <div id="dubai">
+    <div class="city-heading"><b>select your City:</b><button class="close-btn" data-target="emirates-screen">
+    <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i>
+</button></div>
+    <div class="city-list">
+      <a class="emirate" href="https://example.com/city1" target="_blank">City 1</a>
+      <a class="emirate" href="https://example.com/city2" target="_blank">City 2</a>
+      <a class="emirate" href="https://example.com/city3" target="_blank">City 3</a>
+      <a class="emirate" href="https://example.com/city4" target="_blank">City 4</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 5</a>
+      <a class="emirate" href="https://example.com/city6" target="_blank">City 6</a>
+      <a class="emirate" href="https://example.com/city7" target="_blank">City 7</a>
+      <a class="emirate" href="https://example.com/city8" target="_blank">City 8</a>
+      <a class="emirate" href="https://example.com/city9" target="_blank">City 9</a>
+      <a class="emirate" href="https://example.com/city10" target="_blank">City 10</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 11</a>
+    <a class="emirate" href="https://example.com/city6" target="_blank">City 12</a>
+    <a class="emirate" href="https://example.com/city7" target="_blank">City 13</a>
+    <a class="emirate" href="https://example.com/city8" target="_blank">City 14</a>
+    <a class="emirate" href="https://example.com/city9" target="_blank">City 15</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 16</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 17</a>
+    </div>
+  </div>
+  
+   <!-- Sharjah Cities Screen -->
+  <div id="sharjah">
+    <div class="city-heading"><b>select your City:</b><button class="close-btn" data-target="emirates-screen">
+    <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i>
+</button>
+    </div>
+    <div class="city-list">
+      <a class="emirate" href="https://example.com/city1" target="_blank">City 1</a>
+      <a class="emirate" href="https://example.com/city2" target="_blank">City 2</a>
+      <a class="emirate" href="https://example.com/city3" target="_blank">City 3</a>
+      <a class="emirate" href="https://example.com/city4" target="_blank">City 4</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 5</a>
+      <a class="emirate" href="https://example.com/city6" target="_blank">City 6</a>
+      <a class="emirate" href="https://example.com/city7" target="_blank">City 7</a>
+      <a class="emirate" href="https://example.com/city8" target="_blank">City 8</a>
+      <a class="emirate" href="https://example.com/city9" target="_blank">City 9</a>
+      <a class="emirate" href="https://example.com/city10" target="_blank">City 10</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 11</a>
+    <a class="emirate" href="https://example.com/city6" target="_blank">City 12</a>
+    <a class="emirate" href="https://example.com/city7" target="_blank">City 13</a>
+    <a class="emirate" href="https://example.com/city8" target="_blank">City 14</a>
+    <a class="emirate" href="https://example.com/city9" target="_blank">City 15</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 16</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 17</a>
+    </div>
+  </div>  
+  
+  <div id="ajman">
+    <div class="city-heading"><b>select your City:</b><button class="close-btn" data-target="emirates-screen">
+    <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i>
+</button></div>
+    <div class="city-list">
+      <a class="emirate" href="https://example.com/city1" target="_blank">City 1</a>
+      <a class="emirate" href="https://example.com/city2" target="_blank">City 2</a>
+      <a class="emirate" href="https://example.com/city3" target="_blank">City 3</a>
+      <a class="emirate" href="https://example.com/city4" target="_blank">City 4</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 5</a>
+      <a class="emirate" href="https://example.com/city6" target="_blank">City 6</a>
+      <a class="emirate" href="https://example.com/city7" target="_blank">City 7</a>
+      <a class="emirate" href="https://example.com/city8" target="_blank">City 8</a>
+      <a class="emirate" href="https://example.com/city9" target="_blank">City 9</a>
+      <a class="emirate" href="https://example.com/city10" target="_blank">City 10</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 11</a>
+    <a class="emirate" href="https://example.com/city6" target="_blank">City 12</a>
+    <a class="emirate" href="https://example.com/city7" target="_blank">City 13</a>
+    <a class="emirate" href="https://example.com/city8" target="_blank">City 14</a>
+    <a class="emirate" href="https://example.com/city9" target="_blank">City 15</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 16</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 17</a>
+    </div>
+  </div>
+
+  <div id="um-al-quain">
+    <div class="city-heading"><b>select your City:</b><button class="close-btn" data-target="emirates-screen">
+    <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i>
+</button></div>
+    <div class="city-list">
+      <a class="emirate" href="https://example.com/city1" target="_blank">City 1</a>
+      <a class="emirate" href="https://example.com/city2" target="_blank">City 2</a>
+      <a class="emirate" href="https://example.com/city3" target="_blank">City 3</a>
+      <a class="emirate" href="https://example.com/city4" target="_blank">City 4</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 5</a>
+      <a class="emirate" href="https://example.com/city6" target="_blank">City 6</a>
+      <a class="emirate" href="https://example.com/city7" target="_blank">City 7</a>
+      <a class="emirate" href="https://example.com/city8" target="_blank">City 8</a>
+      <a class="emirate" href="https://example.com/city9" target="_blank">City 9</a>
+      <a class="emirate" href="https://example.com/city10" target="_blank">City 10</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 11</a>
+    <a class="emirate" href="https://example.com/city6" target="_blank">City 12</a>
+    <a class="emirate" href="https://example.com/city7" target="_blank">City 13</a>
+    <a class="emirate" href="https://example.com/city8" target="_blank">City 14</a>
+    <a class="emirate" href="https://example.com/city9" target="_blank">City 15</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 16</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 17</a>
+    </div>
+  </div>
+  
+  <div id="ras-al-khaimah">
+    <div class="city-heading"><b>select your City:</b><button class="close-btn" data-target="emirates-screen">
+    <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i>
+</button></div>
+    <div class="city-list">
+      <a class="emirate" href="https://example.com/city1" target="_blank">City 1</a>
+      <a class="emirate" href="https://example.com/city2" target="_blank">City 2</a>
+      <a class="emirate" href="https://example.com/city3" target="_blank">City 3</a>
+      <a class="emirate" href="https://example.com/city4" target="_blank">City 4</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 5</a>
+      <a class="emirate" href="https://example.com/city6" target="_blank">City 6</a>
+      <a class="emirate" href="https://example.com/city7" target="_blank">City 7</a>
+      <a class="emirate" href="https://example.com/city8" target="_blank">City 8</a>
+      <a class="emirate" href="https://example.com/city9" target="_blank">City 9</a>
+      <a class="emirate" href="https://example.com/city10" target="_blank">City 10</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 11</a>
+    <a class="emirate" href="https://example.com/city6" target="_blank">City 12</a>
+    <a class="emirate" href="https://example.com/city7" target="_blank">City 13</a>
+    <a class="emirate" href="https://example.com/city8" target="_blank">City 14</a>
+    <a class="emirate" href="https://example.com/city9" target="_blank">City 15</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 16</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 17</a>
+    </div>
+  </div>  
+  
+  <div id="fujairah">
+    <div class="city-heading"><b>select your City:</b><button class="close-btn" data-target="emirates-screen">
+    <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i>
+</button></div>
+    <div class="city-list">
+      <a class="emirate" href="https://example.com/city1" target="_blank">City 1</a>
+      <a class="emirate" href="https://example.com/city2" target="_blank">City 2</a>
+      <a class="emirate" href="https://example.com/city3" target="_blank">City 3</a>
+      <a class="emirate" href="https://example.com/city4" target="_blank">City 4</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 5</a>
+      <a class="emirate" href="https://example.com/city6" target="_blank">City 6</a>
+      <a class="emirate" href="https://example.com/city7" target="_blank">City 7</a>
+      <a class="emirate" href="https://example.com/city8" target="_blank">City 8</a>
+      <a class="emirate" href="https://example.com/city9" target="_blank">City 9</a>
+      <a class="emirate" href="https://example.com/city10" target="_blank">City 10</a>
+      <a class="emirate" href="https://example.com/city5" target="_blank">City 11</a>
+    <a class="emirate" href="https://example.com/city6" target="_blank">City 12</a>
+    <a class="emirate" href="https://example.com/city7" target="_blank">City 13</a>
+    <a class="emirate" href="https://example.com/city8" target="_blank">City 14</a>
+    <a class="emirate" href="https://example.com/city9" target="_blank">City 15</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 16</a>
+    <a class="emirate" href="https://example.com/city10" target="_blank">City 17</a>
+    </div>
+  </div>  
+
+  <script>
+    // Show the Emirates screen after 1.8 seconds
+    setTimeout(() => {
+        document.getElementById('welcome').classList.remove('visible');
+        document.getElementById('emirates-screen').classList.add('visible');
+    }, 3000);
+
+    // Show the Abu Dhabi screen when clicked
+    document.getElementById('ad').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('abudhabi').classList.add('visible');
+    });
+    
+    // Show the Abu Dhabi screen when clicked
+    document.getElementById('du').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('dubai').classList.add('visible');
+    }); 
+    
+        // Show the Abu Dhabi screen when clicked
+    document.getElementById('shj').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('sharjah').classList.add('visible');
+    });
+    
+    // Show the Abu Dhabi screen when clicked
+    document.getElementById('aj').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('ajman').classList.add('visible');
+    });    
+    
+        // Show the Abu Dhabi screen when clicked
+    document.getElementById('uaq').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('um-al-quain').classList.add('visible');
+    });
+    
+    // Show the Abu Dhabi screen when clicked
+    document.getElementById('rak').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('ras-al-khaimah').classList.add('visible');
+    });    
+    
+        // Show the Abu Dhabi screen when clicked
+    document.getElementById('fuj').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('fujairah').classList.add('visible');
+    });  
+    
+// Add event listener to all close buttons
+document.querySelectorAll('.close-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        // Hide the current visible screen
+        document.querySelectorAll('.visible').forEach(screen => screen.classList.remove('visible'));
+
+        // Show the target screen specified in the data-target attribute
+        const target = button.getAttribute('data-target');
+        document.getElementById(target).classList.add('visible');
+    });
+});
+  </script>
+</body>
+</html>
