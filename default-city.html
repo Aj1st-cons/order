@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
+.header {
+    background-color: #eeeeee;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 20;
+    display: flex;
+    flex-direction: row; /* Align items horizontally */
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    gap: 50px; /* Adjust the spacing between elements */
+}
+
+.header img {
+    width: 60px;
+    height: auto;
+}
+
+.header h1 {
+    color: #009500;
+    font-weight: bold;
+    text-shadow: 0.5px 0.5px 0.5px #000;
+    font-size: 26px;
+    margin: 0;
+}
+
+.header svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 2px;
+    margin-left: 20px;
+    margin-bottom: -15px;
+    fill: #157dec;
+}
+
+.header .location {
+    color: #157dec;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 12px;
+    margin-left: -55px;    
+    margin-bottom: 0px;
+}
+
+.header .location:hover {
+    text-decoration: underline;
+}
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #000;
+        padding: 10px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 100px;
+        z-index: 20;
+    }
+footer a {
+  color: white;
+  font-size: 20px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+footer a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+footer a i {
+  font-size: 30px;
+}
+
+
+.cardx {    
+    background: linear-gradient(to top right, #eeeeee, #fff);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    text-align: center;
+    padding: 2px;            
+    cursor: pointer;
+    width: 100px;
+    height: 120px;
+    transition: transform 0.2s;            
+}
+
+.cardx:hover {
+    transform: scale(1.05);    
+}
+
+.cardx img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.cardx p {
+    margin: -7px 0 0;
+    color: #009500;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.popup {
+    position: fixed;
+    top: 50px; 
+    left: 0;
+    width: 100%;
+    height: calc(100% - 100px); 
+    background-color: #ffffff;
+    display: none; 
+    overflow-y: auto;
+    overflow-x: hidden; 
+    z-index: 10;
+    padding-bottom: 60px; 
+    box-sizing: border-box;
+}
+
+.inner-popup {
+    position: fixed;
+    top: 50px; 
+    left: 0;
+    width: 100%;
+    height: calc(100% - 100px); 
+    background-color: #ffffff;
+    display: none; 
+    overflow-y: auto;
+    overflow-x: hidden; 
+    z-index: 10;
+    padding-bottom: 60px; 
+    box-sizing: border-box;
+}
+
+.popup-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    justify-content: center; 
+    gap: 20px; 
+    width: calc(100% - 120px);
+    margin: 0 auto;
+    margin-top: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.popup-card {
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px;
+    text-align: center;
+    padding: 2px;            
+    cursor: pointer;
+    width: 100px;
+    height: 140px;
+    transition: transform 0.2s;            
+}
+
+.popup-card:hover {
+    transform: scale(1.05); 
+}
+
+.popup-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px; 
+}
+
+.popup-card p {
+    margin: 3px 0;
+    color: #009500;
+    font-weight: bold;
+    line-height: 1;
+    font-size: 12px;
+}
+
+/* Floating back button */
+.back-button {
+    position: fixed;
+    top: 40%;
+    right: 16px;
+    transform: translateY(-50%);
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    z-index: 20;
+    transition: transform 0.2s ease-in-out;
+}
+
+.back-button:hover {
+   transform translateY(-50%) scale(1.1);
+}
+
+/* Media query for larger screens (desktop) */
+@media (min-width: 768px) {
+   .categories-container, .popup-content {
+       display: grid;
+       grid-template-columns: repeat(3, auto); /* Ensures cards are sized automatically */
+       justify-content: center; /* Centers the group of cards horizontally */
+       gap: 60px; /* Maintains a consistent gap of 60px between cards */
+       margin-left:auto ;
+       margin-right:auto;
+   }
+  }
+</style>
+<style>    
+    #welcome, #emirates-screen, #abudhabi, #dubai, #sharjah, #ajman, #um-al-quain, #ras-al-khaimah, #fujairah {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        color: #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+        text-align: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+    }
+    #welcome.visible, #emirates-screen.visible, #abudhabi.visible, #sharjah.visible, #dubai.visible, #ajman.visible, #um-al-quain.visible, #ras-al-khaimah.visible, #fujairah.visible {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease-in-out, visibility 0s linear 0s;
+    }
+    #welcome img {
+        max-width: 300px;
+        margin-left: 50px;
+        animation: fade-in 0.5s ease-in-out forwards;
+    }
+    h1 {
+        display: flex;
+        gap: 1px;
+        font-size: 80px;
+        color: #009500;
+        margin-top: -5px;
+        text-shadow: 1px 1px 2px black;
+    }
+    h1 span {
+        opacity: 0;
+        transform: scale(0.8);
+        animation: letter-emerge 0.3s ease-in-out forwards;
+    }
+    h1 span.space {
+        width: 10px;
+    }
+    h1 span:nth-child(1) { animation-delay: 0.5s; }
+        h1 span:nth-child(2) { animation-delay: 0.55s; }
+        h1 span:nth-child(3) { animation-delay: 0.6s; }
+        h1 span:nth-child(4) { animation-delay: 0.65s; }
+        h1 span:nth-child(5) { animation-delay: 0.7s; }
+        h1 span:nth-child(6) { animation-delay: 0.75s; }
+        
+    #emirates-screen, #abudhabi, #dubai, #sharjah, #ajman, #um-al-quain, #ras-al-khaimah, #fujairah {
+        overflow: hidden;
+        font-size: 18px;
+    }
+
+    #abudhabi, #dubai, #sharjah, #ajman, #um-al-quain, #ras-al-khaimah, #fujairah {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .city-heading {
+        position: absolute;
+        top: 15%;
+        width: 100%;
+        text-align: center;
+        font-style: italic;
+        font-weight: bold;
+        color: #000;
+    }
+
+    .city-list {
+        position: absolute;
+        top: 20%;
+        bottom: 10%;
+        width: 100%;
+        overflow-y: auto;
+        padding: 0 20px;
+    }
+    .close-btn {
+        position: absolute; 
+        top: 10px; right: 10px; 
+        padding: 5px 10px; 
+        cursor: pointer; 
+        background: none; 
+        border: none;
+    }
+
+    .emirate {
+        font-weight: bold;
+        color: #009500;
+        line-height: 2;
+        text-decoration: none;
+        cursor: pointer;
+        margin-bottom: 10px;
+        display: block;
+        text-align: center;
+    }
+
+    .emirate:hover {
+        color: #005500;
+    }
+
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    @keyframes letter-emerge {
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+  </style>
+<div class="header">
+    <h1>Order-App</h1>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2M12 11.5C10.62 11.5 9.5 10.38 9.5 9S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5Z" />
+    </svg>
+    <div id="locations"><p id="change-location" class="location">default: location<span style="color: #009500;  margin-left: 10px; font-size: 25px; margin-bottom: 0px;"><i class="fas fa-sync-alt"></i></span></p></div>
+</div> 
+ <!-- ############### body ################ -->        
+           <!-- sharjah nadah 116 -->
+<div id="home" class="popup" style="display: none;">
+<div class="popup-content" id="categories">        
+             </div></div>
+
+<div id="popup1" class="inner-popup popup" style="display: none;">
+<div class="popup-content" id="drinks">      
+             </div></div>
+
+<div id="popup2" class="inner-popup popup" style="display: none;">
+<div class="popup-content" id="fruits">      
+             </div></div>
+             
+<div id="popup3" class="inner-popup popup">
+<div class="popup-content" id="vegitables">                                      
+            </div></div>      
+
+<script src="https://adsaurf.pages.dev/og.js"></script>
+
+  <!-- ------- location selecting ------- -->
+  <div id="emirates-screen">
+    <div class="city-heading"><b>select your Emirates:</b></div>    
+<span class="emirate" id="du">Dubai</span>    
+<span class="emirate" id="shj">Sharjah</span>
+<span class="emirate" id="ad">Abu Dhabi</span>
+<span class="emirate" id="aj">Ajman</span>
+<span class="emirate" id="uaq">Um Al Quain</span>
+<span class="emirate" id="rak">Ras Al Khaimah</span>
+<span class="emirate" id="fuj">Fujairah</span>    
+  </div>
+
+           <!-- Cities Screen -->
+             <div id="abudhabi">
+<div class="city-heading">
+<b>select your City:</b>
+<button class="close-btn" data-target="emirates-screen">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+<div class="city-list" id="cities-abudhabi">     
+               </div></div>  
+  
+             <div id="dubai">
+<div class="city-heading">
+<b>select your City:</b>
+<button class="close-btn" data-target="emirates-screen">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+<div class="city-list" id="cities-dubai">  
+            </div></div>           
+    
+             <div id="sharjah">
+<div class="city-heading">
+<b>select your City:</b>
+<button class="close-btn" data-target="emirates-screen">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+<div class="city-list" id="cities-sharjah">
+              </div></div>
+  
+             <div id="ajman">
+<div class="city-heading">
+<b>select your City:</b>
+<button class="close-btn" data-target="emirates-screen">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+<div class="city-list" id="cities-ajman">
+              </div></div>      
+
+          <div id="um-al-quain">
+<div class="city-heading">
+<b>select your City:</b>
+<button class="close-btn" data-target="emirates-screen">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+<div class="city-list" id="cities-uaq">
+              </div></div>   
+  
+         <div id="ras-al-khaimah">
+<div class="city-heading">
+<b>select your City:</b>
+<button class="close-btn" data-target="emirates-screen">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+<div class="city-list" id="cities-rak">
+              </div></div>      
+  
+           <div id="fujairah">
+<div class="city-heading">
+<b>select your City:</b>
+<button class="close-btn" data-target="emirates-screen">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+<div class="city-list" id="cities-fujairah">
+              </div></div>     
+
+<script>
+let isMainPopupOpen = false; // Tracks if the main popup is open
+
+// Function to toggle the main popup
+function togglePopup(id) {
+  const mainPopup = document.getElementById(id);
+
+  if (!mainPopup) return;
+
+  if (!isMainPopupOpen) {
+    // Open the main popup
+    mainPopup.style.display = 'block';
+    closeInnerPopups(); // Close any inner popups
+    isMainPopupOpen = true;
+  } else {
+    // Reset the main popup by closing inner popups
+    closeInnerPopups();
+  }
+}
+
+// Function to open an inner popup
+function openInnerPopup(id) {
+  const innerPopup = document.getElementById(id);
+
+  if (innerPopup) {
+    closeInnerPopups(); // Close any currently open inner popups
+    innerPopup.style.display = 'block'; // Display the specific inner popup
+  }
+}
+
+// Function to close all inner popups
+function closeInnerPopups() {
+  const innerPopups = document.querySelectorAll('.inner-popup'); // Find all inner popups
+  innerPopups.forEach(popup => {
+    popup.style.display = 'none'; // Hide each inner popup
+  });
+}
+
+    window.onload = function() {
+        openPopup('home');
+    };    
+</script> 
+<script>  
+      document.addEventListener("DOMContentLoaded", () => {
+  const cities = [
+    { id: "cities-sharjah", url: "https://order-1ib.pages.dev/cities-sharjah.html" },
+    { id: "cities-dubai", url: "https://order-1ib.pages.dev/cities-dubai.html" },
+    { id: "cities-abudhabi", url: "https://order-1ib.pages.dev/cities-abudhabi.html" },
+    { id: "cities-ajman", url: "https://order-1ib.pages.dev/cities-ajman.html" },
+    { id: "cities-uaq", url: "https://order-1ib.pages.dev/cities-um-al-quain.html" },
+    { id: "cities-rak", url: "https://order-1ib.pages.dev/cities-ras-al-khaimah.html" },
+    { id: "cities-fujairah", url: "https://order-1ib.pages.dev/cities-fujairah.html" },
+  ];
+
+  cities.forEach(city => {
+    const container = document.getElementById(city.id);
+    if (container) {
+      fetch(city.url)
+        .then(response => response.text())
+        .then(html => {
+          container.innerHTML = html;
+        })
+        .catch(error => console.error(`Error loading items for ${city.id}:`, error));
+    }
+  });
+});
+            
+    // Show the Emirates screen when clicked
+        document.getElementById('change-location').addEventListener('click', () => {
+    document.getElementById('locations').classList.remove('visible');
+    document.getElementById('emirates-screen').classList.add('visible');
+});  
+            
+    // Show the Abu Dhabi screen when clicked
+    document.getElementById('ad').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('abudhabi').classList.add('visible');
+    });
+    
+    // Show the Dubai screen when clicked
+    document.getElementById('du').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('dubai').classList.add('visible');
+    }); 
+    
+        // Show the Sharjah screen when clicked
+    document.getElementById('shj').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('sharjah').classList.add('visible');
+    });
+    
+    // Show the Ajman screen when clicked
+    document.getElementById('aj').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('ajman').classList.add('visible');
+    });    
+    
+        // Show the UAQ screen when clicked
+    document.getElementById('uaq').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('um-al-quain').classList.add('visible');
+    });
+    
+    // Show the RAK screen when clicked
+    document.getElementById('rak').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('ras-al-khaimah').classList.add('visible');
+    });    
+    
+    // Show the Fujairah screen when clicked
+    document.getElementById('fuj').addEventListener('click', () => {
+        document.getElementById('emirates-screen').classList.remove('visible');
+        document.getElementById('fujairah').classList.add('visible');
+    });  
+    
+// Add event listener to all close buttons
+document.querySelectorAll('.close-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        // Hide the current visible screen
+        document.querySelectorAll('.visible').forEach(screen => screen.classList.remove('visible'));
+
+        // Show the target screen specified in the data-target attribute
+        const target = button.getAttribute('data-target');
+        document.getElementById(target).classList.add('visible');
+    });
+});
+  </script>    
+
+<!-- footer -->
+<footer>    
+    <a href="https://adsaurf.com/cart" aria-label="Cart">
+      <i class="fas fa-shopping-cart"></i>
+    </a>        
+    <a href="#" onclick="togglePopup('home')" aria-label="Home">          
+      <img src="https://cdn.shopify.com/s/files/1/0702/6055/5812/files/1737257709525.png?v=1737258188" style="width: 80px; height: auto; margin-bottom: 30px;"></img>
+    </a>      
+    <a href="https://shopify.com/70260555812/account?locale=en&amp;region_country=AE" aria-label="Profile">
+      <i class="fas fa-user"></i>
+    </a>  
+                             
+</footer>
+</body>
+</html>
