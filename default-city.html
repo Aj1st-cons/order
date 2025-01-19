@@ -381,7 +381,10 @@ footer a i {
 
   <!-- ------- location selecting ------- -->
   <div id="emirates-screen">
-    <div class="city-heading"><b>select your Emirates:</b></div>    
+    <div class="city-heading"><b>select your Emirates:</b>
+<button class="close-btn" onclick="goBack()">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button>    
+    </div>    
 <span class="emirate" id="du">Dubai</span>    
 <span class="emirate" id="shj">Sharjah</span>
 <span class="emirate" id="ad">Abu Dhabi</span>
@@ -390,6 +393,13 @@ footer a i {
 <span class="emirate" id="rak">Ras Al Khaimah</span>
 <span class="emirate" id="fuj">Fujairah</span>    
   </div>
+<script>
+function goBack() {
+    // document.getElementById('emirates-screen').style.display = 'none';
+    // document.getElementById('previous-screen').style.display = 'block';
+}
+</script>
+
 
            <!-- Cities Screen -->
              <div id="abudhabi">
