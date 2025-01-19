@@ -38,6 +38,7 @@
     text-shadow: 0.5px 0.5px 0.5px #000;
     font-size: 26px;
     margin: 0;
+    margin-bottom: 10px;
 }
 
 .header svg {
@@ -125,7 +126,7 @@ footer a i {
     font-size: 13px;
 }
 
-.popup {
+.popup, .popup-emirates {
     position: fixed;
     top: 50px; 
     left: 0;
@@ -139,7 +140,6 @@ footer a i {
     padding-bottom: 60px; 
     box-sizing: border-box;
 }
-
 .inner-popup {
     position: fixed;
     top: 50px; 
@@ -163,6 +163,14 @@ footer a i {
     width: calc(100% - 120px);
     margin: 0 auto;
     margin-top: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.emirates-content {
+    display: column;     
+    justify-content: center;      
+    margin: 0 auto;
+    margin-top: 150px;
     padding: 10px;
     box-sizing: border-box;
 }
@@ -290,26 +298,30 @@ footer a i {
     }
 
     .city-heading {
-        position: absolute;
+        position: fixed;        
         top: 15%;
         width: 100%;
         text-align: center;
         font-style: italic;
         font-weight: bold;
-        color: #000;
+        color: #000;        
     }
 
-    .city-list {
-        position: absolute;
-        top: 20%;
-        bottom: 10%;
-        width: 100%;
-        overflow-y: auto;
-        padding: 0 20px;
-    }
+   .city-list {        
+    display: block;
+    text-align: center;        
+    position: absolute;
+    top: 15%; /* Maintain the vertical alignment as per your design */
+    bottom: 10%;
+    left: 50%; /* Position the center horizontally */
+    transform: translateX(-50%); /* Adjust to truly center horizontally */
+    width: 100%;
+    overflow-y: auto;        
+}
     .close-btn {
         position: absolute; 
-        top: 10px; right: 10px; 
+        top: 10px; 
+        right: 50px; 
         padding: 5px 10px; 
         cursor: pointer; 
         background: none; 
@@ -357,8 +369,15 @@ footer a i {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2M12 11.5C10.62 11.5 9.5 10.38 9.5 9S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5Z" />
     </svg>
-    <div id="locations"><p id="change-location" class="location">default: location<span style="color: #009500;  margin-left: 10px; font-size: 25px; margin-bottom: 0px;"><i class="fas fa-sync-alt"></i></span></p></div>
-</div> 
+<div id="locations">
+  <p id="change-location" class="location" style="cursor: pointer;">
+    default: location
+    <span style="color: #009500; margin-left: 10px; font-size: 25px; margin-bottom: 0px;">
+      <i class="fas fa-sync-alt"></i>
+    </span>
+  </p>
+</div>
+
  <!-- ############### body ################ -->        
            <!-- sharjah nadah 116 -->
 <div id="home" class="popup" style="display: none;">
@@ -380,10 +399,9 @@ footer a i {
 <script src="https://adsaurf.pages.dev/og.js"></script>
 
   <!-- ------- location selecting ------- -->
-  <div id="emirates-screen">
-    <div class="city-heading"><b>select your Emirates:</b>
-<button class="close-btn" onclick="goBack()">
-<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button>    
+  <div id="popup-emirates" class="inner-popup popup" style="display: none;">
+      <div class="emirates-content">
+    <div class="city-heading"><b>select your Emirates:</b>    
     </div>    
 <span class="emirate" id="du">Dubai</span>    
 <span class="emirate" id="shj">Sharjah</span>
@@ -391,72 +409,59 @@ footer a i {
 <span class="emirate" id="aj">Ajman</span>
 <span class="emirate" id="uaq">Um Al Quain</span>
 <span class="emirate" id="rak">Ras Al Khaimah</span>
-<span class="emirate" id="fuj">Fujairah</span>    
-  </div>
-<script>
-function goBack() {
-    // document.getElementById('emirates-screen').style.display = 'none';
-    // document.getElementById('previous-screen').style.display = 'block';
-}
-</script>
+<span class="emirate" id="fuj">Fujairah</span> 
+  </div></div>   
+
+           <!-- Cities Screen -->      
+<div id="popup-dubai" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading"><b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+    <div class="city-list" id="cities-dubai">      
+         </div></div></div>
+                    
+<div id="popup-abudhabi" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading"><b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+<div class="city-list" id="cities-abudhabi">
+         </div></div></div>
 
 
-           <!-- Cities Screen -->
-             <div id="abudhabi">
-<div class="city-heading">
-<b>select your City:</b>
-<button class="close-btn" data-target="emirates-screen">
+<div id="popup-sharjah" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading"><b>Select your City:</b><button class="close-btn">
 <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
-<div class="city-list" id="cities-abudhabi">     
-               </div></div>  
-  
-             <div id="dubai">
-<div class="city-heading">
-<b>select your City:</b>
-<button class="close-btn" data-target="emirates-screen">
-<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
-<div class="city-list" id="cities-dubai">  
-            </div></div>           
-    
-             <div id="sharjah">
-<div class="city-heading">
-<b>select your City:</b>
-<button class="close-btn" data-target="emirates-screen">
-<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
-<div class="city-list" id="cities-sharjah">
-              </div></div>
-  
-             <div id="ajman">
-<div class="city-heading">
-<b>select your City:</b>
-<button class="close-btn" data-target="emirates-screen">
-<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
-<div class="city-list" id="cities-ajman">
-              </div></div>      
+    <div class="city-list" id="cities-sharjah">
+         </div></div></div>
 
-          <div id="um-al-quain">
-<div class="city-heading">
-<b>select your City:</b>
-<button class="close-btn" data-target="emirates-screen">
+<div id="popup-ajman" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading"><b>Select your City:</b><button class="close-btn">
 <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
-<div class="city-list" id="cities-uaq">
-              </div></div>   
-  
-         <div id="ras-al-khaimah">
-<div class="city-heading">
-<b>select your City:</b>
-<button class="close-btn" data-target="emirates-screen">
+    <div class="city-list" id="cities-ajman">
+         </div></div></div>
+
+<div id="popup-uaq" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading"><b>Select your City:</b><button class="close-btn">
 <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
-<div class="city-list" id="cities-rak">
-              </div></div>      
-  
-           <div id="fujairah">
-<div class="city-heading">
-<b>select your City:</b>
-<button class="close-btn" data-target="emirates-screen">
+    <div class="city-list" id="cities-uaq">
+         </div></div></div>
+
+<div id="popup-rak" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading"><b>Select your City:</b><button class="close-btn">
 <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
-<div class="city-list" id="cities-fujairah">
-              </div></div>     
+    <div class="city-list" id="cities-rak">
+         </div></div></div>
+         
+<div id="popup-fujairah" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading"><b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+ <div class="city-list" id="cities-fujairah">
+         </div></div></div>
 
 <script>
 let isMainPopupOpen = false; // Tracks if the main popup is open
@@ -499,14 +504,7 @@ function closeInnerPopups() {
     window.onload = function() {
         openPopup('home');
     };    
-</script> 
-<script> 
-    // Show the Emirates screen when clicked
-        document.getElementById('change-location').addEventListener('click', () => {
-    document.getElementById('locations').classList.remove('visible');
-    document.getElementById('emirates-screen').classList.add('visible');
-});      
-     
+       
        // fetch cities to each emirates
       document.addEventListener("DOMContentLoaded", () => {
   const cities = [
@@ -530,39 +528,84 @@ function closeInnerPopups() {
         .catch(error => console.error(`Error loading items for ${city.id}:`, error));
     }
   });
-});
-            
- // close function to Show the Emirates screen
+});  
 
-document.addEventListener("DOMContentLoaded", () => {
-  const emirates = [
-    { id: "ad", screen: "abudhabi" },
-    { id: "du", screen: "dubai" },
-    { id: "shj", screen: "sharjah" },
-    { id: "aj", screen: "ajman" },
-    { id: "uaq", screen: "um-al-quain" },
-    { id: "rak", screen: "ras-al-khaimah" },
-    { id: "fuj", screen: "fujairah" },
-  ];
 
-  emirates.forEach(emirate => {
-    document.getElementById(emirate.id).addEventListener("click", () => {
-      document.getElementById("emirates-screen").classList.remove("visible");
-      document.getElementById(emirate.screen).classList.add("visible");
-    });
-  });
-}); 
-    
-// Add event listener to all close buttons
+// Add event listener to the close button
 document.querySelectorAll('.close-btn').forEach(button => {
-    button.addEventListener('click', () => {
-        // Hide the current visible screen
-        document.querySelectorAll('.visible').forEach(screen => screen.classList.remove('visible'));
+  button.addEventListener('click', (e) => {
+    // Find the closest popup that contains the close button
+    const currentPopup = e.target.closest('.popup');
+    if (currentPopup) {
+      currentPopup.style.display = 'none'; // Close the current popup
+    }
 
-        // Show the target screen specified in the data-target attribute
-        const target = button.getAttribute('data-target');
-        document.getElementById(target).classList.add('visible');
-    });
+    // Show the 'popup-emirates'
+    const popupEmirates = document.getElementById('popup-emirates');
+    if (popupEmirates) {
+      popupEmirates.style.display = 'block'; // Show the popup-emirates
+    }
+  });
+});
+
+// Get the popup and the link
+const popup = document.getElementById('popup-emirates');
+const changeLocation = document.getElementById('change-location');
+
+// Add a click event listener to toggle the Emirates popup
+changeLocation.addEventListener('click', () => {
+  popup.style.display = (popup.style.display === 'none' || popup.style.display === '') ? 'block' : 'none';
+});
+
+// Get the popups for each emirate
+const popupDubai = document.getElementById('popup-dubai');
+const popupSharjah = document.getElementById('popup-sharjah');
+const popupAbuDhabi = document.getElementById('popup-abudhabi');
+const popupAjman = document.getElementById('popup-ajman');
+const popupUAQ = document.getElementById('popup-uaq');
+const popupRAK = document.getElementById('popup-rak');
+const popupFujairah = document.getElementById('popup-fujairah');
+
+// Add event listener for Dubai
+document.getElementById('du').addEventListener('click', () => {
+  popup.style.display = 'none'; // Hide Emirates popup
+  popupDubai.style.display = 'block'; // Show Dubai popup
+});
+
+// Add event listener for Sharjah
+document.getElementById('shj').addEventListener('click', () => {
+  popup.style.display = 'none'; // Hide Emirates popup
+  popupSharjah.style.display = 'block'; // Show Sharjah popup
+});
+
+// Add event listener for Abu Dhabi
+document.getElementById('ad').addEventListener('click', () => {
+  popup.style.display = 'none'; // Hide Emirates popup
+  popupAbuDhabi.style.display = 'block'; // Show Abu Dhabi popup
+});
+
+// Add event listener for Ajman
+document.getElementById('aj').addEventListener('click', () => {
+  popup.style.display = 'none'; // Hide Emirates popup
+  popupAjman.style.display = 'block'; // Show Ajman popup
+});
+
+// Add event listener for Um Al Quain (UAQ)
+document.getElementById('uaq').addEventListener('click', () => {
+  popup.style.display = 'none'; // Hide Emirates popup
+  popupUAQ.style.display = 'block'; // Show UAQ popup
+});
+
+// Add event listener for Ras Al Khaimah (RAK)
+document.getElementById('rak').addEventListener('click', () => {
+  popup.style.display = 'none'; // Hide Emirates popup
+  popupRAK.style.display = 'block'; // Show RAK popup
+});
+
+// Add event listener for Fujairah
+document.getElementById('fuj').addEventListener('click', () => {
+  popup.style.display = 'none'; // Hide Emirates popup
+  popupFujairah.style.display = 'block'; // Show Fujairah popup
 });
   </script>    
 
@@ -580,4 +623,4 @@ document.querySelectorAll('.close-btn').forEach(button => {
                              
 </footer>
 </body>
-</html>
+</html> 
