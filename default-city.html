@@ -490,7 +490,14 @@ function closeInnerPopups() {
         openPopup('home');
     };    
 </script> 
-<script>  
+<script> 
+    // Show the Emirates screen when clicked
+        document.getElementById('change-location').addEventListener('click', () => {
+    document.getElementById('locations').classList.remove('visible');
+    document.getElementById('emirates-screen').classList.add('visible');
+});      
+     
+       // fetch cities to each emirates
       document.addEventListener("DOMContentLoaded", () => {
   const cities = [
     { id: "cities-sharjah", url: "https://order-1ib.pages.dev/cities-sharjah.html" },
@@ -515,53 +522,26 @@ function closeInnerPopups() {
   });
 });
             
-    // Show the Emirates screen when clicked
-        document.getElementById('change-location').addEventListener('click', () => {
-    document.getElementById('locations').classList.remove('visible');
-    document.getElementById('emirates-screen').classList.add('visible');
-});  
-            
-    // Show the Abu Dhabi screen when clicked
-    document.getElementById('ad').addEventListener('click', () => {
-        document.getElementById('emirates-screen').classList.remove('visible');
-        document.getElementById('abudhabi').classList.add('visible');
+ // close function to Show the Emirates screen
+
+document.addEventListener("DOMContentLoaded", () => {
+  const emirates = [
+    { id: "ad", screen: "abudhabi" },
+    { id: "du", screen: "dubai" },
+    { id: "shj", screen: "sharjah" },
+    { id: "aj", screen: "ajman" },
+    { id: "uaq", screen: "um-al-quain" },
+    { id: "rak", screen: "ras-al-khaimah" },
+    { id: "fuj", screen: "fujairah" },
+  ];
+
+  emirates.forEach(emirate => {
+    document.getElementById(emirate.id).addEventListener("click", () => {
+      document.getElementById("emirates-screen").classList.remove("visible");
+      document.getElementById(emirate.screen).classList.add("visible");
     });
-    
-    // Show the Dubai screen when clicked
-    document.getElementById('du').addEventListener('click', () => {
-        document.getElementById('emirates-screen').classList.remove('visible');
-        document.getElementById('dubai').classList.add('visible');
-    }); 
-    
-        // Show the Sharjah screen when clicked
-    document.getElementById('shj').addEventListener('click', () => {
-        document.getElementById('emirates-screen').classList.remove('visible');
-        document.getElementById('sharjah').classList.add('visible');
-    });
-    
-    // Show the Ajman screen when clicked
-    document.getElementById('aj').addEventListener('click', () => {
-        document.getElementById('emirates-screen').classList.remove('visible');
-        document.getElementById('ajman').classList.add('visible');
-    });    
-    
-        // Show the UAQ screen when clicked
-    document.getElementById('uaq').addEventListener('click', () => {
-        document.getElementById('emirates-screen').classList.remove('visible');
-        document.getElementById('um-al-quain').classList.add('visible');
-    });
-    
-    // Show the RAK screen when clicked
-    document.getElementById('rak').addEventListener('click', () => {
-        document.getElementById('emirates-screen').classList.remove('visible');
-        document.getElementById('ras-al-khaimah').classList.add('visible');
-    });    
-    
-    // Show the Fujairah screen when clicked
-    document.getElementById('fuj').addEventListener('click', () => {
-        document.getElementById('emirates-screen').classList.remove('visible');
-        document.getElementById('fujairah').classList.add('visible');
-    });  
+  });
+}); 
     
 // Add event listener to all close buttons
 document.querySelectorAll('.close-btn').forEach(button => {
@@ -582,7 +562,7 @@ document.querySelectorAll('.close-btn').forEach(button => {
       <i class="fas fa-shopping-cart"></i>
     </a>        
     <a href="#" onclick="togglePopup('home')" aria-label="Home">          
-      <img src="https://cdn.shopify.com/s/files/1/0702/6055/5812/files/1737257709525.png?v=1737258188" style="width: 80px; height: auto; margin-bottom: 30px;"></img>
+      <img src="https://cdn.shopify.com/s/files/1/0702/6055/5812/files/1737257709525.png?v=1737258188" style="width: 80px; height: auto; margin-bottom: 20px;"></img>
     </a>      
     <a href="https://shopify.com/70260555812/account?locale=en&amp;region_country=AE" aria-label="Profile">
       <i class="fas fa-user"></i>
