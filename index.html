@@ -34,7 +34,7 @@
         transition: opacity 0.3s ease-in-out, visibility 0s linear 0s;
     }
     #welcome img {
-        max-width: 300px;
+        max-width: 400px;
         margin-left: 0px;
         animation: fade-in 0.5s ease-in-out forwards;
     }
@@ -103,7 +103,7 @@ h1 span:nth-child(10) { animation-delay: 0.95s; }
         border: none;
     }
 
-    .emirate {
+    .emirate, .emirates {
         font-weight: bold;
         color: #009500;
         line-height: 2;
@@ -142,46 +142,45 @@ h1 span:nth-child(10) { animation-delay: 0.95s; }
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">  
 </head>
 <body>
-  <!-- Welcome Screen -->
-  <div id="welcome" class="visible">
-    <img src="https://cdn.shopify.com/s/files/1/0702/6055/5812/files/1737260669116.png?v=1737260844" alt="Welcome Image">
-    <h1>
+    
+          <!-- Welcome Screen -->
+     <div id="welcome" class="visible">    
+<h1>
   <span>O</span><span>r</span><span>d</span><span>e</span><span>r</span>
   <span>-</span>
   <span>A</span><span>p</span><span>p</span>
 </h1>
+<img src="https://cdn.shopify.com/s/files/1/0702/6055/5812/files/1737349744953.png?v=1737349812" alt="Welcome Image">
   </div>
-
-  <!-- Emirates Screen -->
-  <div id="emirates-screen">
+    
+    <div id="emirates-screen">
     <div class="city-heading"><b>select your Emirates:</b></div>    
-<span class="emirate" id="du">Dubai</span>    
-<span class="emirate" id="shj">Sharjah</span>
-<span class="emirate" id="ad">Abu Dhabi</span>
-<span class="emirate" id="aj">Ajman</span>
-<span class="emirate" id="uaq">Um Al Quain</span>
-<span class="emirate" id="rak">Ras Al Khaimah</span>
-<span class="emirate" id="fuj">Fujairah</span>    
-  </div>
+<span class="emirates" id="du">Dubai</span>    
+<span class="emirates" id="shj">Sharjah</span>
+<span class="emirates" id="ad">Abu Dhabi</span>
+<span class="emirates" id="aj">Ajman</span>
+<span class="emirates" id="uaq">Um Al Quain</span>
+<span class="emirates" id="rak">Ras Al Khaimah</span>
+<span class="emirates" id="fuj">Fujairah</span>   
+    </div>
 
-           <!-- Cities Screen -->
-             <div id="abudhabi">
+<div id="dubai">
+<div class="city-heading">
+<b>select your City:</b>
+<button class="close-btn" data-target="emirates-screen">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
+<div class="city-list" id="cities-dubai">                   
+            </div></div>    
+
+<div id="abudhabi">
 <div class="city-heading">
 <b>select your City:</b>
 <button class="close-btn" data-target="emirates-screen">
 <i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
 <div class="city-list" id="cities-abudhabi">     
                </div></div>  
-  
-             <div id="dubai">
-<div class="city-heading">
-<b>select your City:</b>
-<button class="close-btn" data-target="emirates-screen">
-<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button></div>
-<div class="city-list" id="cities-dubai">  
-            </div></div>           
-    
-             <div id="sharjah">
+
+<div id="sharjah">
 <div class="city-heading">
 <b>select your City:</b>
 <button class="close-btn" data-target="emirates-screen">
@@ -221,42 +220,9 @@ h1 span:nth-child(10) { animation-delay: 0.95s; }
 <div class="city-list" id="cities-fujairah">
               </div></div>     
 
-  <script>
-       // fetch cities to each emirates
-             
+    <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const cities = [
-    { id: "cities-sharjah", url: "https://order-1ib.pages.dev/cities-sharjah.html" },
-    { id: "cities-dubai", url: "https://order-1ib.pages.dev/cities-dubai.html" },
-    { id: "cities-abudhabi", url: "https://order-1ib.pages.dev/cities-abudhabi.html" },
-    { id: "cities-ajman", url: "https://order-1ib.pages.dev/cities-ajman.html" },
-    { id: "cities-uaq", url: "https://order-1ib.pages.dev/cities-um-al-quain.html" },
-    { id: "cities-rak", url: "https://order-1ib.pages.dev/cities-ras-al-khaimah.html" },
-    { id: "cities-fujairah", url: "https://order-1ib.pages.dev/cities-fujairah.html" },
-  ];
-
-  cities.forEach(city => {
-    const container = document.getElementById(city.id);
-    if (container) {
-      fetch(city.url)
-        .then(response => response.text())
-        .then(html => {
-          container.innerHTML = html;
-        })
-        .catch(error => console.error(`Error loading items for ${city.id}:`, error));
-    }
-  });
-});      
-      
-    // Show the Emirates screen after 1.8 seconds
-    setTimeout(() => {
-        document.getElementById('welcome').classList.remove('visible');
-        document.getElementById('emirates-screen').classList.add('visible');
-    }, 3000);
-    
- // close function to Show the Emirates screen
-
-document.addEventListener("DOMContentLoaded", () => {
+  // Define Emirates and their corresponding screens
   const emirates = [
     { id: "ad", screen: "abudhabi" },
     { id: "du", screen: "dubai" },
@@ -267,26 +233,81 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: "fuj", screen: "fujairah" },
   ];
 
-  emirates.forEach(emirate => {
+  // Add event listeners to toggle between Emirates screens
+  emirates.forEach((emirate) => {
     document.getElementById(emirate.id).addEventListener("click", () => {
       document.getElementById("emirates-screen").classList.remove("visible");
       document.getElementById(emirate.screen).classList.add("visible");
     });
   });
-});
-    
-// Add event listener to all close buttons
-document.querySelectorAll('.close-btn').forEach(button => {
-    button.addEventListener('click', () => {
-        // Hide the current visible screen
-        document.querySelectorAll('.visible').forEach(screen => screen.classList.remove('visible'));
 
-        // Show the target screen specified in the data-target attribute
-        const target = button.getAttribute('data-target');
-        document.getElementById(target).classList.add('visible');
+  // Add event listeners to all close buttons
+  document.querySelectorAll(".close-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      // Hide the current visible screen
+      document.querySelectorAll(".visible").forEach((screen) => screen.classList.remove("visible"));
+
+      // Show the target screen specified in the data-target attribute
+      const target = button.getAttribute("data-target");
+      document.getElementById(target).classList.add("visible");
     });
+  });
+
+  // Show the Emirates screen after 3 seconds
+  setTimeout(() => {
+    document.getElementById("welcome").classList.remove("visible");
+    document.getElementById("emirates-screen").classList.add("visible");
+  }, 3000);
+
+  // Function to fetch cities from an external link and handle functionality
+  async function fetchCities(url, containerId) {
+    try {
+      // Fetch HTML content from the external link
+      const response = await fetch(url);
+      const html = await response.text();
+
+      // Insert the fetched HTML into the specified container
+      document.getElementById(containerId).innerHTML = html;
+
+      // Add event listeners to all links with class 'emirate' in this container
+      const cityLinks = document.querySelectorAll(`#${containerId} .emirate`);
+      cityLinks.forEach((link) => {
+        // Add click event listener to save the link in local storage
+        link.addEventListener("click", function () {
+          localStorage.setItem("savedLink", this.href);
+          localStorage.setItem("linkTimestamp", Date.now());
+        });
+      });
+
+      // Check if a saved link exists in local storage
+      const savedLink = localStorage.getItem("savedLink");
+      const savedTimestamp = localStorage.getItem("linkTimestamp");
+
+      if (savedLink && savedTimestamp) {
+        const currentTime = Date.now();
+        const timeDifference = currentTime - savedTimestamp;
+
+        // Redirect to the saved link only after the welcome screen delay (3 seconds)
+        setTimeout(() => {
+          if (timeDifference < 60000) {
+            window.location.href = savedLink;
+          }
+        }, 3000);
+      }
+    } catch (error) {
+      console.error(`Error fetching cities for ${containerId}:`, error);
+    }
+  }
+
+  // Fetch cities for all Emirates on page load
+  fetchCities("https://order-1ib.pages.dev/cities-dubai.html", "cities-dubai");
+  fetchCities("https://order-1ib.pages.dev/cities-abudhabi.html", "cities-abudhabi");
+  fetchCities("https://order-1ib.pages.dev/cities-sharjah.html", "cities-sharjah");
+  fetchCities("https://order-1ib.pages.dev/cities-ajman.html", "cities-ajman");
+  fetchCities("https://order-1ib.pages.dev/cities-um-al-quain.html", "cities-uaq");
+  fetchCities("https://order-1ib.pages.dev/cities-ras-al-khaimah.html", "cities-rak");
+  fetchCities("https://order-1ib.pages.dev/cities-fujairah.html", "cities-fujairah");
 });
-  </script>
+    </script>
 </body>
 </html>
-
