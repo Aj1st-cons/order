@@ -21,8 +21,8 @@ function openPopup(id) {
         .catch(error => console.error(`Error loading ${containerId}:`, error));
     };
 
-loadContent("https://adsaurf.pages.dev/og-categories.html", "categories");
-             loadContent("https://adsaurf.pages.dev/Drinks.html", "drinks");
-            loadContent("https://adsaurf.pages.dev/vegitables.html", "vegitables");
-          loadContent("https://adsaurf.pages.dev/Fruits.html", "fruits");                        
+loadContent("https://order-1ib.pages.dev/categories-cards.html", "categories");
+             loadContent("https://order-1ib.pages.dev/Drinks.html", "drinks");
+            loadContent("https://order-1ib.pages.dev/vegitables.html", "vegitables");
+          loadContent("https://order-1ib.pages.dev/Fruits.html", "fruits");                        
   });
