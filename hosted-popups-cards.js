@@ -23,6 +23,6 @@ function openPopup(id) {
 
 loadContent("https://order-1ib.pages.dev/categories-cards.html", "categories");
              loadContent("https://order-1ib.pages.dev/Drinks.html", "drinks");
-            loadContent("https://order-1ib.pages.dev/vegitables.html", "vegitables");
+            loadContent("https://order-1ib.pages.dev/Vegitables.html", "vegitables");
           loadContent("https://order-1ib.pages.dev/Fruits.html", "fruits");                        
   });
