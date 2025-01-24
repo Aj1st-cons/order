@@ -21,8 +21,11 @@ function openPopup(id) {
         .catch(error => console.error(`Error loading ${containerId}:`, error));
     };
 
-loadContent("https://order-1ib.pages.dev/categories-cards.html", "categories");
-             loadContent("https://order-1ib.pages.dev/Drinks.html", "drinks");
-            loadContent("https://order-1ib.pages.dev/Vegitables.html", "vegitables");
-          loadContent("https://order-1ib.pages.dev/Fruits.html", "fruits");                        
+loadContent("https://order-1ib.pages.dev/categories-cards.html", "categories");             
+              loadContent("https://order-1ib.pages.dev/Vegitables.html", "vegitables");
+              loadContent("https://order-1ib.pages.dev/Bakery.html", "bakery");
+              loadContent("https://order-1ib.pages.dev/Fruits.html", "fruits"); 
+              loadContent("https://order-1ib.pages.dev/Beverages.html", "beverages");
+              loadContent("https://order-1ib.pages.dev/Dairy.html", "dairy");
+              loadContent("https://order-1ib.pages.dev/Meat.html", "meat");
   });
