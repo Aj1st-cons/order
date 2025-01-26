@@ -203,10 +203,10 @@ footer a span {
 }
 
 .popup-card p {
-    margin: 0px 0;
-    color: #009500;
+    margin: 5px 0 10px;
+    color: #52595d;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 /* Floating back button */
