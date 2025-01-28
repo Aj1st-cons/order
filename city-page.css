@@ -109,8 +109,8 @@ footer a span {
     text-align: center;
     padding: 5px;            
     cursor: pointer;
-    width: 95px;
-    height: 110px;
+    width: 90px;
+    height: 100px;
     transition: transform 0.2s;            
 }
 
@@ -125,7 +125,7 @@ footer a span {
 }
 
 .cardx p {
-    margin: 5px 0 5px;
+    margin: 5px 0 0px;
     color: #52595d;
     font-weight: bold;
     font-size: 13px;
