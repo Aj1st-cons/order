@@ -164,7 +164,7 @@ footer a span {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
     justify-content: center; 
-    gap: 10px; 
+    gap: 20px; 
     width: calc(100% - 120px);
     margin: 0 auto;
     margin-top: 10px;
