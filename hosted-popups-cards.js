@@ -30,3 +30,45 @@ loadContent("https://order-1ib.pages.dev/categories-cards.html", "categories");
               loadContent("https://order-1ib.pages.dev/Dairy.html", "dairy");
               loadContent("https://order-1ib.pages.dev/Meat.html", "meat");
   });
+
+
+
+
+
+
+
+
+
+// Function to load the external HTML containing the popups
+function loadPopups(url) {
+  // Create an XMLHttpRequest to fetch the external HTML file
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+
+  // When the request is loaded successfully
+  xhr.onload = function () {
+    if (xhr.status === 200) {
+      // Create a temporary container to hold the fetched HTML content
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = xhr.responseText;
+
+      // Append the fetched popups to the body or a specific container
+      document.body.appendChild(tempDiv);
+      console.log("Popups loaded successfully!");
+    } else {
+      console.error(`Failed to load popups. Status: ${xhr.status}`);
+    }
+  };
+
+  // Handle network or other errors
+  xhr.onerror = function () {
+    console.error("An error occurred while loading the popups.");
+  };
+
+  // Send the request
+  xhr.send();
+}
+
+// Call the function to load the popups
+// Replace 'open-inner-popups.html' with the actual URL of your hosted file
+loadPopups("open-inner-popups.html");
