@@ -71,4 +71,5 @@ function loadPopups(url) {
 
 // Call the function to load the popups
 // Replace 'open-inner-popups.html' with the actual URL of your hosted file
-loadPopups("open-inner-popups.html");
+loadPopups("https://order-1ib.pages.dev/open-inner-popups.html");
+
