@@ -181,7 +181,7 @@ footer a span {
 }
 
 .popup-card {
-    background: #fff;
+    background: linear-gradient(to top right, #fff, #eeeeee);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     text-align: center;
