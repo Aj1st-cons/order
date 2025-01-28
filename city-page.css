@@ -107,7 +107,7 @@ footer a span {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     text-align: center;
-    padding: 15px;            
+    padding: 5px;            
     cursor: pointer;
     width: 100px;
     height: 120px;
@@ -164,7 +164,7 @@ footer a span {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
     justify-content: center; 
-    gap: 20px; 
+    gap: 10px; 
     width: calc(100% - 120px);
     margin: 0 auto;
     margin-top: 10px;
