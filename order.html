@@ -1,0 +1,366 @@
+
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://order-1ib.pages.dev/city-page.css" rel="stylesheet">
+<link rel="prefetch" href="https://order-app-ae.myshopify.com/search"> 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&amp;display=swap" rel="stylesheet"> 
+ 
+   <!-- #### header #### -->
+<div class="header">    
+    <a href="https://order-app-ae.myshopify.com" style="text-decoration: none; font-family: 'Lilita One', cursive;"><h1>Order App</h1></a>
+    <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
+        <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2M12 11.5C10.62 11.5 9.5 10.38 9.5 9S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5Z"></path>
+    </svg>
+<div id="locations">
+  <p id="change-location" class="location" style="cursor: pointer;">
+    default: location
+    <span style="color: #009500; margin-left: 5px; font-size: 15px; margin-bottom: 0px;">
+      <i class="fas fa-sync-alt"></i>
+    </span>
+  </p>
+</div> 
+          <!-- #### body ##### -->        
+  <!-- sharjah nadah 116 -->
+<div id="home" class="popup" style="display: none;">
+<div class="popup-content" id="categories"></div>
+</div>  
+
+
+<div id="vegitablesx" class="inner-popup popup" style="display: none;">
+  <div class="popup-content" id="vegitables"></div>
+</div>
+
+<div id="Fruitsx" class="inner-popup popup" style="display: none;">
+  <div class="popup-content" id="fruits"></div>
+</div>
+
+<!-- No Items Found Popup -->
+<div id="overlay" class="overlay"></div>
+<div id="popup" class="popup">No items found within your area.</div>
+  
+<script src="https://order-1ib.pages.dev/hosted-popups-cards.js"></script>
+
+<script>
+    let userLat = null;
+    let userLon = null;
+    let matchedVendors = [];
+
+    const vendorLocations = [
+        { vendor: "AJ", lat: 24.396973, lon: 54.588957 },
+        { vendor: "AD", lat: 24.391549, lon: 54.578581 },
+        { vendor: "ND", lat: 24.419336, lon: 54.577641 },
+        { vendor: "GF", lat: 24.378686, lon: 54.505349 }
+    ];
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    function getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                userLat = position.coords.latitude;
+                userLon = position.coords.longitude;
+                findNearbyVendors();
+            });
+        }
+    }
+
+    function findNearbyVendors() {
+        matchedVendors = [];
+        vendorLocations.forEach(vendor => {
+            let distance = getDistance(userLat, userLon, vendor.lat, vendor.lon);
+            if (distance <= 50) {
+                matchedVendors.push(vendor.vendor);
+            }
+        });
+    }
+
+    function handleClick(event) {
+        event.preventDefault();
+        const itemName = event.currentTarget.getAttribute("data-item");
+
+        if (matchedVendors.length > 0) {
+            let vendorQuery = matchedVendors.map(vendor => `vendor:${vendor}`).join(" OR ");
+            let searchURL = `https://order-app-ae.myshopify.com/search?q=${itemName}+${vendorQuery}`;
+            window.location.href = searchURL;
+        } else {
+            showPopup();
+        }
+    }
+
+    function showPopup() {
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("popup").style.display = "block";
+        setTimeout(() => {
+            document.getElementById("overlay").style.display = "none";
+            document.getElementById("popup").style.display = "none";
+        }, 2000);
+    }
+
+    // Fetch user location on page load to speed up search
+    getUserLocation();
+</script>
+
+  <!-- location selecting -->
+  <div id="popup-emirates" class="inner-popup popup" style="display: none;">
+      <div class="emirates-content">
+    <div class="city-heading">
+<b>select your Emirates:</b>    
+    </div>    
+<span class="emirate" id="du">Dubai</span>    
+<span class="emirate" id="shj">Sharjah</span>
+<span class="emirate" id="ad">Abu Dhabi</span>
+<span class="emirate" id="aj">Ajman</span>
+<span class="emirate" id="uaq">Um Al Quain</span>
+<span class="emirate" id="rak">Ras Al Khaimah</span>
+<span class="emirate" id="fuj">Fujairah</span> 
+  </div>
+</div>   
+
+           <!-- Cities Screen -->      
+<div id="popup-dubai" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading">
+<b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button>
+</div>
+    <div class="city-list" id="cities-dubai">      
+         </div>
+</div>
+</div>
+                    
+<div id="popup-abudhabi" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading">
+<b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button>
+</div>
+<div class="city-list" id="cities-abudhabi">
+         </div>
+</div>
+</div>
+
+<div id="popup-sharjah" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading">
+<b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button>
+</div>
+    <div class="city-list" id="cities-sharjah">
+         </div>
+</div>
+</div>
+
+<div id="popup-ajman" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading">
+<b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button>
+</div>
+    <div class="city-list" id="cities-ajman">
+         </div>
+</div>
+</div>
+
+<div id="popup-uaq" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading">
+<b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button>
+</div>
+    <div class="city-list" id="cities-uaq">
+         </div>
+</div>
+</div>
+
+<div id="popup-rak" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading">
+<b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button>
+</div>
+    <div class="city-list" id="cities-rak">
+         </div>
+</div>
+</div>
+         
+<div id="popup-fujairah" class="inner-popup popup" style="display: none;">
+  <div class="emirates-content">
+    <div class="city-heading">
+<b>Select your City:</b><button class="close-btn">
+<i class="fas fa-undo" style="font-size: 20px; color: #B83C08;"></i></button>
+</div>
+ <div class="city-list" id="cities-fujairah">
+         </div>
+</div>
+</div>
+
+<script>
+let isMainPopupOpen = false; // Tracks if the main popup is open
+
+// Function to toggle the main popup
+function togglePopup(id) {
+  const mainPopup = document.getElementById(id);
+
+  if (!mainPopup) return;
+
+  if (!isMainPopupOpen) {
+    // Open the main popup
+    mainPopup.style.display = 'block';
+    closeInnerPopups(); // Close any inner popups
+    isMainPopupOpen = true;
+  } else {
+    // Reset the main popup by closing inner popups
+    closeInnerPopups();
+  }
+}
+
+// Function to open an inner popup
+function openInnerPopup(id) {
+  const innerPopup = document.getElementById(id);
+
+  if (innerPopup) {
+    closeInnerPopups(); // Close any currently open inner popups
+    innerPopup.style.display = 'block'; // Display the specific inner popup
+  }
+}
+
+// Function to close all inner popups
+function closeInnerPopups() {
+  const innerPopups = document.querySelectorAll('.inner-popup'); // Find all inner popups
+  innerPopups.forEach(popup => {
+    popup.style.display = 'none'; // Hide each inner popup
+  });
+}
+
+    window.onload = function() {
+        openPopup('home');
+    };           
+
+// Add event listener to the close button
+document.querySelectorAll('.close-btn').forEach(button => {
+  button.addEventListener('click', (e) => {
+    // Find the closest popup that contains the close button
+    const currentPopup = e.target.closest('.popup');
+    if (currentPopup) {
+      currentPopup.style.display = 'none'; // Close the current popup
+    }
+
+    // Show the 'popup-emirates'
+    const popupEmirates = document.getElementById('popup-emirates');
+    if (popupEmirates) {
+      popupEmirates.style.display = 'block'; // Show the popup-emirates
+    }
+  });
+});
+
+// Get the popup and the link
+const popup = document.getElementById('popup-emirates');
+const changeLocation = document.getElementById('change-location');
+
+// Add a click event listener to toggle the Emirates popup
+changeLocation.addEventListener('click', () => {
+  popup.style.display = (popup.style.display === 'none' || popup.style.display === '') ? 'block' : 'none';
+});
+
+// Get the popups for each emirate
+const popupDubai = document.getElementById('popup-dubai');
+const popupSharjah = document.getElementById('popup-sharjah');
+const popupAbuDhabi = document.getElementById('popup-abudhabi');
+const popupAjman = document.getElementById('popup-ajman');
+const popupUAQ = document.getElementById('popup-uaq');
+const popupRAK = document.getElementById('popup-rak');
+const popupFujairah = document.getElementById('popup-fujairah');
+
+
+
+// Define a mapping between Emirates IDs and their corresponding popup variables
+const emirates = {
+  du: popupDubai,
+  shj: popupSharjah,
+  ad: popupAbuDhabi,
+  aj: popupAjman,
+  uaq: popupUAQ,
+  rak: popupRAK,
+  fuj: popupFujairah,
+};
+
+// Add a single event listener for each Emirates button
+Object.keys(emirates).forEach((id) => {
+  document.getElementById(id).addEventListener('click', () => {
+    popup.style.display = 'none'; // Hide Emirates popup
+    emirates[id].style.display = 'block'; // Show the corresponding popup
+  });
+});
+
+
+
+
+  // Function to fetch cities from an external link and store selected city page
+  async function fetchCities(url, containerId) {
+    try {
+      // Fetch HTML content from the external link
+      const response = await fetch(url);
+      const html = await response.text();
+
+      // Insert the fetched HTML into the specified container
+      document.getElementById(containerId).innerHTML = html;
+
+
+// Add click event listeners to city links after fetching
+const cityLinks = document.querySelectorAll(`#${containerId} .emirate`);
+cityLinks.forEach((link) => {
+  link.addEventListener("click", () => {
+    console.log(`City URL Clicked: ${link.href}`);
+  });
+});
+} catch (error) {
+  console.error(`Error fetching cities for ${containerId}:`, error);
+}        
+
+
+    // Fetch cities for all Emirates on page load
+    fetchCities("https://order-1ib.pages.dev/cities-dubai.html", "cities-dubai");
+    fetchCities("https://order-1ib.pages.dev/cities-abudhabi.html", "cities-abudhabi");
+    fetchCities("https://order-1ib.pages.dev/cities-sharjah.html", "cities-sharjah");
+    fetchCities("https://order-1ib.pages.dev/cities-ajman.html", "cities-ajman");
+    fetchCities("https://order-1ib.pages.dev/cities-um-al-quain.html", "cities-uaq");
+    fetchCities("https://order-1ib.pages.dev/cities-ras-al-khaimah.html", "cities-rak");
+    fetchCities("https://order-1ib.pages.dev/cities-fujairah.html", "cities-fujairah");
+  });    
+    
+</script>    
+      <!-- footer -->
+<footer>        
+    <!-- Cart Link -->
+    <a href="https://order-app-ae.myshopify.com/cart" aria-label="Cart">
+        <i class="fas fa-shopping-cart"></i>
+<span style="margin-left:3px;">cart</span>        
+    </a>        
+
+    <!-- Home Link -->
+    <a href="#" onclick="togglePopup('home')" aria-label="Categories">          
+   <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/category-button.png?v=1737641352" alt="Categories" style="width: 80px; height: auto; margin-bottom: 10px;"> 
+    <span style="text-align: center; font-size: 9px; color: #888; margin-top: 0px; margin-bottom: 30px;">Categories</span>             
+</a>
+
+    <!-- Orders Link -->
+    <a href="https://shopify.com/70260555812/account/orders?region_country=AE" aria-label="Orders">
+        <i class="fas fa-user"></i>
+        <span>orders</span>
+    </a>           
+
+</footer>
+
+      </div>
