@@ -33,10 +33,10 @@
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
                     function(position) {
-                        let latitude = position.coords.latitude;
-                        let longitude = position.coords.longitude;
+                        let latitude = position.coords.latitude.toFixed(6);
+                        let longitude = position.coords.longitude.toFixed(6);
                         document.getElementById("output").innerHTML = 
-                            `Latitude: ${latitude} <br> Longitude: ${longitude}`;
+                            `Coordinates: (${latitude}, ${longitude})`;
                     },
                     function(error) {
                         document.getElementById("output").innerHTML = 
