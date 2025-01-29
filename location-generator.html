@@ -32,9 +32,9 @@
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
                     function(position) {
-                        let latitude = position.coords.latitude.toFixed(2);
-                        let longitude = position.coords.longitude.toFixed(2);
-                        document.getElementById("output").innerText = `${latitude}, ${longitude}`;
+                        let latitude = position.coords.latitude;
+                        let longitude = position.coords.longitude;
+                        document.getElementById("output").innerText = `${latitude} , ${longitude}`;
                     },
                     function(error) {
                         document.getElementById("output").innerText = "Error";
