@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML List Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 10px;
+        }
+        h2 {
+            text-align: center;
+        }
+        input {
+            display: block;            
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+        }
+        button {
+            background: #009500;
+            color: #fff;
+            font-weight: bold;
+            display: block;            
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+        }
+        .preview {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+            background: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>HTML List Generator</h2>
+
+    <label for="popupId">Popup ID (for closePopup, optional):</label>
+    <input type="text" id="popupId" placeholder="Enter popup ID">
+
+    <label for="itemName">Item Name:</label>
+    <input type="text" id="itemName" placeholder="Enter item name">
+
+    <label for="itemImage">Image URL (optional):</label>
+    <input type="text" id="itemImage" placeholder="Paste image URL (leave empty for default)">
+
+    <button onclick="addHtml()">Add HTML</button>
+    <button onclick="undoLastAction()">Undo Last Action</button>
+    <button onclick="copyLastHtml()">Copy Last Entry</button>
+    <button onclick="copyAllHtml()">Copy All HTML</button>
+
+    <h3>Generated HTML:</h3>
+    <div class="preview" id="preview"></div>
+
+    <script>
+        const defaultImage = "https://cdn.shopify.com/s/files/1/0664/3751/3414/files/empty.webp?v=1738124169";
+        let lastGeneratedHtml = "";
+        let allGeneratedHtml = "";
+        let historyStack = [];
+
+        function getBackButtonHtml() {
+            const popupId = document.getElementById("popupId").value.trim();
+            if (!popupId) return ""; // No popup ID, no back button
+            return `\n<img src="https://cdn.shopify.com/s/files/1/0702/6055/5812/files/1736692392616.png?v=1736692628" 
+                     alt="Back" class="back-button" onclick="closePopup('${popupId}x')">\n\n`;
+        }
+
+        function addHtml() {
+            const itemName = document.getElementById("itemName").value.trim();
+            const itemImage = document.getElementById("itemImage").value.trim() || defaultImage;
+
+            if (!itemName) {
+                alert("Please enter an item name.");
+                return;
+            }
+
+            const formattedItemName = itemName.charAt(0).toUpperCase() + itemName.slice(1);
+            const itemUrl = itemName.toLowerCase().replace(/\s+/g, "-") + ".html";
+
+            lastGeneratedHtml = `\n<div class="popup-card" onclick="window.location.href='${itemUrl}'">
+    <img src="${itemImage}" alt="${formattedItemName}">
+    <p>${formattedItemName}</p>
+</div>\n`;
+
+            if (!allGeneratedHtml) {
+                allGeneratedHtml = getBackButtonHtml();
+            }
+
+            historyStack.push(lastGeneratedHtml);
+            allGeneratedHtml += lastGeneratedHtml;
+            document.getElementById("preview").textContent = allGeneratedHtml;
+        }
+
+        function undoLastAction() {
+            if (historyStack.length === 0) {
+                alert("Nothing to undo.");
+                return;
+            }
+
+            historyStack.pop();
+            allGeneratedHtml = getBackButtonHtml() + historyStack.join("");
+            document.getElementById("preview").textContent = allGeneratedHtml;
+        }
+
+        function copyLastHtml() {
+            if (!lastGeneratedHtml) {
+                alert("No new entry to copy.");
+                return;
+            }
+            navigator.clipboard.writeText(lastGeneratedHtml.trim()).then(() => {
+                alert("Last entry copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy: " + err);
+            });
+        }
+
+        function copyAllHtml() {
+            if (!allGeneratedHtml) {
+                alert("No HTML to copy.");
+                return;
+            }
+            navigator.clipboard.writeText(allGeneratedHtml.trim()).then(() => {
+                alert("All HTML copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy: " + err);
+            });
+        }
+    </script>
+
+</body>
+</html>
