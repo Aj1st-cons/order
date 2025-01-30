@@ -12,6 +12,7 @@
         }
         h2 {
             text-align: center;
+            color: #B21807;
         }
         input {
             display: block;            
@@ -27,7 +28,7 @@
             margin: 10px 0;
             padding: 8px;
             width: 100%;
-        }
+        }        
         .preview {
             margin-top: 20px;
             padding: 10px;
@@ -41,7 +42,7 @@
 
     <h2>HTML List Generator</h2>
 
-    <label for="popupId">Popup ID (for closePopup, optional):</label>
+    <label for="popupId">Popup ID (for back button, optional):</label>
     <input type="text" id="popupId" placeholder="Enter popup ID">
 
     <label for="itemName">Item Name:</label>
@@ -67,8 +68,9 @@
         function getBackButtonHtml() {
             const popupId = document.getElementById("popupId").value.trim();
             if (!popupId) return ""; // No popup ID, no back button
-            return `\n<img src="https://cdn.shopify.com/s/files/1/0702/6055/5812/files/1736692392616.png?v=1736692628" 
-                     alt="Back" class="back-button" onclick="closePopup('${popupId}x')">\n\n`;
+            return `\n<!-- ${popupId} -->
+<img src="https://cdn.shopify.com/s/files/1/0702/6055/5812/files/1736692392616.png?v=1736692628" 
+     alt="Back" class="back-button" onclick="goBackToCategories()">\n\n`;
         }
 
         function addHtml() {
@@ -81,9 +83,9 @@
             }
 
             const formattedItemName = itemName.charAt(0).toUpperCase() + itemName.slice(1);
-            const itemUrl = itemName.toLowerCase().replace(/\s+/g, "-") + ".html";
+            const itemData = itemName.toLowerCase();
 
-            lastGeneratedHtml = `\n<div class="popup-card" onclick="window.location.href='${itemUrl}'">
+            lastGeneratedHtml = `\n<div class="popup-card" data-item="${itemData}" onclick="handleClick(event)">
     <img src="${itemImage}" alt="${formattedItemName}">
     <p>${formattedItemName}</p>
 </div>\n`;
