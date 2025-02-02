@@ -69,21 +69,23 @@ body {
             padding-bottom: 70px; 
             box-sizing: border-box;             
         }
-        #locationErrorPopup { 
-            position: fixed; 
-            top: 300px;
-            width: 60%; 
-            height: 60%; 
-            background-color: #ffffff; 
-            display: none; 
-            overflow-y: auto; 
-            overflow-x: hidden; 
-            z-index: 10; 
-            padding-top: 50px; 
+         #errorPopup {
+            position: fixed;
+            display: none;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 250px;
+            background-color: white;
+            border: 2px solid #009500;
+            border-radius: 5px;
+            box-shadow: 0 0 30px 30px rgba(0, 0, 0, 0.3);
+            z-index: 9999; 
+            padding: 10px; 
             box-sizing: border-box; 
-            border: 1px solid #009500;                        
-        }
-        #locationPopup, #cityPopup {
+         }
+        #locationPopup, #cityPopup, #locationErrorPopup {
             position: fixed;
             top: 60px;
             right: 10px;
