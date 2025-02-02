@@ -1,0 +1,273 @@
+body { 
+             font-family: Arial, sans-serif; 
+             margin: 20px; 
+             text-align: center; 
+         }
+         .header {
+             background-color: #eeeeee; 
+             text-align: center; 
+             padding: 10px 0; 
+             position: fixed; 
+             top: 0; 
+             left: 0; 
+             width: 100%; 
+             height: 40px;
+             z-index: 20; 
+             display: flex; 
+             flex-direction: row;               
+             justify-content: center; 
+             white-space: nowrap; 
+             gap: 50px;
+        } 
+        .header h1 { 
+             position: absolute;
+             top: 10px;
+             left: 20px;
+             color: #009500;              
+             font-weight: bold; 
+             text-shadow: 0.5px 0.5px 0.5px #000; 
+             font-size: 30px; 
+             margin: 0; 
+             margin-bottom: 10px;
+             text-decoration: none; 
+             font-family: 'Lilita One', cursive;
+        }
+        .location { 
+             cursor: pointer; 
+             font-size: 16px; 
+        }                                          
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border: 1px solid black;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            display: none;            
+            overflow-y: auto;
+        }
+       #itemPopup {
+            position: fixed; 
+            width: 100%; 
+            height: calc(100% - 90px); 
+            background-color: #ffffff; 
+            display: none; 
+            overflow-y: auto; 
+            overflow-x: hidden; 
+            z-index: 10; 
+            padding-bottom: 70px; 
+            box-sizing: border-box;             
+        }
+        #locationErrorPopup { 
+            position: fixed; 
+            top: 300px;
+            width: 60%; 
+            height: 60%; 
+            background-color: #ffffff; 
+            display: none; 
+            overflow-y: auto; 
+            overflow-x: hidden; 
+            z-index: 10; 
+            padding-top: 50px; 
+            box-sizing: border-box; 
+            border: 1px solid #009500;                        
+        }
+        #locationPopup, #cityPopup {
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            width: 170px;
+            height: 400px;
+            background-color: #ffffff;
+            display: none;
+            overflow: auto; 
+            z-index: 10;
+            box-sizing: border-box;
+            border: 2px solid #009500;
+ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+        }
+        .popup-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 10px;
+            max-height: calc(100% - 40px); 
+        }
+        #locationsList, #cityList {
+            margin-top: 0px;
+            text-align: left;
+            margin-left: 10px; 
+            color: #52595d; 
+            font-weight: bold;
+            overflow-y: auto; 
+        } 
+        .current-location {
+            text-align: left;
+            margin-bottom: 20px;
+            margin-top: 15px;            
+            color: #52595d;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .current-location:hover {
+            color: darkred;
+        }               
+        .popup-footer {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px;
+            border-bottom: 1px solid #009500;
+            background-color: #ffffff;
+            z-index: 11; 
+        }
+        .popup-footer button {
+            font-size: 18px; 
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        .popup-footer .back-btn {
+            color: red;
+        }
+        .popup-footer button:last-child {
+            color: red;
+        }
+        #locationsPopup h4 {
+            text-align: center;
+            color: red;
+        }
+        .header .replaceable-text {
+            position: absolute;
+            top: 16px;
+            right: 30px;
+            cursor: pointer;
+            background: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .bottom-popup {
+            position: fixed;
+            top: 150px;
+            left: 50%;         
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background-color: black;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .footer-btn {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .footer-btn i {
+            font-size: 28px;
+        }
+        .footer-btn img {
+            margin-top: -30px;
+        }
+        #categories {            
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            justify-content: center; 
+            gap: 20px; 
+            width: calc(100% - 120px); 
+            margin: 0 auto; 
+            margin-top: 70px; 
+            padding: 10px; 
+            box-sizing: border-box;
+        }
+        .cardx { 
+            margin-top: 0px;              
+   background: linear-gradient(to top right, #eeeeee, #fff);
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            text-align: center;
+            padding: 5px;            
+            cursor: pointer;
+            width: 90px;
+            height: 105px;
+            transition: transform 0.2s;            
+        }
+        .cardx:hover {
+            transform: scale(1.05);    
+        }
+        .cardx img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .cardx p {
+            margin-top: -5px;
+            color: #52595d;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .item-grid {            
+            display: grid; 
+     grid-template-columns: repeat(3, 1fr); 
+            justify-content: center; 
+            gap: 20px; 
+            width: calc(100% - 120px); 
+            margin: 0 auto; 
+            margin-top: 10px; 
+            padding: 10px; 
+            box-sizing: border-box;
+        }                   
+        .item-card {
+            margin-top: 0px;              
+     background: linear-gradient(to top right, #eeeeee, #fff);
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            text-align: center;
+            padding: 5px;            
+            cursor: pointer;
+            width: 90px;
+            height: 105px;
+            transition: transform 0.2s;
+        }
+        .item-card:hover {
+            transform: scale(1.05);
+        }
+        .item-card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .item-card p {
+            margin: -2px;
+            color: #52595d;
+            font-size: 14px;
+            font-weight: bold;
+        }  
