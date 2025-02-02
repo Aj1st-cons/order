@@ -237,7 +237,7 @@ body {
             border-radius: 8px;
         }
         .cardx p {
-            margin-top: -5px;
+            margin-top: 0px;
             color: #52595d;
             font-weight: bold;
             font-size: 14px;
@@ -275,7 +275,7 @@ body {
             border-radius: 8px;
         }
         .item-card p {
-            margin: -2px;
+            margin: 0px;
             color: #52595d;
             font-size: 14px;
             font-weight: bold;
