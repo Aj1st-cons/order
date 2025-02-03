@@ -181,12 +181,12 @@ body {
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 25px;
+            height: 40px;
             background-color: black;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 5px 0;
+            padding: 10px 0;
             z-index: 1000;
         }
         .footer-btn {
@@ -201,7 +201,7 @@ body {
             justify-content: center;
         }
         .footer-btn i {
-            font-size: 26px;
+            font-size: 28px;
         }
         .footer-btn img {
             margin-top: -30px;
