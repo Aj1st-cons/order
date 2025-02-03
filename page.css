@@ -60,7 +60,7 @@ body {
        #itemPopup {
             position: fixed; 
             width: 100%; 
-            height: calc(100% - 90px); 
+            height: calc(100% - 60px); 
             background-color: #ffffff; 
             display: none; 
             overflow-y: auto; 
