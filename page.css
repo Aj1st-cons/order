@@ -178,6 +178,7 @@ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
             padding: 10px;
             border-radius: 5px;
             display: none;
+    z-index: 9999 !important;
         }
         .footer {
             position: fixed;
