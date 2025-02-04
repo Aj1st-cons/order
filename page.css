@@ -226,6 +226,7 @@ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
             margin-top: 0px; 
             padding: 0px; 
             box-sizing: border-box;
+            background: #fff;
         }
         .cardx { 
             margin-top: 0px;              
