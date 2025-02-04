@@ -120,13 +120,18 @@ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
             overflow-y: auto; 
         } 
         .current-location {
-            text-align: left;
-            margin-bottom: 20px;
-            margin-top: 15px;            
-            color: #52595d;
-            cursor: pointer;
-            font-weight: bold;
-        }
+    text-align: left;
+    margin-bottom: 20px;
+    margin-top: 15px;            
+    color: #52595d;
+    cursor: pointer;
+    font-weight: bold;
+    /* Prevent text selection */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
         .current-location:hover {
             color: darkred;
         }               
