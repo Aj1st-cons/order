@@ -216,14 +216,11 @@ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
         .footer-btn img {
             margin-top: -30px;
         }
-        /* Reset default margins and paddings */
 html, body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
-/* Updated #categories styling */
 #categories {            
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
@@ -232,7 +229,9 @@ html, body {
     margin: 0;                 /* No extra margins */
     padding: 20px;             /* Padding touches screen edges */
     box-sizing: border-box;    /* Includes padding within the width */
-    background-color: #fff;    /* Background color for visibility */
+    background-color: #fff;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
         .cardx { 
             margin-top: 0px;              
