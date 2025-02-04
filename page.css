@@ -221,7 +221,7 @@ html, body {
     padding: 0;
     box-sizing: border-box;
 }
-#categorie {            
+#categories {            
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
     gap: 20px; 
