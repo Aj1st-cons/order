@@ -97,9 +97,12 @@ body {
             z-index: 10;
             box-sizing: border-box;
             border: 2px solid #009500;
- box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
+ 
             display: none;
             flex-direction: column;
+        }
+        #locationPopup,#cityPopup {
+box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
         }
         .popup-content {
             flex: 1;
