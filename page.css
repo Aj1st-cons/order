@@ -226,7 +226,7 @@ html, body {
     grid-template-columns: repeat(3, 1fr); 
     gap: 20px; 
     width: 100vw;              /* Full viewport width */
-    height: calc(100% - 80px);  
+    height: calc(100% - 50px);  
     margin: 0 auto;                 /* No extra margins */
     padding: 20px;             /* Padding touches screen edges */
     box-sizing: border-box;    /* Includes padding within the width */
@@ -243,7 +243,7 @@ html, body {
             padding: 5px;            
             cursor: pointer;
             width: 100px;
-            height: 110px;
+            height: 115px;
             transition: transform 0.2s;            
         }
         .cardx:hover {
@@ -282,7 +282,7 @@ html, body {
             padding: 5px;            
             cursor: pointer;
             width: 100px;
-            height: 110px;
+            height: 115px;
             transition: transform 0.2s;
         }
         .item-card:hover {
