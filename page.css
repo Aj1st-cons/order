@@ -126,11 +126,6 @@ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
     color: #52595d;
     cursor: pointer;
     font-weight: bold;
-    /* Prevent text selection */
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
 }
         .current-location:hover {
             color: darkred;
@@ -171,7 +166,13 @@ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
             padding: 5px 10px;
             border-radius: 5px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 14px;         
+        }
+        .current-location, .replaceable-text {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
         }
         .bottom-popup {
             position: fixed;
