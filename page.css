@@ -226,7 +226,7 @@ html, body {
     grid-template-columns: repeat(3, 1fr); 
     gap: 20px; 
     width: 100vw;              /* Full viewport width */
-    height: 100%;  
+    height: 100vw;  
     margin: 0 auto;                 /* No extra margins */
     padding: 20px;             /* Padding touches screen edges */
     box-sizing: border-box;    /* Includes padding within the width */
@@ -260,7 +260,8 @@ html, body {
             line-height: 0.8;
             color: #52595d;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px;
+            white-space: nowrap;
         }
         .item-grid {            
             display: grid; 
@@ -298,6 +299,7 @@ html, body {
             margin-top: -5px;
             line-height: 0.8;
             color: #52595d;
-            font-size: 14px;
+            font-size: 13px;
+            white-space: nowrap;
             font-weight: bold;
         }  
