@@ -226,7 +226,7 @@ html, body {
     grid-template-columns: repeat(3, 1fr); 
     gap: 20px; 
     width: 100vw;              /* Full viewport width */
-    margin: 0;                 /* No extra margins */
+    margin: 0 auto;                 /* No extra margins */
     padding: 20px;             /* Padding touches screen edges */
     box-sizing: border-box;    /* Includes padding within the width */
     background-color: #fff;
@@ -255,7 +255,8 @@ html, body {
             border-radius: 8px;
         }
         .cardx p {
-            margin-top: 0px;
+            margin-top: -10px;
+            line-height: 0.8;
             color: #52595d;
             font-weight: bold;
             font-size: 14px;
