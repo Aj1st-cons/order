@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Search</title>
+<style>
+ #welcome {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        color: #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+        text-align: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+    }
+
+#welcome.visible {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease-in-out, visibility 0s linear 0s;
+    }
+
+    #welcome img {
+        max-width: 400px;
+        margin-bottom: 100px;
+        margin-top: -30px;
+        margin-left: 0px;
+        animation: fade-in 0.5s ease-in-out forwards;
+    }
+
+    h1 {
+        display: flex;
+        gap: 1px;
+        font-family: 'Lilita One', cursive;
+        font-size: 50px;
+        color: #009500;
+        margin-top: -5px;
+        text-shadow: 5px 5px 5px black;
+    }
+
+    h1 span {
+        opacity: 0;
+        transform: scale(0.8);
+        animation: letter-emerge 0.3s ease-in-out forwards;
+    }
+
+    h1 span.space {
+        width: 10px;
+    }
+
+    h1 span:nth-child(1) { animation-delay: 0.5s; }
+    h1 span:nth-child(2) { animation-delay: 0.55s; }
+    h1 span:nth-child(3) { animation-delay: 0.6s; }
+    h1 span:nth-child(4) { animation-delay: 0.65s; }
+    h1 span:nth-child(5) { animation-delay: 0.7s; }
+    h1 span:nth-child(6) { animation-delay: 0.75s; }
+    h1 span:nth-child(7) { animation-delay: 0.8s; }
+    h1 span:nth-child(8) { animation-delay: 0.85s; }
+    h1 span:nth-child(9) { animation-delay: 0.9s; }
+    h1 span:nth-child(10) { animation-delay: 0.95s; }
+
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+#welcome {
+    transition: opacity 1s ease-out;
+}
+#welcome.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+    @keyframes letter-emerge {
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+</style>    
+<link rel="stylesheet" href="https://order-1ib.pages.dev/page.css">    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&amp;display=swap" rel="stylesheet">       
+</head>
+    <body onload="getUserLocation()">
+
+        <div class="header">
+    <a href="https://order-app-ae.myshopify.com" style="margin-right: 10px;">
+        <h1 style="margin: 0;">Order App</h1>
+    </a>    
+    <div class="replaceable-text" onclick="showLocationPopup()" style="margin-right: 10px; cursor: pointer;">
+    Change Location
+</div>
+<div class="icon-container" onclick="showLocationPopup()" style="cursor: pointer;">
+    <i class="fa-solid fa-rotate" style="color: #009500;"></i>
+</div>
+</div>
+          <!-- Welcome Screen -->
+<div id="welcome" class="visible">    
+        <h1>
+            <span>O</span><span>r</span><span>d</span><span>e</span><span>r</span>
+            <span class="space"></span>
+            <span>A</span><span>p</span><span>p</span>
+        </h1>
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/welcome_image.png?v=1737684481" alt="Welcome Image">
+    </div>
+    
+<script>    document.addEventListener("DOMContentLoaded", function () {
+    const welcomeScreen = document.getElementById("welcome");
+    const footer = document.querySelector("footer");
+
+    // Hide footer visually but keep its space
+    if (footer) {
+        footer.style.visibility = "hidden";
+        footer.style.opacity = "0";
+        footer.style.transition = "opacity 0.5s ease-in-out";
+    }
+
+    // Show welcome screen for 2 seconds
+    setTimeout(() => {
+        welcomeScreen.style.display = "none";
+        
+        // Fade-in footer smoothly
+        if (footer) {
+            footer.style.visibility = "visible";
+            footer.style.opacity = "1";
+        }
+    }, 3000); // 3 seconds
+});
+</script>        
+                  <!--  -->
+       <div id="categories" class="item-grid" style="margin-top: 60px; margin-bottom: 50px;"></div> 
+                  <!--  -->    
+    <div id="itemPopup" class="popup">        
+ <div id="itemList"></div></div>                              
+                   <!--  -->
+<div id="locationPopup" class="popup2">  
+    <div class="popup-footer">
+        <span></span>
+        <button onclick="closePopup()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>      
+    <div id="locationsList" class="popup-content"></div></div>
+                   <!--  -->
+<div id="cityPopup" class="popup2">  
+    <div class="popup-footer">
+        <button class="back-btn" onclick="goBackToLocations()">
+       <i class="fas fa-arrow-left"></i> 
+        </button>
+        <button onclick="closePopup()">
+       <i class="fas fa-times"></i>
+        </button>
+    </div>     
+    <div id="cityList" class="popup-content"></div></div>
+                   <!--  -->    
+    <div id="errorPopup" class="popup2">
+        <h3>Item Not Available</h3>
+        <p>The selected item is not available nearby.</p>
+        <br><br>
+   <button onclick="closeErrorPopup()">OK</button>
+    </div>
+                   <!--  -->
+    <div id="locationErrorPopup" class="popup2">
+        <br>
+        <h3>Error</h3>
+        <p>Unable to get your current location. Please turn <b>ON</b> the location</p>
+        <br><br>
+    <button onclick="closePopup()">OK</button>
+    </div>
+                   <!--  -->
+   <div id="locationPromptPopup" class="bottom-popup">
+        <p>Please turn on your location services for a better experience.</p></div>
+        
+     <div id="selectLocationPopup" class="bottom-popup" style="display: none;">
+    <p>Please turn your location <b>ON</b><br><br>OR<br><br>select your location</p>
+</div>
+                   <!--  -->        
+<script>
+  async function loadCategories() {
+      try {
+          let response = await fetch('https://order-1ib.pages.dev/categories.html');
+          if (!response.ok) throw new Error('Failed to load categories');
+
+          let html = await response.text();
+          document.getElementById('categories').innerHTML = html;
+      } catch (error) {
+          console.error('Error loading categories:', error);
+      }
+  }
+
+  loadCategories();
+  
+  
+  
+  function closeErrorPopup() {
+    document.getElementById("errorPopup").style.display = "none";
+}    
+</script>
+
+<script>
+    let locations = {
+        "Dubai": { 
+            "City A1": { lat: 25.123, lng: 55.123 }, 
+            "City A2": { lat: 25.223, lng: 55.223 }, 
+            "City A3": { lat: 25.323, lng: 55.323 },
+            "City A4": { lat: 25.123, lng: 55.123 }, 
+            "City A5": { lat: 25.223, lng: 55.223 }, 
+            "City A6": { lat: 25.323, lng: 55.323 },
+            "City A7": { lat: 25.123, lng: 55.123 }, 
+            "City A8": { lat: 25.223, lng: 55.223 }, 
+            "City A9": { lat: 25.323, lng: 55.323 },
+            "City A10": { lat: 25.123, lng: 55.123 }, 
+            "City A11": { lat: 25.223, lng: 55.223 }, 
+            "City A12": { lat: 25.323, lng: 55.323 },
+            "City A13": { lat: 25.123, lng: 55.123 }, 
+            "City A14": { lat: 25.223, lng: 55.223 }, 
+            "City A15": { lat: 25.323, lng: 55.323 } 
+        },
+        "Abu Dhabi": { 
+            "City C1": { lat: 27.123, lng: 57.123 }, 
+            "City C2": { lat: 27.223, lng: 57.223 }, 
+            "City C3": { lat: 27.323, lng: 57.323 } 
+        },
+        "Ajman": { 
+            "City C1": { lat: 27.123, lng: 57.123 }, 
+            "City C2": { lat: 27.223, lng: 57.223 }, 
+            "City C3": { lat: 27.323, lng: 57.323 } 
+        },
+        "UAQ": { 
+            "City C1": { lat: 27.123, lng: 57.123 }, 
+            "City C2": { lat: 27.223, lng: 57.223 }, 
+            "City C3": { lat: 27.323, lng: 57.323 } 
+        },
+        "RAK": { 
+            "City C1": { lat: 27.123, lng: 57.123 }, 
+            "City C2": { lat: 27.223, lng: 57.223 }, 
+            "City C3": { lat: 27.323, lng: 57.323 } 
+        },
+        "Fujairah": { 
+            "City C1": { lat: 27.123, lng: 57.123 }, 
+            "City C2": { lat: 27.223, lng: 57.223 }, 
+            "City C3": { lat: 27.323, lng: 57.323 } 
+        }
+    };
+
+    let vendors = {
+        "A": { lat: 25.125, lng: 55.126 },
+        "AJ": { lat: 24.396973, lng: 54.588957 },
+        "AD": { lat: 24.391549, lng: 54.578581 },
+        "ND": { lat: 26.125, lng: 56.126 },
+        "GF": { lat: 25.225, lng: 55.226 },
+        "C": { lat: 26.125, lng: 56.126 },        
+        "D": { lat: 27.125, lng: 57.126 }
+    };
+</script>
+
+<script>
+    function getUserLocation() {
+        let savedLocation = getSavedLocation();
+
+        if (savedLocation) {
+            updateReplaceableText(savedLocation);
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    let userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        timestamp: Date.now(),
+                        type: "device"
+                    };
+                    saveLocation(userLocation);
+                    updateReplaceableText(userLocation);
+                },
+                () => {
+                    if (!savedLocation) {
+                        showLocationPopup();
+                    }
+                },
+                { timeout: 10000 }
+            );
+        } else if (!savedLocation) {
+            showLocationPopup();
+        }
+    }
+
+    function saveLocation(location) {
+        localStorage.setItem("userLocation", JSON.stringify(location));
+    }
+</script>
+<script>
+    function getSavedLocation() {
+    let savedLocation = localStorage.getItem("userLocation");
+    if (savedLocation) {
+        savedLocation = JSON.parse(savedLocation);
+        let expiryTime = savedLocation.type === "device" ? 120000 : 180000; // 20 min for device, 1 hour for city list
+
+        if (Date.now() - savedLocation.timestamp > expiryTime) {
+            localStorage.removeItem("userLocation");
+            return null;
+        }
+        return savedLocation;
+    }
+    return null;
+}
+</script>
+<script>
+    function updateReplaceableText(location) {
+        let replaceableText = document.querySelector(".replaceable-text");
+        if (!location) return;
+        
+        if (location.type === "device") {
+            let closestCity = null;
+            let minDistance = Infinity;
+            
+            for (const region in locations) {
+                for (const city in locations[region]) {
+                    const cityCoords = locations[region][city];
+                    const distance = getDistance(
+                        location.lat, location.lng,
+                        cityCoords.lat, cityCoords.lng
+                    );
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestCity = city;
+                    }
+                }
+            }
+         
+            replaceableText.innerText = closestCity && minDistance <= 50 ? 
+                closestCity : "Current Location";
+        } else {
+            for (const region in locations) {
+                for (const city in locations[region]) {
+                    if (locations[region][city].lat === location.lat && 
+                        locations[region][city].lng === location.lng) {
+                        replaceableText.innerText = city;
+                        return;
+                    }
+                }
+            }
+            replaceableText.innerText = "Selected Location";
+        }
+    }
+</script>
+<script>
+    window.addEventListener("load", function() {
+        let savedLocation = getSavedLocation();
+        if (!savedLocation) {
+            setTimeout(function() {
+                const locationPrompt = document.getElementById("locationPromptPopup");
+                locationPrompt.style.display = "block";
+                setTimeout(() => locationPrompt.style.display = "none", 3000);
+            }, 4000);
+        }
+    });
+</script>
+<script>
+    function showLocationPopup() {
+        let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
+        for (const region in locations) {
+            locationList += `<h4 onclick="openCityPopup('${region}')">${region}</h4>`;
+        }
+        document.getElementById("locationsList").innerHTML = locationList;
+        document.getElementById("locationPopup").style.display = "block";
+    }
+</script>
+<script>
+    function useCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    let userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        timestamp: Date.now(),
+                        type: "device"
+                    };
+                    saveLocation(userLocation);
+                    updateReplaceableText(userLocation);
+                    closePopup();
+                },
+                () => {
+                    showLocationError();
+                }
+            );
+        } else {
+            showLocationError();
+        }
+    }
+
+    function showLocationError() {
+        document.getElementById("locationErrorPopup").style.display = "block";
+    }
+</script>
+<script>
+    function openCityPopup(region) {
+        closePopup();
+        let cityList = "";
+        for (const city in locations[region]) {
+            cityList += `<p onclick="selectCity('${city}', ${locations[region][city].lat}, ${locations[region][city].lng})">${city}</p>`;
+        }
+        document.getElementById("cityList").innerHTML = cityList;
+        document.getElementById("cityPopup").style.display = "block";
+    }
+
+    function selectCity(city, lat, lng) {
+        let location = {
+            lat,
+            lng,
+            timestamp: Date.now(),
+            type: "city"
+        };
+        saveLocation(location);
+        updateReplaceableText(location);
+        closePopup();
+    }
+</script> 
+<script>   
+    function showItems(category) {
+        const categoryUrls = {
+            "vegetables": "https://order-1ib.pages.dev/Vegetables.html",
+            "fruits": "https://order-1ib.pages.dev/Fruits.html",
+            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "seafood": "https://order-1ib.pages.dev/Seafood.html"
+        };
+
+        fetch(categoryUrls[category])
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.text();
+            })
+            .then(data => {
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(data, "text/html");
+                let items = [];
+
+                doc.querySelectorAll(".item-card").forEach(card => {
+                    let img = card.querySelector("img")?.src;
+                    let name = card.querySelector("p")?.textContent;
+                    if (img && name) items.push({ name, image: img });
+                });
+
+                let itemList = `<div class="item-grid">`;
+                items.forEach(item => {
+                    itemList += `
+                        <div class="item-card" onclick="searchItem('${item.name}')">
+                            <img src="${item.image}" alt="${item.name}" loading="lazy">
+                            <p>${item.name}</p>
+                        </div>
+                    `;
+                });
+                itemList += `</div>`;
+
+                document.getElementById("itemList").innerHTML = itemList;
+                document.getElementById("itemPopup").style.display = "block";
+            })
+            .catch(error => {
+                console.error("Error loading items:", error);
+                document.getElementById("errorPopup").style.display = "block";
+            });
+    }
+</script>
+<script>
+    function searchItem(item) {
+        let userLocation = getSavedLocation();
+
+        if (!userLocation) {
+            const locationPopup = document.getElementById("selectLocationPopup");
+            locationPopup.style.display = "block";
+            setTimeout(() => {
+                locationPopup.style.display = "none";
+            }, 4000);
+            return;
+        }
+
+        let nearbyVendors = [];
+        for (const vendor in vendors) {
+            let distance = getDistance(
+                userLocation.lat, userLocation.lng,
+                vendors[vendor].lat, vendors[vendor].lng
+            );
+            if (distance <= 1) nearbyVendors.push(`vendor:${vendor}`);
+        }
+
+        if (nearbyVendors.length > 0) {
+            window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
+        } else {
+            document.getElementById("errorPopup").style.display = "block";
+        }
+    }
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+</script>
+<script>
+    function closePopup() {
+        document.querySelectorAll(".popup, .popup2").forEach(popup => {
+            popup.style.display = "none";
+        });
+    }
+</script>
+<script>
+    function goBackToLocations() {
+        document.getElementById('cityPopup').style.display = 'none';
+        document.getElementById('locationPopup').style.display = 'flex';
+    }
+</script>
+<script>
+    // Initialize on page load
+    getUserLocation();
+</script>
