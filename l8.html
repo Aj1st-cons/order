@@ -96,6 +96,24 @@
             transform: scale(1);
         }
     }
+    
+    #editPopup {
+    background: #f9f9f9;
+    border-radius: 10px;
+    text-align: center;
+}
+
+#editPopup button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#editPopup button:hover {
+    background: #ddd;
+}
 </style>    
 <link rel="stylesheet" href="https://order-1ib.pages.dev/page.css">    
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
@@ -195,8 +213,20 @@
     <p>Please turn your location <b>ON</b><br><br>OR<br><br>if <b>ON</b> REFRESH the page</p>
 </div>
                    <!--  -->  
-                  <!-- HTML for displaying saved location and edit option -->
-      <div id="savedLocationInfo"></div>       
+<!-- HTML for displaying saved location and edit icon -->
+<div id="savedLocationInfo"></div>
+
+<!-- Edit Popup -->
+<div id="editPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000;">
+    <h3>Change Saved Location?</h3>
+    <input type="text" id="editNameInput" placeholder="Enter new name" />
+    <br /><br />
+    <button onclick="handleEditYes()">Yes</button>
+    <button onclick="handleEditNo()">No</button>
+</div>
+
+
+       
 <script>
   async function loadCategories() {
       try {
@@ -611,6 +641,108 @@
                 <h4>Saved Location: ${savedLocation.name}</h4>
                 <p>Latitude: ${savedLocation.lat}, Longitude: ${savedLocation.lng}</p>
                 <button onclick="editSavedLocation()">Edit Location</button>
+            `;
+            document.getElementById("savedLocationInfo").innerHTML = locationInfo;
+        } else {
+            document.getElementById("savedLocationInfo").innerHTML = "<p>No saved location.</p>";
+        }
+    }
+
+    // Call this function to display the saved location when the page loads
+    window.addEventListener("load", function () {
+        showSavedLocation();
+    });
+</script>    
+    
+    
+ 
+
+<script>
+    // Function to open the edit popup
+    function openEditPopup() {
+        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+        if (!savedLocation) {
+            alert("No saved location to edit.");
+            return;
+        }
+
+        // Set the current name in the input field
+        document.getElementById("editNameInput").value = savedLocation.name;
+
+        // Display the edit popup
+        document.getElementById("editPopup").style.display = "block";
+    }
+
+    // Function to handle the "Yes" button click
+    function handleEditYes() {
+        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+        const newName = document.getElementById("editNameInput").value;
+
+        if (newName) {
+            // Update the name
+            savedLocation.name = newName;
+
+            // Retrieve new location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        savedLocation.lat = position.coords.latitude;
+                        savedLocation.lng = position.coords.longitude;
+                        savedLocation.timestamp = Date.now();
+
+                        // Save the updated location
+                        localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                        updateReplaceableText(savedLocation); // Refresh the UI
+                        closeEditPopup();
+                        showSavedLocation(); // Refresh the saved location display
+                    },
+                    () => {
+                        alert("Failed to retrieve new location. Name updated, but coordinates remain the same.");
+                        localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                        closeEditPopup();
+                        showSavedLocation();
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported. Name updated, but coordinates remain the same.");
+                localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                closeEditPopup();
+                showSavedLocation();
+            }
+        } else {
+            alert("Please enter a valid name.");
+        }
+    }
+
+    // Function to handle the "No" button click
+    function handleEditNo() {
+        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+        const newName = document.getElementById("editNameInput").value;
+
+        if (newName) {
+            // Update only the name
+            savedLocation.name = newName;
+            localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+            updateReplaceableText(savedLocation); // Refresh the UI
+        }
+
+        closeEditPopup();
+        showSavedLocation(); // Refresh the saved location display
+    }
+
+    // Function to close the edit popup
+    function closeEditPopup() {
+        document.getElementById("editPopup").style.display = "none";
+    }
+
+    // Function to display the saved location and edit icon
+    function showSavedLocation() {
+        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+        if (savedLocation) {
+            let locationInfo = `
+                <h4>Saved Location: ${savedLocation.name}</h4>
+                <p>Latitude: ${savedLocation.lat}, Longitude: ${savedLocation.lng}</p>
+                <i class="fa-solid fa-rotate" style="color: #009500; cursor: pointer;" onclick="openEditPopup()"></i>
             `;
             document.getElementById("savedLocationInfo").innerHTML = locationInfo;
         } else {
