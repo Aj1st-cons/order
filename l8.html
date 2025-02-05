@@ -192,7 +192,7 @@
         <p>Please turn on your location services for a better experience.</p></div>
         
      <div id="selectLocationPopup" class="bottom-popup" style="display: none;">
-    <p>Please turn your location <b>ON</b><br><br>OR<br><br>select your location</p>
+    <p>Please turn your location <b>ON</b><br><br>OR<br><br>if <b>ON</b> REFRESH the page</p>
 </div>
                    <!--  -->        
 <script>
@@ -209,9 +209,8 @@
   }
 
   loadCategories();
-  
-  
-  
+</script>    
+<script>  
   function closeErrorPopup() {
     document.getElementById("errorPopup").style.display = "none";
 }    
@@ -273,7 +272,6 @@
         "D": { lat: 27.125, lng: 57.126 }
     };
 </script>
-
 <script>
     function getUserLocation() {
         let savedLocation = getSavedLocation();
@@ -386,8 +384,7 @@
         document.getElementById("locationsList").innerHTML = locationList;
         document.getElementById("locationPopup").style.display = "block";
     }
-</script>
-<script>
+
     function useCurrentLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -538,4 +535,78 @@
 <script>
     // Initialize on page load
     getUserLocation();
+</script>
+<script>
+    // Add this inside your existing showLocationPopup() function
+function showLocationPopup() {
+    let locationList = `
+        <h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>
+    `;
+
+    const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+    if (savedLocation) {
+        locationList += `<h4 class="current-location" onclick="useSavedLocation()">${savedLocation.name}</h4>`;
+    } else {
+        locationList += `<h4 class="current-location" onclick="saveDeviceLocation()">Save Location</h4>`;
+    }
+
+    for (const region in locations) {
+        locationList += `<h4 onclick="openCityPopup('${region}')">${region}</h4>`;
+    }
+
+    document.getElementById("locationsList").innerHTML = locationList;
+    document.getElementById("locationPopup").style.display = "block";
+}
+
+// Save the device's current location with a custom name
+function saveDeviceLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const customName = prompt("Enter a name for this location:");
+                if (customName) {
+                    const savedLocation = {
+                        name: customName,
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        type: "saved"
+                    };
+                    localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                    updateReplaceableText(customName);
+                    showLocationPopup();  // Refresh the popup with the new name
+                    closePopup();
+                }
+            },
+            () => {
+                showLocationError();
+            }
+        );
+    } else {
+        showLocationError();
+    }
+}
+
+// Retrieve the saved location for use in search link construction
+function useSavedLocation() {
+    const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+    if (savedLocation) {
+        updateReplaceableText(savedLocation.name);
+        constructSearchLink(savedLocation.lat, savedLocation.lng); // Integrate with your existing search function
+        closePopup();
+    }
+}
+
+// Update the replaceable text (assumes an element with ID "replaceable-text" exists)
+function updateReplaceableText(text) {
+    const textElement = document.getElementById("replaceable-text");
+    if (textElement) {
+        textElement.textContent = text;
+    }
+}
+
+// Construct the search link (adjust as needed to fit your existing code)
+function constructSearchLink(lat, lng) {
+    const searchLink = `https://order-1ib.pages.dev/search?lat=${lat}&lng=${lng}`;
+    console.log("Search Link:", searchLink);  // Replace with actual search handling logic
+}
 </script>
