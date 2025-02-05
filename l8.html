@@ -217,62 +217,23 @@
 </script>
 
 <script>
-    let locations = {
-        "Dubai": { 
-            "City A1": { lat: 25.123, lng: 55.123 }, 
-            "City A2": { lat: 25.223, lng: 55.223 }, 
-            "City A3": { lat: 25.323, lng: 55.323 },
-            "City A4": { lat: 25.123, lng: 55.123 }, 
-            "City A5": { lat: 25.223, lng: 55.223 }, 
-            "City A6": { lat: 25.323, lng: 55.323 },
-            "City A7": { lat: 25.123, lng: 55.123 }, 
-            "City A8": { lat: 25.223, lng: 55.223 }, 
-            "City A9": { lat: 25.323, lng: 55.323 },
-            "City A10": { lat: 25.123, lng: 55.123 }, 
-            "City A11": { lat: 25.223, lng: 55.223 }, 
-            "City A12": { lat: 25.323, lng: 55.323 },
-            "City A13": { lat: 25.123, lng: 55.123 }, 
-            "City A14": { lat: 25.223, lng: 55.223 }, 
-            "City A15": { lat: 25.323, lng: 55.323 } 
+    // Mock data for locations and vendors
+    const locations = {
+        "Region1": {
+            "City1": { lat: 12.34, lng: 56.78 },
+            "City2": { lat: 23.45, lng: 67.89 }
         },
-        "Abu Dhabi": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "Ajman": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "UAQ": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "RAK": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "Fujairah": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
+        "Region2": {
+            "City3": { lat: 34.56, lng: 78.90 },
+            "City4": { lat: 45.67, lng: 89.01 }
         }
     };
 
-    let vendors = {
-        "A": { lat: 25.125, lng: 55.126 },
-        "AJ": { lat: 24.396973, lng: 54.588957 },
-        "AD": { lat: 24.391549, lng: 54.578581 },
-        "ND": { lat: 26.125, lng: 56.126 },
-        "GF": { lat: 25.225, lng: 55.226 },
-        "C": { lat: 26.125, lng: 56.126 },        
-        "D": { lat: 27.125, lng: 57.126 }
+    const vendors = {
+        "Vendor1": { lat: 12.34, lng: 56.78 },
+        "Vendor2": { lat: 23.45, lng: 67.89 }
     };
-</script>
-<script>
+
     function getUserLocation() {
         let savedLocation = getSavedLocation();
 
@@ -307,32 +268,30 @@
     function saveLocation(location) {
         localStorage.setItem("userLocation", JSON.stringify(location));
     }
-</script>
-<script>
-    function getSavedLocation() {
-    let savedLocation = localStorage.getItem("userLocation");
-    if (savedLocation) {
-        savedLocation = JSON.parse(savedLocation);
-        let expiryTime = savedLocation.type === "device" ? 120000 : 180000; // 20 min for device, 1 hour for city list
 
-        if (Date.now() - savedLocation.timestamp > expiryTime) {
-            localStorage.removeItem("userLocation");
-            return null;
+    function getSavedLocation() {
+        let savedLocation = localStorage.getItem("userLocation");
+        if (savedLocation) {
+            savedLocation = JSON.parse(savedLocation);
+            let expiryTime = savedLocation.type === "device" ? 1200000 : Infinity; // 20 min for device, no expiry for saved location
+
+            if (savedLocation.type === "device" && Date.now() - savedLocation.timestamp > expiryTime) {
+                localStorage.removeItem("userLocation");
+                return null;
+            }
+            return savedLocation;
         }
-        return savedLocation;
+        return null;
     }
-    return null;
-}
-</script>
-<script>
+
     function updateReplaceableText(location) {
         let replaceableText = document.querySelector(".replaceable-text");
         if (!location) return;
-        
+
         if (location.type === "device") {
             let closestCity = null;
             let minDistance = Infinity;
-            
+
             for (const region in locations) {
                 for (const city in locations[region]) {
                     const cityCoords = locations[region][city];
@@ -346,38 +305,23 @@
                     }
                 }
             }
-         
-            replaceableText.innerText = closestCity && minDistance <= 50 ? 
-                closestCity : "Current Location";
+
+            replaceableText.innerText = closestCity && minDistance <= 50 ? closestCity : "Current Location";
         } else {
-            for (const region in locations) {
-                for (const city in locations[region]) {
-                    if (locations[region][city].lat === location.lat && 
-                        locations[region][city].lng === location.lng) {
-                        replaceableText.innerText = city;
-                        return;
-                    }
-                }
-            }
-            replaceableText.innerText = "Selected Location";
+            replaceableText.innerText = location.name || "Saved Location";
         }
     }
-</script>
-<script>
-    window.addEventListener("load", function() {
-        let savedLocation = getSavedLocation();
-        if (!savedLocation) {
-            setTimeout(function() {
-                const locationPrompt = document.getElementById("locationPromptPopup");
-                locationPrompt.style.display = "block";
-                setTimeout(() => locationPrompt.style.display = "none", 3000);
-            }, 4000);
-        }
-    });
-</script>
-<script>
+
     function showLocationPopup() {
         let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
+
+        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+        if (savedLocation) {
+            locationList += `<h4 class="current-location" onclick="useSavedLocation()">${savedLocation.name}</h4>`;
+        } else {
+            locationList += `<h4 class="current-location" onclick="saveDeviceLocation()">Save Location</h4>`;
+        }
+
         for (const region in locations) {
             locationList += `<h4 onclick="openCityPopup('${region}')">${region}</h4>`;
         }
@@ -408,33 +352,135 @@
         }
     }
 
-    function showLocationError() {
-        document.getElementById("locationErrorPopup").style.display = "block";
+    function saveDeviceLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const customName = prompt("Enter a name for this location:");
+                    if (customName) {
+                        const savedLocation = {
+                            name: customName,
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            type: "saved"
+                        };
+                        localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                        updateReplaceableText(savedLocation);
+                        showLocationPopup(); // Refresh popup
+                        closePopup();
+                    }
+                },
+                () => {
+                    showLocationError();
+                }
+            );
+        } else {
+            showLocationError();
+        }
     }
-</script>
-<script>
+
+    function useSavedLocation() {
+        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+        if (savedLocation) {
+            updateReplaceableText(savedLocation);
+            saveLocation(savedLocation); // Set as the current active location
+            closePopup();
+        }
+    }
+
     function openCityPopup(region) {
-        closePopup();
-        let cityList = "";
+        let cityList = `<h4 onclick="goBackToLocations()">Back</h4>`;
         for (const city in locations[region]) {
-            cityList += `<p onclick="selectCity('${city}', ${locations[region][city].lat}, ${locations[region][city].lng})">${city}</p>`;
+            cityList += `<h4 onclick="selectCity('${city}', ${locations[region][city].lat}, ${locations[region][city].lng})">${city}</h4>`;
         }
         document.getElementById("cityList").innerHTML = cityList;
         document.getElementById("cityPopup").style.display = "block";
+        document.getElementById("locationPopup").style.display = "none";
     }
 
     function selectCity(city, lat, lng) {
-        let location = {
-            lat,
-            lng,
-            timestamp: Date.now(),
-            type: "city"
+        const selectedLocation = {
+            name: city,
+            lat: lat,
+            lng: lng,
+            type: "saved"
         };
-        saveLocation(location);
-        updateReplaceableText(location);
+        saveLocation(selectedLocation);
+        updateReplaceableText(selectedLocation);
         closePopup();
     }
-</script> 
+
+    function showLocationError() {
+        document.getElementById("locationErrorPopup").style.display = "block";
+    }
+
+    function closePopup() {
+        document.querySelectorAll(".popup, .popup2").forEach(popup => {
+            popup.style.display = "none";
+        });
+    }
+
+    function goBackToLocations() {
+        document.getElementById('cityPopup').style.display = 'none';
+        document.getElementById('locationPopup').style.display = 'flex';
+    }
+
+    function searchItem(item) {
+        let userLocation = getSavedLocation();
+
+        if (!userLocation) {
+            const locationPopup = document.getElementById("selectLocationPopup");
+            locationPopup.style.display = "block";
+            setTimeout(() => {
+                locationPopup.style.display = "none";
+            }, 4000);
+            return;
+        }
+
+        let nearbyVendors = [];
+        for (const vendor in vendors) {
+            let distance = getDistance(
+                userLocation.lat, userLocation.lng,
+                vendors[vendor].lat, vendors[vendor].lng
+            );
+            if (distance <= 1) nearbyVendors.push(`vendor:${vendor}`);
+        }
+
+        if (nearbyVendors.length > 0) {
+            window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
+        } else {
+            document.getElementById("errorPopup").style.display = "block";
+        }
+    }
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    // Initialize on page load
+    getUserLocation();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 <script>   
     function showItems(category) {
         const categoryUrls = {
@@ -479,134 +525,4 @@
                 document.getElementById("errorPopup").style.display = "block";
             });
     }
-</script>
-<script>
-    function searchItem(item) {
-        let userLocation = getSavedLocation();
-
-        if (!userLocation) {
-            const locationPopup = document.getElementById("selectLocationPopup");
-            locationPopup.style.display = "block";
-            setTimeout(() => {
-                locationPopup.style.display = "none";
-            }, 4000);
-            return;
-        }
-
-        let nearbyVendors = [];
-        for (const vendor in vendors) {
-            let distance = getDistance(
-                userLocation.lat, userLocation.lng,
-                vendors[vendor].lat, vendors[vendor].lng
-            );
-            if (distance <= 1) nearbyVendors.push(`vendor:${vendor}`);
-        }
-
-        if (nearbyVendors.length > 0) {
-            window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
-        } else {
-            document.getElementById("errorPopup").style.display = "block";
-        }
-    }
-
-    function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    }
-</script>
-<script>
-    function closePopup() {
-        document.querySelectorAll(".popup, .popup2").forEach(popup => {
-            popup.style.display = "none";
-        });
-    }
-</script>
-<script>
-    function goBackToLocations() {
-        document.getElementById('cityPopup').style.display = 'none';
-        document.getElementById('locationPopup').style.display = 'flex';
-    }
-</script>
-<script>
-    // Initialize on page load
-    getUserLocation();
-</script>
-<script>
-    // Add this inside your existing showLocationPopup() function
-function showLocationPopup() {
-    let locationList = `
-        <h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>
-    `;
-
-    const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
-    if (savedLocation) {
-        locationList += `<h4 class="current-location" onclick="useSavedLocation()">${savedLocation.name}</h4>`;
-    } else {
-        locationList += `<h4 class="current-location" onclick="saveDeviceLocation()">Save Location</h4>`;
-    }
-
-    for (const region in locations) {
-        locationList += `<h4 onclick="openCityPopup('${region}')">${region}</h4>`;
-    }
-
-    document.getElementById("locationsList").innerHTML = locationList;
-    document.getElementById("locationPopup").style.display = "block";
-}
-
-// Save the device's current location with a custom name
-function saveDeviceLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const customName = prompt("Enter a name for this location:");
-                if (customName) {
-                    const savedLocation = {
-                        name: customName,
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                        type: "saved"
-                    };
-                    localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
-                    updateReplaceableText(customName);
-                    showLocationPopup();  // Refresh the popup with the new name
-                    closePopup();
-                }
-            },
-            () => {
-                showLocationError();
-            }
-        );
-    } else {
-        showLocationError();
-    }
-}
-
-// Retrieve the saved location for use in search link construction
-function useSavedLocation() {
-    const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
-    if (savedLocation) {
-        updateReplaceableText(savedLocation.name);
-        constructSearchLink(savedLocation.lat, savedLocation.lng); // Integrate with your existing search function
-        closePopup();
-    }
-}
-
-// Update the replaceable text (assumes an element with ID "replaceable-text" exists)
-function updateReplaceableText(text) {
-    const textElement = document.getElementById("replaceable-text");
-    if (textElement) {
-        textElement.textContent = text;
-    }
-}
-
-// Construct the search link (adjust as needed to fit your existing code)
-function constructSearchLink(lat, lng) {
-    const searchLink = `https://order-1ib.pages.dev/search?lat=${lat}&lng=${lng}`;
-    console.log("Search Link:", searchLink);  // Replace with actual search handling logic
-}
 </script>
