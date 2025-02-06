@@ -118,7 +118,52 @@
 #editPopup button:hover {
     background: #ddd;
 }
+
+/* Popup container styling */
+#saveLocationPopup {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 2px solid #009500;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); /* Increased shadow spread */
+    z-index: 1000;
+    text-align: center; /* Ensures content inside the popup is centered */
+}
+
+/* Input box styling */
+#saveLocationInput {
+    width: 100%;
+    text-align: left; 
+    padding: 8px;
+    margin-top: 10px;
+}
+
+/* Button container styling */
+.popup-buttons {
+    margin-top: 15px;
+}
+
+.popup-buttons button {
+    margin: 0 10px; /* Adds spacing between buttons */
+}
+
+#saveLocationConfirm {
+    background-color: #009500;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+#saveLocationConfirm:hover {
+    background-color: #007d00; /* Slightly darker green on hover */
+}
 </style>    
+   
 <link rel="stylesheet" href="https://order-1ib.pages.dev/page.css">    
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&amp;display=swap" rel="stylesheet">       
@@ -230,12 +275,12 @@
 
 
           <!-- customNamePopup  -->
-<div id="saveLocationPopup" style="display: none; position: fixed; top: 30%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid #009500; box-shadow: 0 0 10px rgba(0, 0, 0, 0.9); z-index: 1000;">
+<div id="saveLocationPopup">
     <h3>Your Favourite Location</h3>
-    <input type="text" id="saveLocationInput" placeholder="Home / Office" style="width: 100%; text-align: center; padding: 8px; margin-top: 10px; margin-right: 20px">
-    <div style="margin-top: 15px; text-align: center;">
+    <input type="text" id="saveLocationInput" placeholder="Home / Office">
+    <div class="popup-buttons">
         <button onclick="closeSaveLocationPopup()">Cancel</button>
-        <button style="background-color: #009500; id="saveLocationConfirm">Save</button>
+        <button id="saveLocationConfirm">Save</button>
     </div>
 </div>
            <!-- animation -->
