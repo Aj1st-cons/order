@@ -320,7 +320,454 @@
 
 <script>
     
-let locations = {
+ let locations = {
+        "Dubai": { 
+"City A1": { lat: 25.123, lng: 55.123 }, 
+"City A2": { lat: 25.223, lng: 55.223 }, 
+"City A3": { lat: 25.323, lng: 55.323 },
+"City A4": { lat: 25.123, lng: 55.123 }, 
+"City A5": { lat: 25.223, lng: 55.223 }, 
+"City A6": { lat: 25.323, lng: 55.323 },
+"City A7": { lat: 25.123, lng: 55.123 }, 
+"City A8": { lat: 25.223, lng: 55.223 }, 
+"City A9": { lat: 25.323, lng: 55.323 },
+"City A10": { lat: 25.123, lng: 55.123 }, 
+"City A11": { lat: 25.223, lng: 55.223 }, 
+"City A12": { lat: 25.323, lng: 55.323 },
+"City A13": { lat: 25.123, lng: 55.123 }, 
+"City A14": { lat: 25.223, lng: 55.223 }, 
+"City A15": { lat: 25.323, lng: 55.323 } 
+        },
+        "Abu Dhabi": { 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
+        },
+        "Ajman": { 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
+        },
+        "UAQ": { 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
+        },
+        "RAK": { 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
+        },
+        "Fujairah": { 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
+        }
+    };
+
+    let vendors = {
+        "A": { lat: 25.125, lng: 55.126 },
+        "AJ": { lat: 24.396973, lng: 54.588957 },
+        "AD": { lat: 24.391549, lng: 54.578581 },
+        "ND": { lat: 26.125, lng: 56.126 },
+        "GF": { lat: 25.225, lng: 55.226 },
+        "C": { lat: 26.125, lng: 56.126 },        
+        "D": { lat: 27.125, lng: 57.126 }
+    };       
+   
+    function getUserLocation() {
+        let savedLocation = getSavedLocation();
+
+        if (savedLocation) {
+            updateReplaceableText(savedLocation);
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    let userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        timestamp: Date.now(),
+                        type: "device"
+                    };
+                    saveLocation(userLocation);
+                    updateReplaceableText(userLocation);
+                },
+                () => {
+                    if (!savedLocation) {
+                        showLocationPopup();
+                    }
+                },
+                { timeout: 10000 }
+            );
+        } else if (!savedLocation) {
+            showLocationPopup();
+        }
+    }
+
+    function saveLocation(location) {
+        localStorage.setItem("userLocation", JSON.stringify(location));
+    }
+
+    function getSavedLocation() {
+        let savedLocation = localStorage.getItem("userLocation");
+        if (savedLocation) {
+            savedLocation = JSON.parse(savedLocation);
+            let expiryTime = savedLocation.type === "device" ? 1200000 : Infinity; // 20 min for device, no expiry for saved location
+
+            if (savedLocation.type === "device" && Date.now() - savedLocation.timestamp > expiryTime) {
+                localStorage.removeItem("userLocation");
+                return null;
+            }
+            return savedLocation;
+        }
+        return null;
+    }
+
+    function updateReplaceableText(location) {
+        let replaceableText = document.querySelector(".replaceable-text");
+        if (!location) return;
+
+        if (location.type === "device") {
+            let closestCity = null;
+            let minDistance = Infinity;
+
+            for (const region in locations) {
+                for (const city in locations[region]) {
+                    const cityCoords = locations[region][city];
+                    const distance = getDistance(
+                        location.lat, location.lng,
+                        cityCoords.lat, cityCoords.lng
+                    );
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestCity = city;
+                    }
+                }
+            }
+
+            replaceableText.innerText = closestCity && minDistance <= 50 ? closestCity : "Current Location";
+        } else {
+            replaceableText.innerText = location.name || "Saved Location";
+        }
+    }
+
+    function showLocationPopup() {
+        let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
+
+        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+        if (savedLocation) {
+            locationList += `<h4 class="current-location" onclick="useSavedLocation()">${savedLocation.name}</h4>`;
+        } else {
+            locationList += `<h4 class="current-location" onclick="saveDeviceLocation()">Save Location</h4>`;
+        }
+
+        for (const region in locations) {
+            locationList += `<h4 onclick="openCityPopup('${region}')">${region}</h4>`;
+        }
+        document.getElementById("locationsList").innerHTML = locationList;
+        document.getElementById("locationPopup").style.display = "block";
+    }
+
+    function useCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    let userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        timestamp: Date.now(),
+                        type: "device"
+                    };
+                    saveLocation(userLocation);
+                    updateReplaceableText(userLocation);
+                    closePopup();
+                },
+                () => {
+                    showLocationError();
+                }
+            );
+        } else {
+            showLocationError();
+        }
+    }
+
+    function saveDeviceLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const customName = prompt("Enter a name for this location:");
+                    if (customName) {
+                        const savedLocation = {
+                            name: customName,
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            type: "saved"
+                        };
+                        localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                        updateReplaceableText(savedLocation);
+                        showLocationPopup(); // Refresh popup
+                        closePopup();
+                    }
+                },
+                () => {
+                    showLocationError();
+                }
+            );
+        } else {
+            showLocationError();
+        }
+    }
+
+    function useSavedLocation() {
+        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+        if (savedLocation) {
+            updateReplaceableText(savedLocation);
+            saveLocation(savedLocation); // Set as the current active location
+            closePopup();
+        }
+    }
+
+    function openCityPopup(region) {
+        let cityList = `<h4 onclick="goBackToLocations()">Back</h4>`;
+        for (const city in locations[region]) {
+            cityList += `<h4 onclick="selectCity('${city}', ${locations[region][city].lat}, ${locations[region][city].lng})">${city}</h4>`;
+        }
+        document.getElementById("cityList").innerHTML = cityList;
+        document.getElementById("cityPopup").style.display = "block";
+        document.getElementById("locationPopup").style.display = "none";
+    }
+
+    function selectCity(city, lat, lng) {
+        const selectedLocation = {
+            name: city,
+            lat: lat,
+            lng: lng,
+            type: "saved"
+        };
+        saveLocation(selectedLocation);
+        updateReplaceableText(selectedLocation);
+        closePopup();
+    }
+
+    function showLocationError() {
+        document.getElementById("locationErrorPopup").style.display = "block";
+    }
+
+    function closePopup() {
+        document.querySelectorAll(".popup, .popup2").forEach(popup => {
+            popup.style.display = "none";
+        });
+    }
+
+    function goBackToLocations() {
+        document.getElementById('cityPopup').style.display = 'none';
+        document.getElementById('locationPopup').style.display = 'flex';
+    }
+
+    function searchItem(item) {
+        let userLocation = getSavedLocation();
+
+        if (!userLocation) {
+            const locationPopup = document.getElementById("selectLocationPopup");
+            locationPopup.style.display = "block";
+            setTimeout(() => {
+                locationPopup.style.display = "none";
+            }, 4000);
+            return;
+        }
+
+        let nearbyVendors = [];
+        for (const vendor in vendors) {
+            let distance = getDistance(
+                userLocation.lat, userLocation.lng,
+                vendors[vendor].lat, vendors[vendor].lng
+            );
+            if (distance <= 1) nearbyVendors.push(`vendor:${vendor}`);
+        }
+
+        if (nearbyVendors.length > 0) {
+            window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
+        } else {
+            document.getElementById("errorPopup").style.display = "block";
+        }
+    }
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    // Initialize on page load
+    getUserLocation();
+</script>
+<script>
+    // Function to open the save location name popup
+    function openSaveLocationNamePopup(locationKey) {
+        // Display the save location name popup
+        document.getElementById("saveLocationNamePopup").style.display = "block";
+        // Store the location key in a hidden input for later use
+        document.getElementById("saveLocationKey").value = locationKey;
+    }
+
+    // Function to save the location with a custom name
+    function saveLocationWithName() {
+        const locationKey = document.getElementById("saveLocationKey").value;
+        const customName = document.getElementById("saveLocationNameInput").value;
+
+        if (customName) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const savedLocation = {
+                            name: customName,
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            type: "saved"
+                        };
+                        localStorage.setItem(locationKey, JSON.stringify(savedLocation));
+                        updateReplaceableText(savedLocation);
+                        closeSaveLocationNamePopup();
+                        showLocationPopup(); // Refresh the location popup
+                    },
+                    () => {
+                        alert("Failed to retrieve location. Please try again.");
+                        closeSaveLocationNamePopup();
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported.");
+                closeSaveLocationNamePopup();
+            }
+        } else {
+            alert("Please enter a valid name.");
+        }
+    }
+
+    // Function to close the save location name popup
+    function closeSaveLocationNamePopup() {
+        document.getElementById("saveLocationNamePopup").style.display = "none";
+    }
+
+    // Function to open the edit popup
+    function openEditPopup(locationKey) {
+        const savedLocation = JSON.parse(localStorage.getItem(locationKey));
+        if (!savedLocation) {
+            alert("No saved location to edit.");
+            return;
+        }
+
+        // Set the current name in the input field
+        document.getElementById("editNameInput").value = savedLocation.name;
+
+        // Store the location key in a hidden input for later use
+        document.getElementById("editLocationKey").value = locationKey;
+
+        // Close the location popup and open the edit popup
+        document.getElementById("locationPopup").style.display = "none";
+        document.getElementById("editPopup").style.display = "block";
+    }
+
+    // Function to handle the "Yes" button click in the edit popup
+    function handleEditYes() {
+        const locationKey = document.getElementById("editLocationKey").value;
+        const savedLocation = JSON.parse(localStorage.getItem(locationKey));
+        const newName = document.getElementById("editNameInput").value;
+
+        if (newName) {
+            // Update the name
+            savedLocation.name = newName;
+
+            // Retrieve new location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        savedLocation.lat = position.coords.latitude;
+                        savedLocation.lng = position.coords.longitude;
+                        savedLocation.timestamp = Date.now();
+
+                        // Save the updated location
+                        localStorage.setItem(locationKey, JSON.stringify(savedLocation));
+                        updateReplaceableText(savedLocation); // Refresh the UI
+                        closeEditPopup();
+                        showLocationPopup(); // Refresh the location popup
+                    },
+                    () => {
+                        alert("Failed to retrieve new location. Name updated, but coordinates remain the same.");
+                        localStorage.setItem(locationKey, JSON.stringify(savedLocation));
+                        closeEditPopup();
+                        showLocationPopup();
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported. Name updated, but coordinates remain the same.");
+                localStorage.setItem(locationKey, JSON.stringify(savedLocation));
+                closeEditPopup();
+                showLocationPopup();
+            }
+        } else {
+            alert("Please enter a valid name.");
+        }
+    }
+
+    // Function to handle the "No" button click in the edit popup
+    function handleEditNo() {
+        const locationKey = document.getElementById("editLocationKey").value;
+        const savedLocation = JSON.parse(localStorage.getItem(locationKey));
+        const newName = document.getElementById("editNameInput").value;
+
+        if (newName) {
+            // Update only the name
+            savedLocation.name = newName;
+            localStorage.setItem(locationKey, JSON.stringify(savedLocation));
+            updateReplaceableText(savedLocation); // Refresh the UI
+        }
+
+        closeEditPopup();
+        showLocationPopup(); // Refresh the location popup
+    }
+
+    // Function to close the edit popup
+    function closeEditPopup() {
+        document.getElementById("editPopup").style.display = "none";
+    }
+
+    // Function to show the location popup with the edit buttons
+    function showLocationPopup() {
+        let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
+
+        // Add saved locations with edit buttons
+        for (let i = 1; i <= 5; i++) {
+            const locationKey = `savedLocation${i}`;
+            const savedLocation = JSON.parse(localStorage.getItem(locationKey));
+            if (savedLocation) {
+                locationList += `
+                    <h4 class="current-location" onclick="useSavedLocation('${locationKey}')">
+                        ${savedLocation.name}
+                        <i class="fa-solid fa-rotate" style="color: #009500; cursor: pointer; margin-left: 10px;" onclick="event.stopPropagation(); openEditPopup('${locationKey}')"></i>
+                    </h4>
+                `;
+            } else {
+                locationList += `<h4 class="current-location" onclick="openSaveLocationNamePopup('${locationKey}')">Save Location ${i}</h4>`;
+            }
+        }
+
+        for (const region in locations) {
+            locationList += `<h4 onclick="openCityPopup('${region}')">${region}</h4>`;
+        }
+
+        document.getElementById("locationsList").innerHTML = locationList;
+        document.getElementById("locationPopup").style.display = "block";
+    }
+</script>
+<script>
+    let locations = {
     "Dubai": { 
         "City A1": { lat: 25.123, lng: 55.123 }, 
         "City A2": { lat: 25.223, lng: 55.223 }, 
@@ -531,179 +978,17 @@ function searchItem(item) {
     }
 }
 
+// Helper function to calculate distance between two coordinates
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
 
-
-
-
-    function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    }
-
-    // Initialize on page load
-    getUserLocation();
-</script>
-<script>
-    // Function to open the save location name popup
-    function openSaveLocationNamePopup(locationKey) {
-        // Display the save location name popup
-        document.getElementById("saveLocationNamePopup").style.display = "block";
-        // Store the location key in a hidden input for later use
-        document.getElementById("saveLocationKey").value = locationKey;
-    }
-
-    // Function to save the location with a custom name
-    function saveLocationWithName() {
-        const locationKey = document.getElementById("saveLocationKey").value;
-        const customName = document.getElementById("saveLocationNameInput").value;
-
-        if (customName) {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const savedLocation = {
-                            name: customName,
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                            type: "saved"
-                        };
-                        localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-                        updateReplaceableText(savedLocation);
-                        closeSaveLocationNamePopup();
-                        showLocationPopup(); // Refresh the location popup
-                    },
-                    () => {
-                        alert("Failed to retrieve location. Please try again.");
-                        closeSaveLocationNamePopup();
-                    }
-                );
-            } else {
-                alert("Geolocation is not supported.");
-                closeSaveLocationNamePopup();
-            }
-        } else {
-            alert("Please enter a valid name.");
-        }
-    }
-
-    // Function to close the save location name popup
-    function closeSaveLocationNamePopup() {
-        document.getElementById("saveLocationNamePopup").style.display = "none";
-    }
-
-    // Function to open the edit popup
-    function openEditPopup(locationKey) {
-        const savedLocation = JSON.parse(localStorage.getItem(locationKey));
-        if (!savedLocation) {
-            alert("No saved location to edit.");
-            return;
-        }
-
-        // Set the current name in the input field
-        document.getElementById("editNameInput").value = savedLocation.name;
-
-        // Store the location key in a hidden input for later use
-        document.getElementById("editLocationKey").value = locationKey;
-
-        // Close the location popup and open the edit popup
-        document.getElementById("locationPopup").style.display = "none";
-        document.getElementById("editPopup").style.display = "block";
-    }
-
-    // Function to handle the "Yes" button click in the edit popup
-    function handleEditYes() {
-        const locationKey = document.getElementById("editLocationKey").value;
-        const savedLocation = JSON.parse(localStorage.getItem(locationKey));
-        const newName = document.getElementById("editNameInput").value;
-
-        if (newName) {
-            // Update the name
-            savedLocation.name = newName;
-
-            // Retrieve new location
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        savedLocation.lat = position.coords.latitude;
-                        savedLocation.lng = position.coords.longitude;
-                        savedLocation.timestamp = Date.now();
-
-                        // Save the updated location
-                        localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-                        updateReplaceableText(savedLocation); // Refresh the UI
-                        closeEditPopup();
-                        showLocationPopup(); // Refresh the location popup
-                    },
-                    () => {
-                        alert("Failed to retrieve new location. Name updated, but coordinates remain the same.");
-                        localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-                        closeEditPopup();
-                        showLocationPopup();
-                    }
-                );
-            } else {
-                alert("Geolocation is not supported. Name updated, but coordinates remain the same.");
-                localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-                closeEditPopup();
-                showLocationPopup();
-            }
-        } else {
-            alert("Please enter a valid name.");
-        }
-    }
-
-    // Function to handle the "No" button click in the edit popup
-    function handleEditNo() {
-        const locationKey = document.getElementById("editLocationKey").value;
-        const savedLocation = JSON.parse(localStorage.getItem(locationKey));
-        const newName = document.getElementById("editNameInput").value;
-
-        if (newName) {
-            // Update only the name
-            savedLocation.name = newName;
-            localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-            updateReplaceableText(savedLocation); // Refresh the UI
-        }
-
-        closeEditPopup();
-        showLocationPopup(); // Refresh the location popup
-    }
-
-    // Function to close the edit popup
-    function closeEditPopup() {
-        document.getElementById("editPopup").style.display = "none";
-    }
-
-    // Function to show the location popup with the edit buttons
-    function showLocationPopup() {
-        let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
-
-        // Add saved locations with edit buttons
-        for (let i = 1; i <= 5; i++) {
-            const locationKey = `savedLocation${i}`;
-            const savedLocation = JSON.parse(localStorage.getItem(locationKey));
-            if (savedLocation) {
-                locationList += `
-                    <h4 class="current-location" onclick="useSavedLocation('${locationKey}')">
-                        ${savedLocation.name}
-                        <i class="fa-solid fa-rotate" style="color: #009500; cursor: pointer; margin-left: 10px;" onclick="event.stopPropagation(); openEditPopup('${locationKey}')"></i>
-                    </h4>
-                `;
-            } else {
-                locationList += `<h4 class="current-location" onclick="openSaveLocationNamePopup('${locationKey}')">Save Location ${i}</h4>`;
-            }
-        }
-
-        for (const region in locations) {
-            locationList += `<h4 onclick="openCityPopup('${region}')">${region}</h4>`;
-        }
-
-        document.getElementById("locationsList").innerHTML = locationList;
-        document.getElementById("locationPopup").style.display = "block";
-    }
+// Initialize on page load
+getUserLocation();
 </script>
