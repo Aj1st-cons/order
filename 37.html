@@ -499,65 +499,62 @@
 
     
 function saveDeviceLocation() {
-    // Check if geolocation is supported
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                // Close the location popup if it's open
-                document.getElementById("locationPopup").style.display = "none";
+                // Add a delay before showing the save location popup
+                setTimeout(() => {
+                    openSaveLocationPopup();
 
-                // Open the save location popup
-                openSaveLocationPopup();
-
-                // Handle saving the location when the user confirms
-                document.getElementById("saveLocationConfirm").onclick = function () {
-                    const customName = document.getElementById("saveLocationInput").value.trim();
-                    
-                    // Ensure the user has entered a valid name
-                    if (customName) {
-                        const savedLocation = {
-                            name: customName,
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                            type: "saved"
-                        };
-
-                        // Save location data to localStorage
-                        localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
-                        
-                        // Update UI or perform any necessary actions with the saved location
-                        updateReplaceableText(savedLocation);
-
-                        // Close the save location popup
-                        closeSaveLocationPopup();
-
-                        // Refresh the page after saving to reflect changes
-                        setTimeout(() => {
-                            location.reload();
-                        }, 500); // Short delay to ensure localStorage updates properly
-                    } else {
-                        alert("Please enter a name for this location."); // Notify user to input a name
-                    }
-                };
+                    // Prevent closing until required action is taken
+                    document.getElementById("saveLocationConfirm").onclick = function () {
+                        const customName = document.getElementById("saveLocationInput").value.trim();
+                        if (customName) {
+                            const savedLocation = {
+                                name: customName,
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                                type: "saved"
+                            };
+                            localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                            updateReplaceableText(savedLocation);
+                            closeSaveLocationPopup();
+                            setTimeout(() => location.reload(), 500);
+                        } else {
+                            alert("Please enter a name for this location.");
+                        }
+                    };
+                }, 1000); // Delay of 1 second
             },
             (error) => {
-                // Handle errors when retrieving location
                 showLocationError(error);
             }
         );
     } else {
-        // Geolocation is not supported by the browser
         alert("Geolocation is not supported by your browser.");
     }
 }
 
 function openSaveLocationPopup() {
-    document.getElementById("locationPopup").style.display = "none"; // Close the location popup (if open)
-    document.getElementById("saveLocationPopup").style.display = "block"; // Show save location popup
+    document.getElementById("locationPopup").style.display = "none"; // Hide other popups
+    const popup = document.getElementById("saveLocationPopup");
+    popup.style.display = "block";
+    popup.style.opacity = 0; // Start with zero opacity for fade-in effect
+
+    // Fade-in animation
+    let opacity = 0;
+    const fadeIn = setInterval(() => {
+        if (opacity < 1) {
+            opacity += 0.1;
+            popup.style.opacity = opacity;
+        } else {
+            clearInterval(fadeIn);
+        }
+    }, 50); // Adjust speed as needed
 }
 
 function closeSaveLocationPopup() {
-    document.getElementById("saveLocationPopup").style.display = "none"; // Hide save location popup
+    document.getElementById("saveLocationPopup").style.display = "none";
 }
 
 function showLocationError(error) {
@@ -577,8 +574,9 @@ function showLocationError(error) {
                 errorMessage = "An unknown error occurred.";
         }
     }
-    alert(errorMessage); // Display an appropriate error message to the user
+    alert(errorMessage);
 }
+
 
     
     
