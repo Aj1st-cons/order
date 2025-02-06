@@ -1,4 +1,4 @@
-body { 
+         body { 
              font-family: Arial, sans-serif; 
              margin: 20px; 
              text-align: center; 
@@ -102,7 +102,7 @@ body {
             flex-direction: column;
         }
         #locationPopup,#cityPopup {
-box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
+            box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
         }
         .popup-content {
             flex: 1;
@@ -120,13 +120,13 @@ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
             overflow-y: auto; 
         } 
         .current-location {
-    text-align: left;
-    margin-bottom: 20px;
-    margin-top: 15px;            
-    color: #52595d;
-    cursor: pointer;
-    font-weight: bold;
-}
+            text-align: left;
+            margin-bottom: 20px;
+            margin-top: 15px;            
+            color: #52595d;
+            cursor: pointer;
+            font-weight: bold;
+        }
         .current-location:hover {
             color: darkred;
         }               
@@ -169,10 +169,10 @@ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
             font-size: 12px;         
         }
         .current-location, .replaceable-text {
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         .bottom-popup {
             position: fixed;
@@ -184,7 +184,7 @@ box-shadow: -5px 5px 15px 5px rgba(0, 0, 0, 0.8);
             padding: 10px;
             border-radius: 5px;
             display: none;
-    z-index: 9999 !important;
+            z-index: 9999 !important;
         }
         .footer {
             position: fixed;
@@ -225,19 +225,19 @@ html, body {
     display: grid; 
     grid-template-columns: repeat(3, 1fr); 
     gap: 20px; 
-    width: 100vw;              /* Full viewport width */
+    width: 100vw;              
     height: auto;  
-    margin: 0 auto;                 /* No extra margins */
-    padding: 20px;             /* Padding touches screen edges */
-    box-sizing: border-box;    /* Includes padding within the width */
+    margin: 0 auto;                 
+    padding: 20px;             
+    box-sizing: border-box;    
     background-color: #fff;
     margin-top: 50px;
     margin-bottom: 50px;
 }
         .cardx { 
             margin-top: 0px;              
-   background: linear-gradient(to top right, #eeeeee, #fff);
-   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(to top right, #eeeeee, #fff);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
             text-align: center;
             padding: 5px;            
@@ -265,7 +265,7 @@ html, body {
         }
         .item-grid {            
             display: grid; 
-     grid-template-columns: repeat(3, 1fr); 
+            grid-template-columns: repeat(3, 1fr); 
             justify-content: center; 
             gap: 20px; 
             width: calc(100% - 120px); 
@@ -276,8 +276,8 @@ html, body {
         }                   
         .item-card {
             margin-top: 0px;              
-     background: linear-gradient(to top right, #eeeeee, #fff);
-     box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            background: linear-gradient(to top right, #eeeeee, #fff);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
             text-align: center;
             padding: 5px;            
@@ -303,3 +303,154 @@ html, body {
             white-space: nowrap;
             font-weight: bold;
         }  
+    #welcome {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        color: #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 20;
+        text-align: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+    }
+    #welcome.visible {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease-in-out, visibility 0s linear 0s;
+    }
+    #welcome img {
+        max-width: 400px;
+        margin-bottom: 100px;
+        margin-top: -30px;
+        margin-left: 0px;
+        animation: fade-in 0.5s ease-in-out forwards;
+    }
+    h1 {
+        display: flex;
+        gap: 1px;
+        font-family: 'Lilita One', cursive;
+        font-size: 50px;
+        color: #009500;
+        margin-top: -5px;
+        text-shadow: 5px 5px 5px black;
+    }
+    h1 span {
+        opacity: 0;
+        transform: scale(0.8);
+        animation: letter-emerge 0.3s ease-in-out forwards;
+    }
+    h1 span.space {
+        width: 10px;
+    }
+    h1 span:nth-child(1) { animation-delay: 0.5s; }
+    h1 span:nth-child(2) { animation-delay: 0.55s; }
+    h1 span:nth-child(3) { animation-delay: 0.6s; }
+    h1 span:nth-child(4) { animation-delay: 0.65s; }
+    h1 span:nth-child(5) { animation-delay: 0.7s; }
+    h1 span:nth-child(6) { animation-delay: 0.75s; }
+    h1 span:nth-child(7) { animation-delay: 0.8s; }
+    h1 span:nth-child(8) { animation-delay: 0.85s; }
+    h1 span:nth-child(9) { animation-delay: 0.9s; }
+    h1 span:nth-child(10) { animation-delay: 0.95s; }
+
+    @keyframes fade-in {
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+#welcome {
+    transition: opacity 1s ease-out;
+}
+#welcome.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+    @keyframes letter-emerge {
+        0% {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+#editPopup {
+    background: #f9f9f9;
+    border-radius: 10px;
+    text-align: center;
+}
+#editPopup h3 {
+    margin: 0 0 10px 0;
+}
+#editPopup button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#editPopup button:hover {
+    background: #ddd;
+}    
+         /* Save Location Popup */
+#saveLocationPopup, #editPopup {
+    display: none;
+    position: fixed;
+    top: 40%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 2px solid #009500;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); /* Consistent shadow spread */
+    z-index: 1000;
+    width: 300px; /* Fixed width for consistent layout */
+}
+.input-container {
+    display: flex;
+    justify-content: center; /* Centers input horizontally */
+}
+#saveLocationInput, #editNameInput {
+    width: 100%;
+    padding: 8px;
+}
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+#cancelButton, #saveLocationConfirm, #editNoButton, #editYesButton {
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
+#cancelButton, #editNoButton {
+    background-color: #73A16C;
+    color: white;
+}
+#cancelButton:hover, #editNoButton:hover {
+    background-color: #5b8457;
+}
+#saveLocationConfirm, #editYesButton {
+    background-color: #009500;
+    color: white;
+}
+#saveLocationConfirm:hover, #editYesButton:hover {
+    background-color: #007d00;
+}
