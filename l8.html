@@ -218,18 +218,26 @@
 </div>
                    <!--  -->  
 
-<!-- Edit Popup -->
+      <!-- Save Location Name Popup -->
+<div id="saveLocationNamePopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000;">
+    <h3>Save Location</h3>
+    <label for="saveLocationNameInput">Location Name:</label>
+    <input type="text" id="saveLocationNameInput" placeholder="Enter location name" />
+    <input type="hidden" id="saveLocationKey" /> <!-- Hidden input to store the location key -->
+    <br /><br />
+    <button onclick="saveLocationWithName()">Save</button>
+    <button onclick="closeSaveLocationNamePopup()">Cancel</button>
+</div>
+             <!-- Edit Popup -->
 <div id="editPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000;">
-    <h3>Change Saved Location?</h3>
-    <input type="text" id="editNameInput" placeholder="Enter new name" />
+    <label for="editNameInput">Location Name:</label>
+    <input type="text" id="editNameInput" placeholder="Enter location name" />
     <input type="hidden" id="editLocationKey" /> <!-- Hidden input to store the location key -->
     <br /><br />
+    <p>Do you want to replace the saved location?</p>
     <button onclick="handleEditYes()">Yes</button>
     <button onclick="handleEditNo()">No</button>
 </div>
-
-
-
 
        
 <script>
@@ -291,8 +299,7 @@
                 document.getElementById("errorPopup").style.display = "block";
             });
     }
-</script>   
-<script>  
+
   function closeErrorPopup() {
     document.getElementById("errorPopup").style.display = "none";
 }    
@@ -311,50 +318,49 @@
     });
 </script>
 
-<script>
-    
+<script>    
  let locations = {
         "Dubai": { 
-            "City A1": { lat: 25.123, lng: 55.123 }, 
-            "City A2": { lat: 25.223, lng: 55.223 }, 
-            "City A3": { lat: 25.323, lng: 55.323 },
-            "City A4": { lat: 25.123, lng: 55.123 }, 
-            "City A5": { lat: 25.223, lng: 55.223 }, 
-            "City A6": { lat: 25.323, lng: 55.323 },
-            "City A7": { lat: 25.123, lng: 55.123 }, 
-            "City A8": { lat: 25.223, lng: 55.223 }, 
-            "City A9": { lat: 25.323, lng: 55.323 },
-            "City A10": { lat: 25.123, lng: 55.123 }, 
-            "City A11": { lat: 25.223, lng: 55.223 }, 
-            "City A12": { lat: 25.323, lng: 55.323 },
-            "City A13": { lat: 25.123, lng: 55.123 }, 
-            "City A14": { lat: 25.223, lng: 55.223 }, 
-            "City A15": { lat: 25.323, lng: 55.323 } 
+"City A1": { lat: 25.123, lng: 55.123 }, 
+"City A2": { lat: 25.223, lng: 55.223 }, 
+"City A3": { lat: 25.323, lng: 55.323 },
+"City A4": { lat: 25.123, lng: 55.123 }, 
+"City A5": { lat: 25.223, lng: 55.223 }, 
+"City A6": { lat: 25.323, lng: 55.323 },
+"City A7": { lat: 25.123, lng: 55.123 }, 
+"City A8": { lat: 25.223, lng: 55.223 }, 
+"City A9": { lat: 25.323, lng: 55.323 },
+"City A10": { lat: 25.123, lng: 55.123 }, 
+"City A11": { lat: 25.223, lng: 55.223 }, 
+"City A12": { lat: 25.323, lng: 55.323 },
+"City A13": { lat: 25.123, lng: 55.123 }, 
+"City A14": { lat: 25.223, lng: 55.223 }, 
+"City A15": { lat: 25.323, lng: 55.323 } 
         },
         "Abu Dhabi": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
         },
         "Ajman": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
         },
         "UAQ": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
         },
         "RAK": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
         },
         "Fujairah": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
         }
     };
 
@@ -404,20 +410,33 @@
     }
 
     function getSavedLocation() {
-        let savedLocation = localStorage.getItem("userLocation");
-        if (savedLocation) {
-            savedLocation = JSON.parse(savedLocation);
-            let expiryTime = savedLocation.type === "device" ? 1200000 : Infinity; // 20 min for device, no expiry for saved location
-
-            if (savedLocation.type === "device" && Date.now() - savedLocation.timestamp > expiryTime) {
-                localStorage.removeItem("userLocation");
-                return null;
-            }
-            return savedLocation;
+    let savedLocation = localStorage.getItem("userLocation");
+    if (savedLocation) {
+        savedLocation = JSON.parse(savedLocation);
+        
+        let expiryTime;
+        switch (savedLocation.type) {
+            case "device":
+                expiryTime = 120000; // 2 minutes
+                break;
+            case "city":
+                expiryTime = 300000; // 5 minutes
+                break;
+            case "custom":
+                expiryTime = 3600000; // 1 hour
+                break;
+            default:
+                expiryTime = Infinity; // No expiry for unknown types
         }
-        return null;
-    }
 
+        if (expiryTime !== Infinity && Date.now() - savedLocation.timestamp > expiryTime) {
+            localStorage.removeItem("userLocation");
+            return null;
+        }
+        return savedLocation;
+    }
+    return null;
+}
     function updateReplaceableText(location) {
         let replaceableText = document.querySelector(".replaceable-text");
         if (!location) return;
@@ -600,44 +619,96 @@
     // Initialize on page load
     getUserLocation();
 </script>
-
-
-
-
-
-
-
 <script>
+function showAlertPopup(message) {
+    // Create a new div element for the popup
+    const popup = document.createElement("div");
+    popup.className = "bottom-popup";
+    popup.innerHTML = `<p>${message}</p>`;
+
+    // Append the popup to the body
+    document.body.appendChild(popup);
+
+    // Automatically remove the popup after 3 seconds
+    setTimeout(() => {
+        document.body.removeChild(popup);
+    }, 3000);
+}    
+    
+    
+    
+    
+    
+    
+    
+    // Function to open the save location name popup
+    function openSaveLocationNamePopup(locationKey) {
+        document.getElementById("saveLocationNamePopup").style.display = "block";
+        document.getElementById("saveLocationKey").value = locationKey;
+    }
+
+    // Function to save the location with a custom name
+    function saveLocationWithName() {
+        const locationKey = document.getElementById("saveLocationKey").value;
+        const customName = document.getElementById("saveLocationNameInput").value;
+
+        if (customName) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const savedLocation = {
+                            name: customName,
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            type: "saved"
+                        };
+                        localStorage.setItem(locationKey, JSON.stringify(savedLocation));
+                        updateReplaceableText(savedLocation);
+                        closeSaveLocationNamePopup();
+                        showLocationPopup(); // Refresh the location popup
+                    },
+                    () => {
+                        showAlertPopup("Failed to retrieve location. Please try again.");
+                        closeSaveLocationNamePopup();
+                    }
+                );
+            } else {
+                showAlertPopup("Geolocation is not supported.");
+                closeSaveLocationNamePopup();
+            }
+        } else {
+            showAlertPopup("Please enter a valid name.");
+        }
+    }
+
+    // Function to close the save location name popup
+    function closeSaveLocationNamePopup() {
+        document.getElementById("saveLocationNamePopup").style.display = "none";
+    }
+
     // Function to open the edit popup
     function openEditPopup(locationKey) {
         const savedLocation = JSON.parse(localStorage.getItem(locationKey));
         if (!savedLocation) {
-            alert("No saved location to edit.");
+            showAlertPopup("No saved location to edit.");
             return;
         }
 
-        // Set the current name in the input field
         document.getElementById("editNameInput").value = savedLocation.name;
-
-        // Store the location key in a hidden input for later use
         document.getElementById("editLocationKey").value = locationKey;
-
-        // Close the location popup and open the edit popup
         document.getElementById("locationPopup").style.display = "none";
         document.getElementById("editPopup").style.display = "block";
     }
 
-    // Function to handle the "Yes" button click
+    // Function to handle the "Yes" button click in the edit popup
     function handleEditYes() {
         const locationKey = document.getElementById("editLocationKey").value;
         const savedLocation = JSON.parse(localStorage.getItem(locationKey));
         const newName = document.getElementById("editNameInput").value;
 
         if (newName) {
-            // Update the name
             savedLocation.name = newName;
 
-            // Retrieve new location
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -645,45 +716,43 @@
                         savedLocation.lng = position.coords.longitude;
                         savedLocation.timestamp = Date.now();
 
-                        // Save the updated location
                         localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-                        updateReplaceableText(savedLocation); // Refresh the UI
+                        updateReplaceableText(savedLocation);
                         closeEditPopup();
-                        showLocationPopup(); // Refresh the location popup
+                        showLocationPopup();
                     },
                     () => {
-                        alert("Failed to retrieve new location. Name updated, but coordinates remain the same.");
+                        showAlertPopup("Failed to retrieve new location. Name updated, but coordinates remain the same.");
                         localStorage.setItem(locationKey, JSON.stringify(savedLocation));
                         closeEditPopup();
                         showLocationPopup();
                     }
                 );
             } else {
-                alert("Geolocation is not supported. Name updated, but coordinates remain the same.");
+                showAlertPopup("Geolocation is not supported. Name updated, but coordinates remain the same.");
                 localStorage.setItem(locationKey, JSON.stringify(savedLocation));
                 closeEditPopup();
                 showLocationPopup();
             }
         } else {
-            alert("Please enter a valid name.");
+            showAlertPopup("Please enter a valid name.");
         }
     }
 
-    // Function to handle the "No" button click
+    // Function to handle the "No" button click in the edit popup
     function handleEditNo() {
         const locationKey = document.getElementById("editLocationKey").value;
         const savedLocation = JSON.parse(localStorage.getItem(locationKey));
         const newName = document.getElementById("editNameInput").value;
 
         if (newName) {
-            // Update only the name
             savedLocation.name = newName;
             localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-            updateReplaceableText(savedLocation); // Refresh the UI
+            updateReplaceableText(savedLocation);
         }
 
         closeEditPopup();
-        showLocationPopup(); // Refresh the location popup
+        showLocationPopup();
     }
 
     // Function to close the edit popup
@@ -695,7 +764,6 @@
     function showLocationPopup() {
         let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
 
-        // Add saved locations with edit buttons
         for (let i = 1; i <= 5; i++) {
             const locationKey = `savedLocation${i}`;
             const savedLocation = JSON.parse(localStorage.getItem(locationKey));
@@ -707,7 +775,7 @@
                     </h4>
                 `;
             } else {
-                locationList += `<h4 class="current-location" onclick="saveDeviceLocation('${locationKey}')">Save Location ${i}</h4>`;
+                locationList += `<h4 class="current-location" onclick="openSaveLocationNamePopup('${locationKey}')">Save Location ${i}</h4>`;
             }
         }
 
@@ -717,41 +785,5 @@
 
         document.getElementById("locationsList").innerHTML = locationList;
         document.getElementById("locationPopup").style.display = "block";
-    }
-
-    // Function to save a new location with a custom name
-    function saveDeviceLocation(locationKey) {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const customName = prompt("Enter a name for this location:");
-                    if (customName) {
-                        const savedLocation = {
-                            name: customName,
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                            type: "saved"
-                        };
-                        localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-                        updateReplaceableText(savedLocation);
-                        showLocationPopup(); // Refresh popup
-                    }
-                },
-                () => {
-                    showLocationError();
-                }
-            );
-        } else {
-            showLocationError();
-        }
-    }
-
-    // Function to use a saved location
-    function useSavedLocation(locationKey) {
-        const savedLocation = JSON.parse(localStorage.getItem(locationKey));
-        if (savedLocation) {
-            updateReplaceableText(savedLocation);
-            closePopup();
-        }
     }
 </script>
