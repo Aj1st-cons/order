@@ -320,279 +320,220 @@
 
 <script>
     
- let locations = {
-        "Dubai": { 
-"City A1": { lat: 25.123, lng: 55.123 }, 
-"City A2": { lat: 25.223, lng: 55.223 }, 
-"City A3": { lat: 25.323, lng: 55.323 },
-"City A4": { lat: 25.123, lng: 55.123 }, 
-"City A5": { lat: 25.223, lng: 55.223 }, 
-"City A6": { lat: 25.323, lng: 55.323 },
-"City A7": { lat: 25.123, lng: 55.123 }, 
-"City A8": { lat: 25.223, lng: 55.223 }, 
-"City A9": { lat: 25.323, lng: 55.323 },
-"City A10": { lat: 25.123, lng: 55.123 }, 
-"City A11": { lat: 25.223, lng: 55.223 }, 
-"City A12": { lat: 25.323, lng: 55.323 },
-"City A13": { lat: 25.123, lng: 55.123 }, 
-"City A14": { lat: 25.223, lng: 55.223 }, 
-"City A15": { lat: 25.323, lng: 55.323 } 
-        },
-        "Abu Dhabi": { 
-"City C1": { lat: 27.123, lng: 57.123 }, 
-"City C2": { lat: 27.223, lng: 57.223 }, 
-"City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "Ajman": { 
-"City C1": { lat: 27.123, lng: 57.123 }, 
-"City C2": { lat: 27.223, lng: 57.223 }, 
-"City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "UAQ": { 
-"City C1": { lat: 27.123, lng: 57.123 }, 
-"City C2": { lat: 27.223, lng: 57.223 }, 
-"City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "RAK": { 
-"City C1": { lat: 27.123, lng: 57.123 }, 
-"City C2": { lat: 27.223, lng: 57.223 }, 
-"City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "Fujairah": { 
-"City C1": { lat: 27.123, lng: 57.123 }, 
-"City C2": { lat: 27.223, lng: 57.223 }, 
-"City C3": { lat: 27.323, lng: 57.323 } 
+let locations = {
+    "Dubai": { 
+        "City A1": { lat: 25.123, lng: 55.123 }, 
+        "City A2": { lat: 25.223, lng: 55.223 }, 
+        "City A3": { lat: 25.323, lng: 55.323 },  
+        "City C3": { lat: 27.323, lng: 57.323 } 
+    },
+    "Ajman": { 
+        "City C1": { lat: 27.123, lng: 57.123 }, 
+        "City C2": { lat: 27.223, lng: 57.223 }, 
+        "City C3": { lat: 27.323, lng: 57.323 } 
+    },
+    "UAQ": { 
+        "City C1": { lat: 27.123, lng: 57.123 }, 
+        "City C2": { lat: 27.223, lng: 57.223 }, 
+        "City C3": { lat: 27.323, lng: 57.323 } 
+    }
+};
+
+let vendors = {
+    "A": { lat: 25.125, lng: 55.126 },
+    "AJ": { lat: 24.396973, lng: 54.588957 },
+    "AD": { lat: 24.391549, lng: 54.578581 },
+    "ND": { lat: 26.125, lng: 56.126 },
+    "GF": { lat: 25.225, lng: 55.226 },
+    "C": { lat: 26.125, lng: 56.126 },        
+    "D": { lat: 27.125, lng: 57.126 }
+};       
+
+function getUserLocation() {
+    let savedLocation = getSavedLocation();
+
+    if (savedLocation) {
+        updateReplaceableText(savedLocation);
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                let userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    timestamp: Date.now(),
+                    type: "device"
+                };
+                saveLocation(userLocation);
+                updateReplaceableText(userLocation);
+            },
+            () => {
+                if (!savedLocation) {
+                    showLocationPopup();
+                }
+            },
+            { timeout: 10000 }
+        );
+    } else if (!savedLocation) {
+        showLocationPopup();
+    }
+}
+
+function saveLocation(location) {
+    localStorage.setItem("userLocation", JSON.stringify(location));
+}
+
+function getSavedLocation() {
+    let savedLocation = localStorage.getItem("userLocation");
+    if (savedLocation) {
+        savedLocation = JSON.parse(savedLocation);
+        let expiryTime = savedLocation.type === "device" ? 1200000 : Infinity;
+
+        if (savedLocation.type === "device" && Date.now() - savedLocation.timestamp > expiryTime) {
+            localStorage.removeItem("userLocation");
+            return null;
         }
+        return savedLocation;
+    }
+    return null;
+}
+
+function updateReplaceableText(location) {
+    let replaceableText = document.querySelector(".replaceable-text");
+    if (!location) return;
+
+    if (location.type === "device") {
+        let closestCity = getClosestCity(location);
+        replaceableText.innerText = closestCity || "Current Location";
+    } else {
+        replaceableText.innerText = location.name || "Saved Location";
+    }
+}
+
+function getClosestCity(location) {
+    let closestCity = null;
+    let minDistance = Infinity;
+
+    for (const region in locations) {
+        for (const city in locations[region]) {
+            const cityCoords = locations[region][city];
+            const distance = getDistance(
+                location.lat, location.lng,
+                cityCoords.lat, cityCoords.lng
+            );
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestCity = city;
+            }
+        }
+    }
+    return minDistance <= 50 ? closestCity : null;
+}
+
+function showLocationPopup() {
+    let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
+
+    // Add saved locations 1-5
+    for (let i = 1; i <= 5; i++) {
+        const locationKey = `savedLocation${i}`;
+        const savedLocation = JSON.parse(localStorage.getItem(locationKey));
+        if (savedLocation) {
+            locationList += `
+                <h4 class="current-location" onclick="useSavedLocation('${locationKey}')">
+                    ${savedLocation.name}
+                    <i class="fa-solid fa-rotate" style="color: #009500; cursor: pointer; margin-left: 10px;" 
+                       onclick="event.stopPropagation(); openEditPopup('${locationKey}')"></i>
+                </h4>`;
+        } else {
+            locationList += `<h4 class="current-location" onclick="openSaveLocationNamePopup('${locationKey}')">Save Location ${i}</h4>`;
+        }
+    }
+
+    for (const region in locations) {
+        locationList += `<h4 onclick="openCityPopup('${region}')">${region}</h4>`;
+    }
+    document.getElementById("locationsList").innerHTML = locationList;
+    document.getElementById("locationPopup").style.display = "block";
+}
+
+// Modified save location functions
+function openSaveLocationNamePopup(locationKey) {
+    const activeLocation = getSavedLocation();
+    if (!activeLocation) {
+        alert("Please select or detect a location first.");
+        return;
+    }
+    
+    document.getElementById("saveLocationNamePopup").style.display = "block";
+    document.getElementById("saveLocationKey").value = locationKey;
+}
+
+function saveLocationWithName() {
+    const locationKey = document.getElementById("saveLocationKey").value;
+    const customName = document.getElementById("saveLocationNameInput").value.trim();
+    const activeLocation = getSavedLocation();
+
+    if (!customName || !activeLocation) {
+        alert("Please enter a valid name and ensure a location is selected.");
+        return;
+    }
+
+    const savedLocation = {
+        name: customName,
+        lat: activeLocation.lat,
+        lng: activeLocation.lng,
+        type: "saved",
+        timestamp: Date.now()
     };
 
-    let vendors = {
-        "A": { lat: 25.125, lng: 55.126 },
-        "AJ": { lat: 24.396973, lng: 54.588957 },
-        "AD": { lat: 24.391549, lng: 54.578581 },
-        "ND": { lat: 26.125, lng: 56.126 },
-        "GF": { lat: 25.225, lng: 55.226 },
-        "C": { lat: 26.125, lng: 56.126 },        
-        "D": { lat: 27.125, lng: 57.126 }
-    };       
-   
-    function getUserLocation() {
-        let savedLocation = getSavedLocation();
+    localStorage.setItem(locationKey, JSON.stringify(savedLocation));
+    closeSaveLocationNamePopup();
+    showLocationPopup();
+}
 
-        if (savedLocation) {
-            updateReplaceableText(savedLocation);
-        }
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    let userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                        timestamp: Date.now(),
-                        type: "device"
-                    };
-                    saveLocation(userLocation);
-                    updateReplaceableText(userLocation);
-                },
-                () => {
-                    if (!savedLocation) {
-                        showLocationPopup();
-                    }
-                },
-                { timeout: 10000 }
-            );
-        } else if (!savedLocation) {
-            showLocationPopup();
-        }
-    }
-
-    function saveLocation(location) {
-        localStorage.setItem("userLocation", JSON.stringify(location));
-    }
-
-    function getSavedLocation() {
-        let savedLocation = localStorage.getItem("userLocation");
-        if (savedLocation) {
-            savedLocation = JSON.parse(savedLocation);
-            let expiryTime = savedLocation.type === "device" ? 1200000 : Infinity; // 20 min for device, no expiry for saved location
-
-            if (savedLocation.type === "device" && Date.now() - savedLocation.timestamp > expiryTime) {
-                localStorage.removeItem("userLocation");
-                return null;
-            }
-            return savedLocation;
-        }
-        return null;
-    }
-
-    function updateReplaceableText(location) {
-        let replaceableText = document.querySelector(".replaceable-text");
-        if (!location) return;
-
-        if (location.type === "device") {
-            let closestCity = null;
-            let minDistance = Infinity;
-
-            for (const region in locations) {
-                for (const city in locations[region]) {
-                    const cityCoords = locations[region][city];
-                    const distance = getDistance(
-                        location.lat, location.lng,
-                        cityCoords.lat, cityCoords.lng
-                    );
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        closestCity = city;
-                    }
-                }
-            }
-
-            replaceableText.innerText = closestCity && minDistance <= 50 ? closestCity : "Current Location";
-        } else {
-            replaceableText.innerText = location.name || "Saved Location";
-        }
-    }
-
-    function showLocationPopup() {
-        let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
-
-        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
-        if (savedLocation) {
-            locationList += `<h4 class="current-location" onclick="useSavedLocation()">${savedLocation.name}</h4>`;
-        } else {
-            locationList += `<h4 class="current-location" onclick="saveDeviceLocation()">Save Location</h4>`;
-        }
-
-        for (const region in locations) {
-            locationList += `<h4 onclick="openCityPopup('${region}')">${region}</h4>`;
-        }
-        document.getElementById("locationsList").innerHTML = locationList;
-        document.getElementById("locationPopup").style.display = "block";
-    }
-
-    function useCurrentLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    let userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                        timestamp: Date.now(),
-                        type: "device"
-                    };
-                    saveLocation(userLocation);
-                    updateReplaceableText(userLocation);
-                    closePopup();
-                },
-                () => {
-                    showLocationError();
-                }
-            );
-        } else {
-            showLocationError();
-        }
-    }
-
-    function saveDeviceLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const customName = prompt("Enter a name for this location:");
-                    if (customName) {
-                        const savedLocation = {
-                            name: customName,
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                            type: "saved"
-                        };
-                        localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
-                        updateReplaceableText(savedLocation);
-                        showLocationPopup(); // Refresh popup
-                        closePopup();
-                    }
-                },
-                () => {
-                    showLocationError();
-                }
-            );
-        } else {
-            showLocationError();
-        }
-    }
-
-    function useSavedLocation() {
-        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
-        if (savedLocation) {
-            updateReplaceableText(savedLocation);
-            saveLocation(savedLocation); // Set as the current active location
-            closePopup();
-        }
-    }
-
-    function openCityPopup(region) {
-        let cityList = `<h4 onclick="goBackToLocations()">Back</h4>`;
-        for (const city in locations[region]) {
-            cityList += `<h4 onclick="selectCity('${city}', ${locations[region][city].lat}, ${locations[region][city].lng})">${city}</h4>`;
-        }
-        document.getElementById("cityList").innerHTML = cityList;
-        document.getElementById("cityPopup").style.display = "block";
-        document.getElementById("locationPopup").style.display = "none";
-    }
-
-    function selectCity(city, lat, lng) {
-        const selectedLocation = {
-            name: city,
-            lat: lat,
-            lng: lng,
-            type: "saved"
-        };
-        saveLocation(selectedLocation);
-        updateReplaceableText(selectedLocation);
+function useSavedLocation(locationKey) {
+    const savedLocation = JSON.parse(localStorage.getItem(locationKey));
+    if (savedLocation) {
+        savedLocation.timestamp = Date.now();
+        saveLocation(savedLocation);
+        updateReplaceableText(savedLocation);
         closePopup();
     }
+}
 
-    function showLocationError() {
-        document.getElementById("locationErrorPopup").style.display = "block";
+// Modified search function
+function searchItem(item) {
+    let userLocation = getSavedLocation();
+
+    if (!userLocation) {
+        const locationPopup = document.getElementById("selectLocationPopup");
+        locationPopup.style.display = "block";
+        setTimeout(() => {
+            locationPopup.style.display = "none";
+        }, 4000);
+        return;
     }
 
-    function closePopup() {
-        document.querySelectorAll(".popup, .popup2").forEach(popup => {
-            popup.style.display = "none";
-        });
+    let nearbyVendors = [];
+    for (const vendor in vendors) {
+        let distance = getDistance(
+            userLocation.lat, userLocation.lng,
+            vendors[vendor].lat, vendors[vendor].lng
+        );
+        if (distance <= 1) nearbyVendors.push(`vendor:${vendor}`);
     }
 
-    function goBackToLocations() {
-        document.getElementById('cityPopup').style.display = 'none';
-        document.getElementById('locationPopup').style.display = 'flex';
+    if (nearbyVendors.length > 0) {
+        window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
+    } else {
+        document.getElementById("errorPopup").style.display = "block";
     }
+}
 
-    function searchItem(item) {
-        let userLocation = getSavedLocation();
 
-        if (!userLocation) {
-            const locationPopup = document.getElementById("selectLocationPopup");
-            locationPopup.style.display = "block";
-            setTimeout(() => {
-                locationPopup.style.display = "none";
-            }, 4000);
-            return;
-        }
 
-        let nearbyVendors = [];
-        for (const vendor in vendors) {
-            let distance = getDistance(
-                userLocation.lat, userLocation.lng,
-                vendors[vendor].lat, vendors[vendor].lng
-            );
-            if (distance <= 1) nearbyVendors.push(`vendor:${vendor}`);
-        }
 
-        if (nearbyVendors.length > 0) {
-            window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
-        } else {
-            document.getElementById("errorPopup").style.display = "block";
-        }
-    }
 
     function getDistance(lat1, lon1, lat2, lon2) {
         const R = 6371;
