@@ -497,20 +497,23 @@
 
 
 
-    function openSaveLocationPopup() {
-    document.getElementById("saveLocationPopup").style.display = "block";
-}
-
-function closeSaveLocationPopup() {
-    document.getElementById("saveLocationPopup").style.display = "none";
-}
-
+    
 function saveDeviceLocation() {
+    // Check if geolocation is supported
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
+                // Close the location popup if it's open
+                document.getElementById("locationPopup").style.display = "none";
+
+                // Open the save location popup
+                openSaveLocationPopup();
+
+                // Handle saving the location when the user confirms
                 document.getElementById("saveLocationConfirm").onclick = function () {
                     const customName = document.getElementById("saveLocationInput").value.trim();
+                    
+                    // Ensure the user has entered a valid name
                     if (customName) {
                         const savedLocation = {
                             name: customName,
@@ -518,23 +521,68 @@ function saveDeviceLocation() {
                             lng: position.coords.longitude,
                             type: "saved"
                         };
+
+                        // Save location data to localStorage
                         localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                        
+                        // Update UI or perform any necessary actions with the saved location
                         updateReplaceableText(savedLocation);
-                        showLocationPopup(); // Refresh the popup with the new saved location
+
+                        // Close the save location popup
                         closeSaveLocationPopup();
+
+                        // Refresh the page after saving to reflect changes
+                        setTimeout(() => {
+                            location.reload();
+                        }, 500); // Short delay to ensure localStorage updates properly
+                    } else {
+                        alert("Please enter a name for this location."); // Notify user to input a name
                     }
                 };
-                openSaveLocationPopup();
             },
-            () => {
-                showLocationError();
+            (error) => {
+                // Handle errors when retrieving location
+                showLocationError(error);
             }
         );
     } else {
-        showLocationError();
+        // Geolocation is not supported by the browser
+        alert("Geolocation is not supported by your browser.");
     }
 }
-   
+
+function openSaveLocationPopup() {
+    document.getElementById("locationPopup").style.display = "none"; // Close the location popup (if open)
+    document.getElementById("saveLocationPopup").style.display = "block"; // Show save location popup
+}
+
+function closeSaveLocationPopup() {
+    document.getElementById("saveLocationPopup").style.display = "none"; // Hide save location popup
+}
+
+function showLocationError(error) {
+    let errorMessage = "Unable to retrieve your location.";
+    if (error) {
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                errorMessage = "Permission denied. Please allow access to your location.";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                errorMessage = "Position unavailable. Please try again later.";
+                break;
+            case error.TIMEOUT:
+                errorMessage = "Request timed out. Please try again.";
+                break;
+            default:
+                errorMessage = "An unknown error occurred.";
+        }
+    }
+    alert(errorMessage); // Display an appropriate error message to the user
+}
+
+    
+    
+    
    
    
    
@@ -627,11 +675,6 @@ function saveDeviceLocation() {
     // Initialize on page load
     getUserLocation();
 </script>
-
-
-
-
-
 
 
 <script>
