@@ -118,58 +118,6 @@
 #editPopup button:hover {
     background: #ddd;
 }
-
-/* Loading Overlay */
-#loadingOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it appears above all other elements */
-}
-
-/* Spinner Animation */
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid rgba(255, 255, 255, 0.3); /* Light border */
-    border-top-color: white; /* Highlighted border */
-    border-radius: 50%;
-    animation: spin 1s linear infinite; /* Infinite rotation */
-}
-
-/* Keyframes for Spinner */
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* Popup Container Styles */
-.popup-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Popup Content Styles */
-.popup-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-    
 </style>    
 <link rel="stylesheet" href="https://order-1ib.pages.dev/page.css">    
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
@@ -291,9 +239,44 @@
     </div>
 </div>
            <!-- animation -->
-<div id="loadingOverlay" style="display: none;">
-    <div class="spinner"></div>
+<style>
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dim background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it appears above other elements */
+}
+
+/* Spinner Animation */
+.loading-spinner {
+    border: 6px solid #f3f3f3; /* Light gray */
+    border-top: 6px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite; /* Spinner animation */
+}
+
+/* Keyframes for Spinner Animation */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>           
+           
+           
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display: none;">
+    <div class="loading-spinner"></div>
 </div>
+
 
 
 
@@ -556,96 +539,57 @@
     
 function saveDeviceLocation() {
     if (navigator.geolocation) {
-        // Show loading animation while retrieving location
+        // Show loading animation immediately
         showLoadingAnimation();
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                // Add a delay before showing the save location popup
-                setTimeout(() => {
-                    hideLoadingAnimation(); // Hide loading animation
-                    openSaveLocationPopup();
+        // Use requestAnimationFrame to ensure loader is rendered before geolocation starts
+        requestAnimationFrame(() => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    // Add a delay before showing the save location popup
+                    setTimeout(() => {
+                        hideLoadingAnimation(); // Hide loading animation
+                        openSaveLocationPopup();
 
-                    // Prevent closing until required action is taken
-                    document.getElementById("saveLocationConfirm").onclick = function () {
-                        const customName = document.getElementById("saveLocationInput").value.trim();
-                        if (customName) {
-                            const savedLocation = {
-                                name: customName,
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude,
-                                type: "saved"
-                            };
-                            localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
-                            updateReplaceableText(savedLocation);
-                            closeSaveLocationPopup();
-                            setTimeout(() => location.reload(), 500);
-                        } else {
-                            alert("Please enter a name for this location.");
-                        }
-                    };
-                }, 1000); // Delay of 1 second
-            },
-            (error) => {
-                hideLoadingAnimation(); // Hide loading animation on error
-                showLocationError(error);
-            }
-        );
+                        // Prevent closing until required action is taken
+                        document.getElementById("saveLocationConfirm").onclick = function () {
+                            const customName = document.getElementById("saveLocationInput").value.trim();
+                            if (customName) {
+                                const savedLocation = {
+                                    name: customName,
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude,
+                                    type: "saved"
+                                };
+                                localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                                updateReplaceableText(savedLocation);
+                                closeSaveLocationPopup();
+                                setTimeout(() => location.reload(), 500);
+                            } else {
+                                alert("Please enter a name for this location.");
+                            }
+                        };
+                    }, 1000); // Delay of 1 second
+                },
+                (error) => {
+                    hideLoadingAnimation(); // Hide loading animation on error
+                    showLocationError(error);
+                }
+            );
+        });
     } else {
         alert("Geolocation is not supported by your browser.");
     }
 }
 
-function openSaveLocationPopup() {
-    document.getElementById("locationPopup").style.display = "none"; // Hide other popups
-    const popup = document.getElementById("saveLocationPopup");
-    popup.style.display = "block";
-    popup.style.opacity = 0; // Start with zero opacity for fade-in effect
-
-    // Fade-in animation
-    let opacity = 0;
-    const fadeIn = setInterval(() => {
-        if (opacity < 1) {
-            opacity += 0.1;
-            popup.style.opacity = opacity;
-        } else {
-            clearInterval(fadeIn);
-        }
-    }, 50); // Adjust speed as needed
-}
-
-function closeSaveLocationPopup() {
-    document.getElementById("saveLocationPopup").style.display = "none";
-}
-
 function showLoadingAnimation() {
     const loadingOverlay = document.getElementById("loadingOverlay");
-    loadingOverlay.style.display = "flex"; // Show the loading overlay
+    loadingOverlay.style.display = "flex"; // Show loading overlay
 }
 
 function hideLoadingAnimation() {
     const loadingOverlay = document.getElementById("loadingOverlay");
-    loadingOverlay.style.display = "none"; // Hide the loading overlay
-}
-
-function showLocationError(error) {
-    let errorMessage = "Unable to retrieve your location.";
-    if (error) {
-        switch (error.code) {
-            case error.PERMISSION_DENIED:
-                errorMessage = "Permission denied. Please allow access to your location.";
-                break;
-            case error.POSITION_UNAVAILABLE:
-                errorMessage = "Position unavailable. Please try again later.";
-                break;
-            case error.TIMEOUT:
-                errorMessage = "Request timed out. Please try again.";
-                break;
-            default:
-                errorMessage = "An unknown error occurred.";
-        }
-    }
-    alert(errorMessage);
+    loadingOverlay.style.display = "none"; // Hide loading overlay
 }
 
 
