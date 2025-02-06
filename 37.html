@@ -500,10 +500,13 @@
     
 function saveDeviceLocation() {
     if (navigator.geolocation) {
+        showLoadingIndicator();
+
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                // Close the locationPopup when opening the save location popup
+                hideLoadingIndicator();
                 closeLocationPopup();
+                openSaveLocationPopup();
 
                 document.getElementById("saveLocationConfirm").onclick = function () {
                     const customName = document.getElementById("saveLocationInput").value.trim();
@@ -518,18 +521,17 @@ function saveDeviceLocation() {
                         updateReplaceableText(savedLocation);
                         closeSaveLocationPopup();
 
-                        // Refresh the page after saving
                         setTimeout(() => {
                             location.reload();
-                        }, 500); // Short delay to ensure localStorage updates properly
+                        }, 500);
                     }
                 };
-
-                openSaveLocationPopup();
             },
-            () => {
+            (error) => {
+                hideLoadingIndicator();
                 showLocationError();
-            }
+            },
+            { timeout: 10000 } // 10-second timeout
         );
     } else {
         showLocationError();
@@ -537,25 +539,33 @@ function saveDeviceLocation() {
 }
 
 function openSaveLocationPopup() {
-    closeLocationPopup(); // Close the location popup
-    document.getElementById("saveLocationPopup").style.display = "block"; // Open save location popup
+    closeLocationPopup();
+    requestAnimationFrame(() => {
+        document.getElementById("saveLocationPopup").style.display = "block";
+    });
 }
 
 function closeLocationPopup() {
-    document.getElementById("locationPopup").style.display = "none"; // Close the location popup
+    document.getElementById("locationPopup").style.display = "none";
 }
 
 function closeSaveLocationPopup() {
-    document.getElementById("saveLocationPopup").style.display = "none"; // Close the save location popup
+    document.getElementById("saveLocationPopup").style.display = "none";
+}
+
+function showLoadingIndicator() {
+    document.getElementById("loadingIndicator").style.display = "block";
+}
+
+function hideLoadingIndicator() {
+    document.getElementById("loadingIndicator").style.display = "none";
 }
 
 function showLocationError() {
-    // Handle location error
     console.error("Geolocation is not supported or permission denied.");
 }
 
 function updateReplaceableText(savedLocation) {
-    // Update the UI with the saved location details
     console.log("Location saved:", savedLocation);
 }
     
