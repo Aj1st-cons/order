@@ -502,8 +502,8 @@ function saveDeviceLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                // Close locationPopup when opening save location popup
-                document.getElementById("locationPopup").style.display = "none";
+                // Close the locationPopup when opening the save location popup
+                closeLocationPopup();
 
                 document.getElementById("saveLocationConfirm").onclick = function () {
                     const customName = document.getElementById("saveLocationInput").value.trim();
@@ -516,13 +516,12 @@ function saveDeviceLocation() {
                         };
                         localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
                         updateReplaceableText(savedLocation);
-                        
-                        // Close save location popup after saving
                         closeSaveLocationPopup();
 
+                        // Refresh the page after saving
                         setTimeout(() => {
                             location.reload();
-                        }, 500);
+                        }, 500); // Short delay to ensure localStorage updates properly
                     }
                 };
 
@@ -538,12 +537,26 @@ function saveDeviceLocation() {
 }
 
 function openSaveLocationPopup() {
-    document.getElementById("locationPopup").style.display = "none"; // Ensure location popup is closed
-    document.getElementById("saveLocationPopup").style.display = "block";
+    closeLocationPopup(); // Close the location popup
+    document.getElementById("saveLocationPopup").style.display = "block"; // Open save location popup
+}
+
+function closeLocationPopup() {
+    document.getElementById("locationPopup").style.display = "none"; // Close the location popup
 }
 
 function closeSaveLocationPopup() {
-    document.getElementById("saveLocationPopup").style.display = "none"; // Add this function
+    document.getElementById("saveLocationPopup").style.display = "none"; // Close the save location popup
+}
+
+function showLocationError() {
+    // Handle location error
+    console.error("Geolocation is not supported or permission denied.");
+}
+
+function updateReplaceableText(savedLocation) {
+    // Update the UI with the saved location details
+    console.log("Location saved:", savedLocation);
 }
     
     
