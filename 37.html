@@ -119,60 +119,62 @@
     background: #ddd;
 }
     
-/* Popup container styling */
-#saveLocationPopup {
+/* Common Popup Container Styling */
+#saveLocationPopup, #editPopup {
     display: none;
     position: fixed;
-    top: 40%;
+    top: 40%; /* Adjusted for centering */
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
     padding: 20px;
     border: 2px solid #009500;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); /* Increased shadow spread */
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); /* Consistent shadow spread */
     z-index: 1000;
-    width: 300px; /* Set a fixed width for proper centering */
+    width: 300px; /* Fixed width for consistent layout */
 }
 
-/* Input container to center the input box */
+/* Input Container Styling (Centers Input Box) */
 .input-container {
     display: flex;
-    justify-content: left; /* Centers input horizontally */
+    justify-content: center; /* Centers input horizontally */
 }
 
-#saveLocationInput {
+#saveLocationInput, #editNameInput {
     width: 100%;
     padding: 8px;
 }
 
-/* Button container styling */
+/* Button Container Styling */
 .popup-buttons {
     display: flex;
     justify-content: space-between; /* Aligns buttons to opposite ends */
     margin-top: 15px;
 }
 
-#cancelButton {
-    background-color: #73A16C; /* Red background for Cancel button */
-    color: white;
+#cancelButton, #saveLocationConfirm, #editNoButton, #editYesButton {
     border: none;
     padding: 8px 16px;
     cursor: pointer;
 }
 
-#cancelButton:hover {
-    background-color: #d32f2f; /* Darker red on hover */
-}
-
-#saveLocationConfirm {
-    background-color: #009500; /* Green background for Save button */
+/* Cancel/No Button Styling */
+#cancelButton, #editNoButton {
+    background-color: #73A16C; /* Matching Cancel button color */
     color: white;
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
 }
 
-#saveLocationConfirm:hover {
+#cancelButton:hover, #editNoButton:hover {
+    background-color: #5b8457; /* Darker shade on hover */
+}
+
+/* Save/Yes Button Styling */
+#saveLocationConfirm, #editYesButton {
+    background-color: #009500; /* Matching Save button color */
+    color: white;
+}
+
+#saveLocationConfirm:hover, #editYesButton:hover {
     background-color: #007d00; /* Slightly darker green on hover */
 }
 </style>
@@ -278,15 +280,17 @@
                    <!--  -->  
 
 
-<!-- Edit Popup -->
-<div id="editPopup" style="display: none; position: fixed; top: 30%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid #009500; box-shadow: 0 0 10px rgba(0, 0, 0, 0.9); z-index: 1000;">
+           <!-- Edit Popup -->
+<div id="editPopup">
     <h3>Change Saved Location?</h3>
-    <input type="text" id="editNameInput" placeholder="Enter new name" />
-    <br /><br />
-    <button onclick="handleEditYes()">Yes</button>
-    <button onclick="handleEditNo()">No</button>
+    <div class="input-container">
+        <input type="text" id="editNameInput" placeholder="Enter new name">
+    </div>
+    <div class="popup-buttons">
+        <button id="editNoButton" onclick="handleEditNo()">No</button>
+        <button id="editYesButton" onclick="handleEditYes()">Yes</button>
+    </div>
 </div>
-
 
           <!-- customNamePopup  -->
 <div id="saveLocationPopup">
