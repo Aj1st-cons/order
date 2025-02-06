@@ -499,51 +499,52 @@
 
     
 function saveDeviceLocation() {
-    // Close the location popup before opening the save location popup
-    document.getElementById("locationPopup").style.display = "none"; 
-    document.getElementById("saveLocationPopup").style.display = "block";
-}
-
-function handleSaveLocation() {
-    const customName = document.getElementById("saveLocationInput").value.trim();
-
-    if (!customName) {
-        alert("Please enter a valid name for the location.");
-        return;
-    }
-
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                const savedLocation = {
-                    name: customName,
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    type: "saved"
+                // Close locationPopup when opening save location popup
+                document.getElementById("locationPopup").style.display = "none";
+
+                document.getElementById("saveLocationConfirm").onclick = function () {
+                    const customName = document.getElementById("saveLocationInput").value.trim();
+                    if (customName) {
+                        const savedLocation = {
+                            name: customName,
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude,
+                            type: "saved"
+                        };
+                        localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                        updateReplaceableText(savedLocation);
+                        
+                        // Close save location popup after saving
+                        closeSaveLocationPopup();
+
+                        setTimeout(() => {
+                            location.reload();
+                        }, 500);
+                    }
                 };
 
-                localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
-                updateReplaceableText(savedLocation);
-                
-                // Close the save location popup
-                document.getElementById("saveLocationPopup").style.display = "none";
-                
-                // Refresh the page to update locations list
-                location.reload();
+                openSaveLocationPopup();
             },
             () => {
-                alert("Failed to retrieve location. Please try again.");
+                showLocationError();
             }
         );
     } else {
-        alert("Geolocation is not supported.");
+        showLocationError();
     }
 }
 
 function openSaveLocationPopup() {
-    document.getElementById("locationPopup").style.display = "none"; // Close the location popup
-    document.getElementById("saveLocationPopup").style.display = "block"; // Open save location popup
-}  
+    document.getElementById("locationPopup").style.display = "none"; // Ensure location popup is closed
+    document.getElementById("saveLocationPopup").style.display = "block";
+}
+
+function closeSaveLocationPopup() {
+    document.getElementById("saveLocationPopup").style.display = "none"; // Add this function
+}
     
     
     
