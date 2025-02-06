@@ -497,14 +497,18 @@
 
 
 
-    
+    function openSaveLocationPopup() {
+    document.getElementById("saveLocationPopup").style.display = "block";
+}
+
+function closeSaveLocationPopup() {
+    document.getElementById("saveLocationPopup").style.display = "none";
+}
+
 function saveDeviceLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                // Close the locationPopup when opening the save location popup
-                closeLocationPopup();
-
                 document.getElementById("saveLocationConfirm").onclick = function () {
                     const customName = document.getElementById("saveLocationInput").value.trim();
                     if (customName) {
@@ -516,15 +520,10 @@ function saveDeviceLocation() {
                         };
                         localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
                         updateReplaceableText(savedLocation);
+                        showLocationPopup(); // Refresh the popup with the new saved location
                         closeSaveLocationPopup();
-
-                        // Refresh the page after saving
-                        setTimeout(() => {
-                            location.reload();
-                        }, 500); // Short delay to ensure localStorage updates properly
                     }
                 };
-
                 openSaveLocationPopup();
             },
             () => {
@@ -535,10 +534,7 @@ function saveDeviceLocation() {
         showLocationError();
     }
 }
-
-
-    
-    
+   
    
    
    
@@ -631,6 +627,11 @@ function saveDeviceLocation() {
     // Initialize on page load
     getUserLocation();
 </script>
+
+
+
+
+
 
 
 <script>
