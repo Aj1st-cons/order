@@ -238,6 +238,10 @@
         <button id="saveLocationConfirm">Save</button>
     </div>
 </div>
+           <!-- animation -->
+<div id="loadingOverlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
 
 
 
@@ -500,10 +504,14 @@
     
 function saveDeviceLocation() {
     if (navigator.geolocation) {
+        // Show loading animation while retrieving location
+        showLoadingAnimation();
+
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 // Add a delay before showing the save location popup
                 setTimeout(() => {
+                    hideLoadingAnimation(); // Hide loading animation
                     openSaveLocationPopup();
 
                     // Prevent closing until required action is taken
@@ -527,6 +535,7 @@ function saveDeviceLocation() {
                 }, 1000); // Delay of 1 second
             },
             (error) => {
+                hideLoadingAnimation(); // Hide loading animation on error
                 showLocationError(error);
             }
         );
@@ -555,6 +564,16 @@ function openSaveLocationPopup() {
 
 function closeSaveLocationPopup() {
     document.getElementById("saveLocationPopup").style.display = "none";
+}
+
+function showLoadingAnimation() {
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    loadingOverlay.style.display = "flex"; // Show the loading overlay
+}
+
+function hideLoadingAnimation() {
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    loadingOverlay.style.display = "none"; // Hide the loading overlay
 }
 
 function showLocationError(error) {
