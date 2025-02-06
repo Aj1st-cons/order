@@ -318,7 +318,8 @@
     });
 </script>
 
-<script>    
+<script>
+    
  let locations = {
         "Dubai": { 
 "City A1": { lat: 25.123, lng: 55.123 }, 
@@ -410,33 +411,20 @@
     }
 
     function getSavedLocation() {
-    let savedLocation = localStorage.getItem("userLocation");
-    if (savedLocation) {
-        savedLocation = JSON.parse(savedLocation);
-        
-        let expiryTime;
-        switch (savedLocation.type) {
-            case "device":
-                expiryTime = 120000; // 2 minutes
-                break;
-            case "city":
-                expiryTime = 300000; // 5 minutes
-                break;
-            case "custom":
-                expiryTime = 3600000; // 1 hour
-                break;
-            default:
-                expiryTime = Infinity; // No expiry for unknown types
-        }
+        let savedLocation = localStorage.getItem("userLocation");
+        if (savedLocation) {
+            savedLocation = JSON.parse(savedLocation);
+            let expiryTime = savedLocation.type === "device" ? 1200000 : Infinity; // 20 min for device, no expiry for saved location
 
-        if (expiryTime !== Infinity && Date.now() - savedLocation.timestamp > expiryTime) {
-            localStorage.removeItem("userLocation");
-            return null;
+            if (savedLocation.type === "device" && Date.now() - savedLocation.timestamp > expiryTime) {
+                localStorage.removeItem("userLocation");
+                return null;
+            }
+            return savedLocation;
         }
-        return savedLocation;
+        return null;
     }
-    return null;
-}
+
     function updateReplaceableText(location) {
         let replaceableText = document.querySelector(".replaceable-text");
         if (!location) return;
@@ -620,30 +608,11 @@
     getUserLocation();
 </script>
 <script>
-function showAlertPopup(message) {
-    // Create a new div element for the popup
-    const popup = document.createElement("div");
-    popup.className = "bottom-popup";
-    popup.innerHTML = `<p>${message}</p>`;
-
-    // Append the popup to the body
-    document.body.appendChild(popup);
-
-    // Automatically remove the popup after 3 seconds
-    setTimeout(() => {
-        document.body.removeChild(popup);
-    }, 3000);
-}    
-    
-    
-    
-    
-    
-    
-    
     // Function to open the save location name popup
     function openSaveLocationNamePopup(locationKey) {
+        // Display the save location name popup
         document.getElementById("saveLocationNamePopup").style.display = "block";
+        // Store the location key in a hidden input for later use
         document.getElementById("saveLocationKey").value = locationKey;
     }
 
@@ -668,16 +637,16 @@ function showAlertPopup(message) {
                         showLocationPopup(); // Refresh the location popup
                     },
                     () => {
-                        showAlertPopup("Failed to retrieve location. Please try again.");
+                        alert("Failed to retrieve location. Please try again.");
                         closeSaveLocationNamePopup();
                     }
                 );
             } else {
-                showAlertPopup("Geolocation is not supported.");
+                alert("Geolocation is not supported.");
                 closeSaveLocationNamePopup();
             }
         } else {
-            showAlertPopup("Please enter a valid name.");
+            alert("Please enter a valid name.");
         }
     }
 
@@ -690,12 +659,17 @@ function showAlertPopup(message) {
     function openEditPopup(locationKey) {
         const savedLocation = JSON.parse(localStorage.getItem(locationKey));
         if (!savedLocation) {
-            showAlertPopup("No saved location to edit.");
+            alert("No saved location to edit.");
             return;
         }
 
+        // Set the current name in the input field
         document.getElementById("editNameInput").value = savedLocation.name;
+
+        // Store the location key in a hidden input for later use
         document.getElementById("editLocationKey").value = locationKey;
+
+        // Close the location popup and open the edit popup
         document.getElementById("locationPopup").style.display = "none";
         document.getElementById("editPopup").style.display = "block";
     }
@@ -707,8 +681,10 @@ function showAlertPopup(message) {
         const newName = document.getElementById("editNameInput").value;
 
         if (newName) {
+            // Update the name
             savedLocation.name = newName;
 
+            // Retrieve new location
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -716,26 +692,27 @@ function showAlertPopup(message) {
                         savedLocation.lng = position.coords.longitude;
                         savedLocation.timestamp = Date.now();
 
+                        // Save the updated location
                         localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-                        updateReplaceableText(savedLocation);
+                        updateReplaceableText(savedLocation); // Refresh the UI
                         closeEditPopup();
-                        showLocationPopup();
+                        showLocationPopup(); // Refresh the location popup
                     },
                     () => {
-                        showAlertPopup("Failed to retrieve new location. Name updated, but coordinates remain the same.");
+                        alert("Failed to retrieve new location. Name updated, but coordinates remain the same.");
                         localStorage.setItem(locationKey, JSON.stringify(savedLocation));
                         closeEditPopup();
                         showLocationPopup();
                     }
                 );
             } else {
-                showAlertPopup("Geolocation is not supported. Name updated, but coordinates remain the same.");
+                alert("Geolocation is not supported. Name updated, but coordinates remain the same.");
                 localStorage.setItem(locationKey, JSON.stringify(savedLocation));
                 closeEditPopup();
                 showLocationPopup();
             }
         } else {
-            showAlertPopup("Please enter a valid name.");
+            alert("Please enter a valid name.");
         }
     }
 
@@ -746,13 +723,14 @@ function showAlertPopup(message) {
         const newName = document.getElementById("editNameInput").value;
 
         if (newName) {
+            // Update only the name
             savedLocation.name = newName;
             localStorage.setItem(locationKey, JSON.stringify(savedLocation));
-            updateReplaceableText(savedLocation);
+            updateReplaceableText(savedLocation); // Refresh the UI
         }
 
         closeEditPopup();
-        showLocationPopup();
+        showLocationPopup(); // Refresh the location popup
     }
 
     // Function to close the edit popup
@@ -764,6 +742,7 @@ function showAlertPopup(message) {
     function showLocationPopup() {
         let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
 
+        // Add saved locations with edit buttons
         for (let i = 1; i <= 5; i++) {
             const locationKey = `savedLocation${i}`;
             const savedLocation = JSON.parse(localStorage.getItem(locationKey));
