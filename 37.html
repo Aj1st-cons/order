@@ -239,8 +239,47 @@
     </div>
 </div>
 
+        <!-- animation for delay -->
+<!-- Add this HTML for the loader -->
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="spinner"></div>
+</div>
 
+<style>
+/* CSS for the loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  visibility: hidden;
+}
 
+/* Spinner animation */
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>
 
 
        
@@ -309,6 +348,19 @@
     document.getElementById("errorPopup").style.display = "none";
 }    
 </script>
+<script>
+        window.addEventListener("load", function() {
+        let savedLocation = getSavedLocation();
+        if (!savedLocation) {
+            setTimeout(function() {
+                const locationPrompt = document.getElementById("locationPromptPopup");
+                locationPrompt.style.display = "block";
+                setTimeout(() => locationPrompt.style.display = "none", 3000);
+            }, 4000);
+        }
+    });
+</script>
+
 
 <script>
     
@@ -499,14 +551,19 @@
 
     
 function saveDeviceLocation() {
+    const loadingOverlay = document.getElementById("loadingOverlay");
+
     if (navigator.geolocation) {
-        showLoadingIndicator();
+        // Show the loading animation
+        loadingOverlay.style.visibility = "visible";
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                hideLoadingIndicator();
+                // Hide the loading animation once geolocation is retrieved
+                loadingOverlay.style.visibility = "hidden";
+
+                // Close the location popup when opening the save location popup
                 closeLocationPopup();
-                openSaveLocationPopup();
 
                 document.getElementById("saveLocationConfirm").onclick = function () {
                     const customName = document.getElementById("saveLocationInput").value.trim();
@@ -521,54 +578,28 @@ function saveDeviceLocation() {
                         updateReplaceableText(savedLocation);
                         closeSaveLocationPopup();
 
+                        // Refresh the page after saving
                         setTimeout(() => {
                             location.reload();
-                        }, 500);
+                        }, 500); // Short delay to ensure localStorage updates properly
                     }
                 };
+
+                openSaveLocationPopup();
             },
-            (error) => {
-                hideLoadingIndicator();
+            () => {
+                // Hide the loading animation if geolocation fails
+                loadingOverlay.style.visibility = "hidden";
                 showLocationError();
-            },
-            { timeout: 10000 } // 10-second timeout
+            }
         );
     } else {
         showLocationError();
     }
 }
 
-function openSaveLocationPopup() {
-    closeLocationPopup();
-    requestAnimationFrame(() => {
-        document.getElementById("saveLocationPopup").style.display = "block";
-    });
-}
 
-function closeLocationPopup() {
-    document.getElementById("locationPopup").style.display = "none";
-}
 
-function closeSaveLocationPopup() {
-    document.getElementById("saveLocationPopup").style.display = "none";
-}
-
-function showLoadingIndicator() {
-    document.getElementById("loadingIndicator").style.display = "block";
-}
-
-function hideLoadingIndicator() {
-    document.getElementById("loadingIndicator").style.display = "none";
-}
-
-function showLocationError() {
-    console.error("Geolocation is not supported or permission denied.");
-}
-
-function updateReplaceableText(savedLocation) {
-    console.log("Location saved:", savedLocation);
-}
-    
     
     
    
