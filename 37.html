@@ -229,6 +229,20 @@
 </div>
 
 
+          <!-- customNamePopup  -->
+<div id="saveLocationPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid #ccc; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000;">
+    <h3>Save Location</h3>
+    <input type="text" id="saveLocationInput" placeholder="Enter location name" style="width: 100%; padding: 8px; margin-top: 10px;">
+    <div style="margin-top: 15px; text-align: right;">
+        <button onclick="closeSaveLocationPopup()">Cancel</button>
+        <button id="saveLocationConfirm">Save</button>
+    </div>
+</div>
+
+
+
+
+
        
 <script>
   async function loadCategories() {
@@ -389,19 +403,27 @@
     }
 
     function getSavedLocation() {
-        let savedLocation = localStorage.getItem("userLocation");
-        if (savedLocation) {
-            savedLocation = JSON.parse(savedLocation);
-            let expiryTime = savedLocation.type === "device" ? 1200000 : Infinity; // 20 min for device, no expiry for saved location
+    let savedLocation = localStorage.getItem("userLocation");
+    if (savedLocation) {
+        savedLocation = JSON.parse(savedLocation);
 
-            if (savedLocation.type === "device" && Date.now() - savedLocation.timestamp > expiryTime) {
-                localStorage.removeItem("userLocation");
-                return null;
-            }
-            return savedLocation;
+        let expiryTime;
+        if (savedLocation.type === "device") {
+            expiryTime = 1200000; // 20 minutes
+        } else if (savedLocation.type === "saved") {
+            expiryTime = Infinity; // Never expires
+        } else if (savedLocation.type === "city") {
+            expiryTime = 3600000; // 1 hour
         }
-        return null;
+
+        if (expiryTime !== Infinity && Date.now() - savedLocation.timestamp > expiryTime) {
+            localStorage.removeItem("userLocation");
+            return null;
+        }
+        return savedLocation;
     }
+    return null;
+}
 
     function updateReplaceableText(location) {
         let replaceableText = document.querySelector(".replaceable-text");
@@ -471,11 +493,24 @@
         }
     }
 
-    function saveDeviceLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const customName = prompt("Enter a name for this location:");
+
+
+
+
+    function openSaveLocationPopup() {
+    document.getElementById("saveLocationPopup").style.display = "block";
+}
+
+function closeSaveLocationPopup() {
+    document.getElementById("saveLocationPopup").style.display = "none";
+}
+
+function saveDeviceLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                document.getElementById("saveLocationConfirm").onclick = function () {
+                    const customName = document.getElementById("saveLocationInput").value.trim();
                     if (customName) {
                         const savedLocation = {
                             name: customName,
@@ -485,19 +520,24 @@
                         };
                         localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
                         updateReplaceableText(savedLocation);
-                        showLocationPopup(); // Refresh popup
-                        closePopup();
+                        showLocationPopup(); // Refresh the popup with the new saved location
+                        closeSaveLocationPopup();
                     }
-                },
-                () => {
-                    showLocationError();
-                }
-            );
-        } else {
-            showLocationError();
-        }
+                };
+                openSaveLocationPopup();
+            },
+            () => {
+                showLocationError();
+            }
+        );
+    } else {
+        showLocationError();
     }
-
+}
+   
+   
+   
+   
     function useSavedLocation() {
         const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
         if (savedLocation) {
@@ -506,6 +546,8 @@
             closePopup();
         }
     }
+
+
 
     function openCityPopup(region) {
         let cityList = `<h4 onclick="goBackToLocations()">Back</h4>`;
