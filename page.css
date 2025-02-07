@@ -111,7 +111,7 @@
             padding: 10px;
             max-height: calc(100% - 40px); 
         }
-        #locationsList, #citiesList {
+        .locationsList, .cityList {
             margin-top: 0px;
             text-align: left;
             margin-left: 10px; 
