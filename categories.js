@@ -3,6 +3,18 @@ const categoryUrls = {
             "fruits": "https://order-1ib.pages.dev/Fruits.html",
             "oils": "https://order-1ib.pages.dev/Oils.html",
             "beverages": "https://order-1ib.pages.dev/Beverages.html",           
+            "delicatessen": "https://order-1ib.pages.dev/Delicatessen.html",
+            "eggs": "https://order-1ib.pages.dev/Eggs.html",
+            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "bakery": "https://order-1ib.pages.dev/Bakery.html",
+            "spices": "https://order-1ib.pages.dev/Spices.html",
+            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "meat": "https://order-1ib.pages.dev/Meat.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
             "seafood": "https://order-1ib.pages.dev/Seafood.html"
         };
