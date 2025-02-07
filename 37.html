@@ -3,182 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Search</title>
-<style>
- #welcome {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #fff;
-        color: #000;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 20;
-        text-align: center;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
-    }
-
-#welcome.visible {
-        opacity: 1;
-        visibility: visible;
-        transition: opacity 0.3s ease-in-out, visibility 0s linear 0s;
-    }
-
-    #welcome img {
-        max-width: 400px;
-        margin-bottom: 100px;
-        margin-top: -30px;
-        margin-left: 0px;
-        animation: fade-in 0.5s ease-in-out forwards;
-    }
-
-    h1 {
-        display: flex;
-        gap: 1px;
-        font-family: 'Lilita One', cursive;
-        font-size: 50px;
-        color: #009500;
-        margin-top: -5px;
-        text-shadow: 5px 5px 5px black;
-    }
-
-    h1 span {
-        opacity: 0;
-        transform: scale(0.8);
-        animation: letter-emerge 0.3s ease-in-out forwards;
-    }
-
-    h1 span.space {
-        width: 10px;
-    }
-
-    h1 span:nth-child(1) { animation-delay: 0.5s; }
-    h1 span:nth-child(2) { animation-delay: 0.55s; }
-    h1 span:nth-child(3) { animation-delay: 0.6s; }
-    h1 span:nth-child(4) { animation-delay: 0.65s; }
-    h1 span:nth-child(5) { animation-delay: 0.7s; }
-    h1 span:nth-child(6) { animation-delay: 0.75s; }
-    h1 span:nth-child(7) { animation-delay: 0.8s; }
-    h1 span:nth-child(8) { animation-delay: 0.85s; }
-    h1 span:nth-child(9) { animation-delay: 0.9s; }
-    h1 span:nth-child(10) { animation-delay: 0.95s; }
-
-    @keyframes fade-in {
-        0% {
-            opacity: 0;
-            transform: scale(0.8);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-#welcome {
-    transition: opacity 1s ease-out;
-}
-#welcome.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-    @keyframes letter-emerge {
-        0% {
-            opacity: 0;
-            transform: scale(0.8);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-    
-#editPopup {
-    background: #f9f9f9;
-    border-radius: 10px;
-    text-align: center;
-}
-
-#editPopup h3 {
-    margin: 0 0 10px 0;
-}
-
-#editPopup button {
-    margin: 5px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#editPopup button:hover {
-    background: #ddd;
-}
-    
-/* Common Popup Container Styling */
-#saveLocationPopup, #editPopup {
-    display: none;
-    position: fixed;
-    top: 40%; /* Adjusted for centering */
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    border: 2px solid #009500;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); /* Consistent shadow spread */
-    z-index: 1000;
-    width: 300px; /* Fixed width for consistent layout */
-}
-
-/* Input Container Styling (Centers Input Box) */
-.input-container {
-    display: flex;
-    justify-content: center; /* Centers input horizontally */
-}
-
-#saveLocationInput, #editNameInput {
-    width: 100%;
-    padding: 8px;
-}
-
-/* Button Container Styling */
-.popup-buttons {
-    display: flex;
-    justify-content: space-between; /* Aligns buttons to opposite ends */
-    margin-top: 15px;
-}
-
-#cancelButton, #saveLocationConfirm, #editNoButton, #editYesButton {
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
-}
-
-/* Cancel/No Button Styling */
-#cancelButton, #editNoButton {
-    background-color: #73A16C; /* Matching Cancel button color */
-    color: white;
-}
-
-#cancelButton:hover, #editNoButton:hover {
-    background-color: #5b8457; /* Darker shade on hover */
-}
-
-/* Save/Yes Button Styling */
-#saveLocationConfirm, #editYesButton {
-    background-color: #009500; /* Matching Save button color */
-    color: white;
-}
-
-#saveLocationConfirm:hover, #editYesButton:hover {
-    background-color: #007d00; /* Slightly darker green on hover */
-}
-</style>
-
+    <title>Order App</title>
    
 <link rel="stylesheet" href="https://order-1ib.pages.dev/page.css">    
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
@@ -192,11 +17,11 @@
     </a>    
     <div class="replaceable-text" onclick="showLocationPopup()" style="margin-right: 10px; cursor: pointer;">
     Change Location
-</div>
-<div class="icon-container" onclick="showLocationPopup()" style="cursor: pointer;">
+   </div>
+   <div class="icon-container" onclick="showLocationPopup()" style="cursor: pointer;">
     <i class="fa-solid fa-rotate" style="color: #009500;"></i>
-</div>
-</div>
+   </div>
+       </div>
           <!-- Welcome Screen -->
 <div id="welcome" class="visible">    
         <h1>
@@ -273,13 +98,10 @@
                    <!--  -->
    <div id="locationPromptPopup" class="bottom-popup">
         <p>Please turn on your location services for a better experience.</p></div>
-        
+                   <!--  -->
      <div id="selectLocationPopup" class="bottom-popup" style="display: none;">
     <p>Please turn your location <b>ON</b><br><br>OR<br><br>if <b>ON</b> REFRESH the page</p>
-</div>
-                   <!--  -->  
-
-
+</div>                   
            <!-- Edit Popup -->
 <div id="editPopup">
     <h3>Change Saved Location?</h3>
@@ -291,7 +113,6 @@
         <button id="editYesButton" onclick="handleEditYes()">Yes</button>
     </div>
 </div>
-
           <!-- customNamePopup  -->
 <div id="saveLocationPopup">
     <h3>Your Favourite Location</h3>
@@ -302,176 +123,15 @@
         <button id="cancelButton" onclick="closeSaveLocationPopup()">Cancel</button>
         <button id="saveLocationConfirm">Save</button>
     </div>
-</div>
-
-           <!-- animation -->
-<style>
-/* Loading Overlay */
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Dim background */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it appears above other elements */
-}
-
-/* Spinner Animation */
-.loading-spinner {
-    border: 6px solid #F5F5F5; /* Light gray */
-    border-top: 6px solid #009500; /* Blue */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite; /* Spinner animation */
-}
-
-/* Keyframes for Spinner Animation */
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-</style>           
-           
-           
-<!-- Loading Overlay -->
+</div>    
+         <!-- Loading Overlay -->
 <div id="loadingOverlay" class="loading-overlay" style="display: none;">
     <div class="loading-spinner"></div>
 </div>
+<!-- ///////////////////////// -->
+<script src="https://order-1ib.pages.dev/page.js"></script>
 
-
-
-
-
-
-       
-<script>
-  async function loadCategories() {
-      try {
-          let response = await fetch('https://order-1ib.pages.dev/categories.html');
-          if (!response.ok) throw new Error('Failed to load categories');
-
-          let html = await response.text();
-          document.getElementById('categories').innerHTML = html;
-      } catch (error) {
-          console.error('Error loading categories:', error);
-      }
-  }
-
-  loadCategories();
-</script> 
-<script>   
-    function showItems(category) {
-        const categoryUrls = {
-            "vegetables": "https://order-1ib.pages.dev/Vegetables.html",
-            "fruits": "https://order-1ib.pages.dev/Fruits.html",
-            "meat": "https://order-1ib.pages.dev/Meat.html",
-            "seafood": "https://order-1ib.pages.dev/Seafood.html"
-        };
-
-        fetch(categoryUrls[category])
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.text();
-            })
-            .then(data => {
-                let parser = new DOMParser();
-                let doc = parser.parseFromString(data, "text/html");
-                let items = [];
-
-                doc.querySelectorAll(".item-card").forEach(card => {
-                    let img = card.querySelector("img")?.src;
-                    let name = card.querySelector("p")?.textContent;
-                    if (img && name) items.push({ name, image: img });
-                });
-
-                let itemList = `<div class="item-grid">`;
-                items.forEach(item => {
-                    itemList += `
-                        <div class="item-card" onclick="searchItem('${item.name}')">
-                            <img src="${item.image}" alt="${item.name}" loading="lazy">
-                            <p>${item.name}</p>
-                        </div>
-                    `;
-                });
-                itemList += `</div>`;
-
-                document.getElementById("itemList").innerHTML = itemList;
-                document.getElementById("itemPopup").style.display = "block";
-            })
-            .catch(error => {
-                console.error("Error loading items:", error);
-                document.getElementById("errorPopup").style.display = "block";
-            });
-    }
-</script>   
-<script>  
-  function closeErrorPopup() {
-    document.getElementById("errorPopup").style.display = "none";
-}    
-</script>
-
-<script>
-    
- let locations = {
-        "Dubai": { 
-            "City A1": { lat: 25.123, lng: 55.123 }, 
-            "City A2": { lat: 25.223, lng: 55.223 }, 
-            "City A3": { lat: 25.323, lng: 55.323 },
-            "City A4": { lat: 25.123, lng: 55.123 }, 
-            "City A5": { lat: 25.223, lng: 55.223 }, 
-            "City A6": { lat: 25.323, lng: 55.323 },
-            "City A7": { lat: 25.123, lng: 55.123 }, 
-            "City A8": { lat: 25.223, lng: 55.223 }, 
-            "City A9": { lat: 25.323, lng: 55.323 },
-            "City A10": { lat: 25.123, lng: 55.123 }, 
-            "City A11": { lat: 25.223, lng: 55.223 }, 
-            "City A12": { lat: 25.323, lng: 55.323 },
-            "City A13": { lat: 25.123, lng: 55.123 }, 
-            "City A14": { lat: 25.223, lng: 55.223 }, 
-            "City A15": { lat: 25.323, lng: 55.323 } 
-        },
-        "Abu Dhabi": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "Ajman": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "UAQ": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "RAK": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
-        },
-        "Fujairah": { 
-            "City C1": { lat: 27.123, lng: 57.123 }, 
-            "City C2": { lat: 27.223, lng: 57.223 }, 
-            "City C3": { lat: 27.323, lng: 57.323 } 
-        }
-    };
-
-    let vendors = {
-        "A": { lat: 25.125, lng: 55.126 },
-        "AJ": { lat: 24.396973, lng: 54.588957 },
-        "AD": { lat: 24.391549, lng: 54.578581 },
-        "ND": { lat: 26.125, lng: 56.126 },
-        "GF": { lat: 25.225, lng: 55.226 },
-        "C": { lat: 26.125, lng: 56.126 },        
-        "D": { lat: 27.125, lng: 57.126 }
-    };       
-   
+<script>        
     function getUserLocation() {
         let savedLocation = getSavedLocation();
 
@@ -530,6 +190,8 @@
     return null;
 }
 
+//××××××××××××××××××××××××××××××××××××
+
     function updateReplaceableText(location) {
         let replaceableText = document.querySelector(".replaceable-text");
         if (!location) return;
@@ -557,6 +219,8 @@
             replaceableText.innerText = location.name || "Saved Location";
         }
     }
+
+//×××××××××××××××××××××××××××××××
 
     function showLocationPopup() {
         let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
@@ -598,172 +262,8 @@
         }
     }
 
+//××××××××××××××××××××××××××××××××××××
 
-
-
-
-    
-function saveDeviceLocation() {
-    if (navigator.geolocation) {
-        // Show loading animation immediately
-        showLoadingAnimation();
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                // Add a delay before showing the save location popup
-                setTimeout(() => {
-                    hideLoadingAnimation(); // Hide loading animation
-                    openSaveLocationPopup();
-
-                    // Prevent closing until required action is taken
-                    document.getElementById("saveLocationConfirm").onclick = function () {
-                        const customName = document.getElementById("saveLocationInput").value.trim();
-                        if (customName) {
-                            const savedLocation = {
-                                name: customName,
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude,
-                                type: "saved"
-                            };
-                            localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
-                            updateReplaceableText(savedLocation);
-                            closeSaveLocationPopup();
-                            setTimeout(() => location.reload(), 500);
-                        } else {
-                            alert("Please enter a name for this location.");
-                        }
-                    };
-                }, 1000); // Delay of 1 second
-            },
-            (error) => {
-                hideLoadingAnimation(); // Hide loading animation on error
-                showLocationError(error);
-            }
-        );
-    } else {
-        alert("Geolocation is not supported by your browser.");
-    }
-}
-
-function showLoadingAnimation() {
-    const loadingOverlay = document.getElementById("loadingOverlay");
-    loadingOverlay.style.display = "flex"; // Show loading overlay
-}
-
-function hideLoadingAnimation() {
-    const loadingOverlay = document.getElementById("loadingOverlay");
-    loadingOverlay.style.display = "none"; // Hide loading overlay
-}
-
-function openSaveLocationPopup() {
-    const saveLocationPopup = document.getElementById("saveLocationPopup");
-    saveLocationPopup.style.display = "block"; // Show the popup
-}
-
-function closeSaveLocationPopup() {
-    const saveLocationPopup = document.getElementById("saveLocationPopup");
-    saveLocationPopup.style.display = "none"; // Hide the popup
-}
-
-
-    
-    
-    
-   
-   
-   
-    function useSavedLocation() {
-        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
-        if (savedLocation) {
-            updateReplaceableText(savedLocation);
-            saveLocation(savedLocation); // Set as the current active location
-            closePopup();
-        }
-    }
-
-
-
-    function openCityPopup(region) {
-        let cityList = `<h4 onclick="goBackToLocations()">Back</h4>`;
-        for (const city in locations[region]) {
-            cityList += `<h4 onclick="selectCity('${city}', ${locations[region][city].lat}, ${locations[region][city].lng})">${city}</h4>`;
-        }
-        document.getElementById("cityList").innerHTML = cityList;
-        document.getElementById("cityPopup").style.display = "block";
-        document.getElementById("locationPopup").style.display = "none";
-    }
-
-    function selectCity(city, lat, lng) {
-        const selectedLocation = {
-            name: city,
-            lat: lat,
-            lng: lng,
-            type: "saved"
-        };
-        saveLocation(selectedLocation);
-        updateReplaceableText(selectedLocation);
-        closePopup();
-    }
-
-    function showLocationError() {
-        document.getElementById("locationErrorPopup").style.display = "block";
-    }
-
-    function closePopup() {
-        document.querySelectorAll(".popup, .popup2").forEach(popup => {
-            popup.style.display = "none";
-        });
-    }
-
-    function goBackToLocations() {
-        document.getElementById('cityPopup').style.display = 'none';
-        document.getElementById('locationPopup').style.display = 'flex';
-    }
-
-    function searchItem(item) {
-        let userLocation = getSavedLocation();
-
-        if (!userLocation) {
-            const locationPopup = document.getElementById("selectLocationPopup");
-            locationPopup.style.display = "block";
-            setTimeout(() => {
-                locationPopup.style.display = "none";
-            }, 4000);
-            return;
-        }
-
-        let nearbyVendors = [];
-        for (const vendor in vendors) {
-            let distance = getDistance(
-                userLocation.lat, userLocation.lng,
-                vendors[vendor].lat, vendors[vendor].lng
-            );
-            if (distance <= 1) nearbyVendors.push(`vendor:${vendor}`);
-        }
-
-        if (nearbyVendors.length > 0) {
-            window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
-        } else {
-            document.getElementById("errorPopup").style.display = "block";
-        }
-    }
-
-    function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    }
-
-    // Initialize on page load
-    getUserLocation();
-</script>
-
-
-<script>
     // Function to open the edit popup
     function openEditPopup() {
         const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
@@ -772,7 +272,7 @@ function closeSaveLocationPopup() {
             return;
         }
 
-        // Set the current name in the input field
+  // Set the current name in the input field
         document.getElementById("editNameInput").value = savedLocation.name;
 
         // Display the edit popup
@@ -865,5 +365,131 @@ function closeSaveLocationPopup() {
         document.getElementById("locationsList").innerHTML = locationList;
         document.getElementById("locationPopup").style.display = "block";
     }
+
+//××××××××××××××××××××××××××××××××××
+//××××××××××××××××××××××××××××××××××
+  
+function saveDeviceLocation() {
+    if (navigator.geolocation) {
+        // Show loading animation immediately
+        showLoadingAnimation();
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                // Add a delay before showing the save location popup
+                setTimeout(() => {
+                    hideLoadingAnimation(); // Hide loading animation
+                    openSaveLocationPopup();
+
+                    // Prevent closing until required action is taken
+                    document.getElementById("saveLocationConfirm").onclick = function () {
+                        const customName = document.getElementById("saveLocationInput").value.trim();
+                        if (customName) {
+                            const savedLocation = {
+                                name: customName,
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                                type: "saved"
+                            };
+                            localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                            updateReplaceableText(savedLocation);
+                            closeSaveLocationPopup();
+                            setTimeout(() => location.reload(), 500);
+                        } else {
+                            alert("Please enter a name for this location.");
+                        }
+                    };
+                }, 1000); // Delay of 1 second
+            },
+            (error) => {
+                hideLoadingAnimation(); // Hide loading animation on error
+                showLocationError(error);
+            }
+        );
+    } else {
+        alert("Geolocation is not supported by your browser.");
+    }
+}
+
+function showLoadingAnimation() {
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    loadingOverlay.style.display = "flex"; // Show loading overlay
+}
+
+function hideLoadingAnimation() {
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    loadingOverlay.style.display = "none"; // Hide loading overlay
+}
+
+function openSaveLocationPopup() {
+    // Close locationPopup before opening saveLocationPopup
+    const locationPopup = document.getElementById("locationPopup");
+    if (locationPopup) locationPopup.style.display = "none";
+
+    const saveLocationPopup = document.getElementById("saveLocationPopup");
+    saveLocationPopup.style.display = "block"; // Show the popup
+}
+
+function closeSaveLocationPopup() {
+    const saveLocationPopup = document.getElementById("saveLocationPopup");
+    saveLocationPopup.style.display = "none"; // Hide the popup
+}
+
+//××××××××××××××××××××××××××××××××××
+//××××××××××××××××××××××××××××××××××
+          
+    function useSavedLocation() {
+        const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
+        if (savedLocation) {
+            updateReplaceableText(savedLocation);
+            saveLocation(savedLocation); // Set as the current active location
+            closePopup();
+        }
+    }
+
+//×××××××××××××××××××××××××××××××××
+   
+    function searchItem(item) {
+        let userLocation = getSavedLocation();
+
+        if (!userLocation) {
+            const locationPopup = document.getElementById("selectLocationPopup");
+            locationPopup.style.display = "block";
+            setTimeout(() => {
+                locationPopup.style.display = "none";
+            }, 4000);
+            return;
+        }
+
+        let nearbyVendors = [];
+        for (const vendor in vendors) {
+            let distance = getDistance(
+                userLocation.lat, userLocation.lng,
+                vendors[vendor].lat, vendors[vendor].lng
+            );
+            if (distance <= 1) nearbyVendors.push(`vendor:${vendor}`);
+        }
+
+        if (nearbyVendors.length > 0) {
+            window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
+        } else {
+            document.getElementById("errorPopup").style.display = "block";
+        }
+    }
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    // Initialize on page load
+    getUserLocation();
 </script>
+
+
 
