@@ -232,7 +232,8 @@ function getUserLocation() {
         document.getElementById("locationPopup").style.display = "block";
     }
 
-//×××××××××××××××××××××××××××××××××××××××
+//××××××××××××××××××××××××××××××××××
+//××××××××××××××××××××××××××××××××××
   
 function saveDeviceLocation() {
     if (navigator.geolocation) {
@@ -244,7 +245,8 @@ function saveDeviceLocation() {
                 // Add a delay before showing the save location popup
                 setTimeout(() => {
                     hideLoadingAnimation(); // Hide loading animation
-                    openSaveLocationPopup();
+                    closeLocationPopup(); // Close locationPopup immediately
+                    openSaveLocationPopup(); // Open saveLocationPopup
 
                     // Prevent closing until required action is taken
                     document.getElementById("saveLocationConfirm").onclick = function () {
@@ -286,6 +288,11 @@ function hideLoadingAnimation() {
     loadingOverlay.style.display = "none"; // Hide loading overlay
 }
 
+function closeLocationPopup() {
+    const locationPopup = document.getElementById("locationPopup");
+    if (locationPopup) locationPopup.style.display = "none";
+}
+
 function openSaveLocationPopup() {
     const saveLocationPopup = document.getElementById("saveLocationPopup");
     saveLocationPopup.style.display = "block"; // Show the popup
@@ -296,6 +303,7 @@ function closeSaveLocationPopup() {
     saveLocationPopup.style.display = "none"; // Hide the popup
 }
 
+//××××××××××××××××××××××××××××××××××
 //××××××××××××××××××××××××××××××××××
           
     function useSavedLocation() {
