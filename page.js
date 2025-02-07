@@ -61,7 +61,7 @@ async function loadCategories() {
         for (const city in locations[region]) {
             cityList += `<h4 onclick="selectCity('${city}', ${locations[region][city].lat}, ${locations[region][city].lng})">${city}</h4>`;
         }
-        document.getElementById("citiyList").innerHTML = cityList;
+        document.getElementById("cityList").innerHTML = cityList;
         document.getElementById("cityPopup").style.display = "block";
         document.getElementById("locationPopup").style.display = "none";
     }
