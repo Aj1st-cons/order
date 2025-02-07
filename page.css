@@ -111,7 +111,7 @@
             padding: 10px;
             max-height: calc(100% - 40px); 
         }
-        #locationsList, #cityList {
+        #locationsList {
             margin-top: 0px;
             text-align: left;
             margin-left: 10px; 
@@ -119,7 +119,7 @@
             font-weight: bold !important;
             overflow-y: auto; 
         } 
-        .current-location, #cityList {
+        #cityList {
             text-align: left;
             margin-bottom: 20px;
             margin-top: 15px;            
