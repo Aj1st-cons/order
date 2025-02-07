@@ -148,10 +148,10 @@
             cursor: pointer;
         }
         .popup-footer .back-btn {
-            color: ##7D0541;
+            color: #7D0541;
         }
         .popup-footer button:last-child {
-            color: #99000099;
+            color: #7D0541;
         }
         #locationsPopup h4 {
             text-align: center;
