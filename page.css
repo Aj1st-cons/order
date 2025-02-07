@@ -300,7 +300,7 @@ html, body {
             line-height: 0.8;
             color: #52595d;
             font-size: 13px;
-            white-space: wrap;
+            white-space: nowrap;
             font-weight: bold;
         }  
     #welcome {
