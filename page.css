@@ -119,7 +119,7 @@
             font-weight: bold !important;
             overflow-y: auto; 
         } 
-        .current-location {
+        .current-location, #cityList {
             text-align: left;
             margin-bottom: 20px;
             margin-top: 15px;            
