@@ -11,23 +11,9 @@
         }
     });
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-async function loadCategories() {
-      try {
-          let response = await fetch('https://order-1ib.pages.dev/categories.html');
-          if (!response.ok) throw new Error('Failed to load categories');
-
-          let html = await response.text();
-          document.getElementById('categories').innerHTML = html;
-      } catch (error) {
-          console.error('Error loading categories:', error);
-      }
-  }
-
-  loadCategories();
-  
-    function showItems(category) {
-
-//××××××××××××××××××××××××××××××××××××        
+      
+//××××××××××××××××××××××××××××××××        
+       function showItems(category) {
 
         fetch(categoryUrls[category])
             .then(response => {
