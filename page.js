@@ -1,3 +1,15 @@
+window.addEventListener("load", function() {
+        let savedLocation = getSavedLocation();
+        if (!savedLocation) {
+            setTimeout(function() {
+                const locationPrompt = document.getElementById("locationPromptPopup");
+                locationPrompt.style.display = "block";
+                setTimeout(() => locationPrompt.style.display = "none", 3000);
+            }, 2000);
+        }
+    });
+
+
 async function loadCategories() {
       try {
           let response = await fetch('https://order-1ib.pages.dev/categories.html');
