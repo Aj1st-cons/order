@@ -32,7 +32,8 @@
       <!--  <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/welcome_image.png?v=1737684481" alt="Welcome Image"> -->
     </div>
     
-<script>    document.addEventListener("DOMContentLoaded", function () {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
     const welcomeScreen = document.getElementById("welcome");
     const footer = document.querySelector("footer");
 
@@ -52,11 +53,16 @@
             footer.style.transition = "opacity 0.5s ease-in-out";
         }
 
-        // Show welcome screen for 4 seconds
-        welcomeScreen.style.display = "block"; 
+        // Ensure welcome screen stays centered (only fade it out)
+        welcomeScreen.style.visibility = "visible";
+        welcomeScreen.style.opacity = "1";
+        welcomeScreen.style.transition = "opacity 0.5s ease-in-out";
 
         setTimeout(() => {
-            welcomeScreen.style.display = "none";
+            welcomeScreen.style.opacity = "0"; // Fade out
+            setTimeout(() => {
+                welcomeScreen.style.visibility = "hidden"; // Hide after fade
+            }, 500);
 
             // Fade-in footer smoothly
             if (footer) {
@@ -66,13 +72,14 @@
         }, 4000);
     } else {
         // Skip welcome screen if visited within 15 mins
-        welcomeScreen.style.display = "none";
+        welcomeScreen.style.visibility = "hidden";
+        welcomeScreen.style.opacity = "0";
         if (footer) {
             footer.style.visibility = "visible";
             footer.style.opacity = "1";
         }
     }
-});
+});   
 </script>        
                   <!--  -->
        <div id="categories" class="item-grid" style="margin-top: 60px; margin-bottom: 50px;"></div> 
