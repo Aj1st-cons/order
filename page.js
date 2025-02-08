@@ -6,7 +6,7 @@
             setTimeout(function() {
                 const locationPrompt = document.getElementById("locationPromptPopup");
                 locationPrompt.style.display = "block";
-                setTimeout(() => locationPrompt.style.display = "none", 2000);
+                setTimeout(() => locationPrompt.style.display = "none", 4000);
             }, 1000);
         }
     });
