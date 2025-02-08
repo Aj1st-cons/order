@@ -11,7 +11,7 @@ const categoryUrls = {
             "rice & grains": "https://order-1ib.pages.dev/Rice & Grains.html",
             "frozen": "https://order-1ib.pages.dev/Frozen.html",
             "ready to cook": "https://order-1ib.pages.dev/Ready to cook.html",
-            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "snacks": "https://order-1ib.pages.dev/Snacks.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
