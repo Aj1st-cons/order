@@ -18,7 +18,7 @@ let locations = {
     },
     "Sharjah": { 
 "City C1": { lat: 27.123, lng: 57.123 }, 
-"Al Nadah": { lat: 25.301, lng: 55.375 }, 
+"SHJ - Al Nadah": { lat: 25.301, lng: 55.375 }, 
 "City C3": { lat: 27.323, lng: 57.323 } 
     },    
     "Abu Dhabi": { 
