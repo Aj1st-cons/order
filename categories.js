@@ -12,7 +12,7 @@ const categoryUrls = {
             "frozen": "https://order-1ib.pages.dev/Frozen.html",
             "ready to cook": "https://order-1ib.pages.dev/Ready to cook.html",
             "snacks": "https://order-1ib.pages.dev/Snacks.html",
-            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "beauty": "https://order-1ib.pages.dev/Beauty.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
