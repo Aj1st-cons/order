@@ -36,23 +36,42 @@
     const welcomeScreen = document.getElementById("welcome");
     const footer = document.querySelector("footer");
 
-    // Hide footer visually but keep its space
-    if (footer) {
-        footer.style.visibility = "hidden";
-        footer.style.opacity = "0";
-        footer.style.transition = "opacity 0.5s ease-in-out";
-    }
+    // Check last visit time from localStorage
+    const lastVisit = localStorage.getItem("lastWelcomeTime");
+    const now = Date.now();
+    const fifteenMinutes = 15 * 60 * 1000; // 15 minutes in milliseconds
 
-    // Show welcome screen for 4 seconds
-    setTimeout(() => {
+    if (!lastVisit || now - lastVisit > fifteenMinutes) {
+        // Save current timestamp
+        localStorage.setItem("lastWelcomeTime", now);
+
+        // Hide footer visually but keep its space
+        if (footer) {
+            footer.style.visibility = "hidden";
+            footer.style.opacity = "0";
+            footer.style.transition = "opacity 0.5s ease-in-out";
+        }
+
+        // Show welcome screen for 4 seconds
+        welcomeScreen.style.display = "block"; 
+
+        setTimeout(() => {
+            welcomeScreen.style.display = "none";
+
+            // Fade-in footer smoothly
+            if (footer) {
+                footer.style.visibility = "visible";
+                footer.style.opacity = "1";
+            }
+        }, 4000);
+    } else {
+        // Skip welcome screen if visited within 15 mins
         welcomeScreen.style.display = "none";
-        
-        // Fade-in footer smoothly
         if (footer) {
             footer.style.visibility = "visible";
             footer.style.opacity = "1";
         }
-    }, 4000);
+    }
 });
 </script>        
                   <!--  -->
@@ -203,7 +222,7 @@
     return null;
 }
 
-//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã——Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã
+//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã
 
     function updateReplaceableText(location) {
         let replaceableText = document.querySelector(".replaceable-text");
@@ -380,7 +399,6 @@
     }
 
 //Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—
-//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—
   
 function saveDeviceLocation() {
     if (navigator.geolocation) {
@@ -458,7 +476,6 @@ function closeSaveLocationPopup() {
 }
 
 //Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—
-//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—
           
     function useSavedLocation() {
         const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
@@ -469,7 +486,7 @@ function closeSaveLocationPopup() {
         }
     }
 
-//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—
+//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã
    
     function searchItem(item) {
         let userLocation = getSavedLocation();
