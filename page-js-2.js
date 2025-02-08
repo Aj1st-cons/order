@@ -1,4 +1,3 @@
-<script>        
     function getUserLocation() {
         let savedLocation = getSavedLocation();
 
@@ -358,4 +357,4 @@ function closeSaveLocationPopup() {
 
     // Initialize on page load
     getUserLocation();
-</script>
+
