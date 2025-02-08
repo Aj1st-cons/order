@@ -43,7 +43,7 @@
         footer.style.transition = "opacity 0.5s ease-in-out";
     }
 
-    // Show welcome screen for 1 seconds
+    // Show welcome screen for 4 seconds
     setTimeout(() => {
         welcomeScreen.style.display = "none";
         
@@ -52,7 +52,7 @@
             footer.style.visibility = "visible";
             footer.style.opacity = "1";
         }
-    }, 500);
+    }, 4000);
 });
 </script>        
                   <!--  -->
@@ -139,8 +139,8 @@
             setTimeout(function() {
                 const locationPrompt = document.getElementById("locationPromptPopup");
                 locationPrompt.style.display = "block";
-                setTimeout(() => locationPrompt.style.display = "none", 3000);
-            }, 4000);
+                setTimeout(() => locationPrompt.style.display = "none", 2000);
+            }, 1000);
         }
     });
 </script>
@@ -203,7 +203,7 @@
     return null;
 }
 
-//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—
+//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã——Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã
 
     function updateReplaceableText(location) {
         let replaceableText = document.querySelector(".replaceable-text");
@@ -233,7 +233,7 @@
         }
     }
 
-//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—
+//Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã
 
     function showLocationPopup() {
         let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
@@ -384,18 +384,15 @@
   
 function saveDeviceLocation() {
     if (navigator.geolocation) {
-        // Show loading animation immediately
-        showLoadingAnimation();
+        showLoadingAnimation(); // Show loading animation
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                // Add a delay before showing the save location popup
                 setTimeout(() => {
                     hideLoadingAnimation(); // Hide loading animation
-                    closeLocationPopup(); // Close locationPopup immediately
+                    closeLocationPopup(); // Close locationPopup
                     openSaveLocationPopup(); // Open saveLocationPopup
 
-                    // Prevent closing until required action is taken
                     document.getElementById("saveLocationConfirm").onclick = function () {
                         const customName = document.getElementById("saveLocationInput").value.trim();
                         if (customName) {
@@ -413,7 +410,7 @@ function saveDeviceLocation() {
                             alert("Please enter a name for this location.");
                         }
                     };
-                }, 1000); // Delay of 1 second
+                }, 1000); // Delay to ensure UI updates smoothly
             },
             (error) => {
                 hideLoadingAnimation(); // Hide loading animation on error
@@ -427,12 +424,22 @@ function saveDeviceLocation() {
 
 function showLoadingAnimation() {
     const loadingOverlay = document.getElementById("loadingOverlay");
-    loadingOverlay.style.display = "flex"; // Show loading overlay
+    if (loadingOverlay) {
+        loadingOverlay.style.display = "flex";
+        console.log("Loading animation shown");
+    } else {
+        console.error("Error: Loading overlay not found!");
+    }
 }
 
 function hideLoadingAnimation() {
     const loadingOverlay = document.getElementById("loadingOverlay");
-    loadingOverlay.style.display = "none"; // Hide loading overlay
+    if (loadingOverlay) {
+        setTimeout(() => {
+            loadingOverlay.style.display = "none";
+            console.log("Loading animation hidden");
+        }, 500); // Small delay to prevent flickering
+    }
 }
 
 function closeLocationPopup() {
@@ -442,12 +449,12 @@ function closeLocationPopup() {
 
 function openSaveLocationPopup() {
     const saveLocationPopup = document.getElementById("saveLocationPopup");
-    saveLocationPopup.style.display = "block"; // Show the popup
+    if (saveLocationPopup) saveLocationPopup.style.display = "block";
 }
 
 function closeSaveLocationPopup() {
     const saveLocationPopup = document.getElementById("saveLocationPopup");
-    saveLocationPopup.style.display = "none"; // Hide the popup
+    if (saveLocationPopup) saveLocationPopup.style.display = "none";
 }
 
 //Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—Ã—
