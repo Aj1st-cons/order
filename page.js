@@ -1,57 +1,5 @@
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-// Listen to the popstate event when the back button is pressed
-window.addEventListener('popstate', function (e) {
-    const popup = document.getElementById("itemPopup");
 
-    // Check if the popup is open
-    if (popup.style.display === "block") {
-        // Close the popup
-        popup.style.display = "none";
-        
-        // Prevent the default behavior of going back
-        history.pushState(null, null, location.href);
-    }
-});
-
-// Function to open the popup and update the browser history state
-function showItems(category) {
-    fetch(categoryUrls[category])
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.text();
-        })
-        .then(data => {
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(data, "text/html");
-            let items = [];
-
-            doc.querySelectorAll(".item-card").forEach(card => {
-                let img = card.querySelector("img")?.src;
-                let name = card.querySelector("p")?.textContent;
-                if (img && name) items.push({ name, image: img });
-            });
-
-            let itemList = `<div class="item-grid">`;
-            items.forEach(item => {
-                itemList += `
-                    <div class="item-card" onclick="searchItem('${item.name}')">
-                        <img src="${item.image}" alt="${item.name}" loading="lazy">
-                        <p>${item.name}</p>
-                    </div>
-                `;
-            });
-            itemList += `</div>`;
-            document.getElementById("itemList").innerHTML = itemList;
-            document.getElementById("itemPopup").style.display = "block";
-
-            // Push state to the history to avoid going back to previous page
-            history.pushState(null, null, location.href);
-        })
-        .catch(error => {
-            console.error("Error loading items:", error);
-            document.getElementById("errorPopup").style.display = "block";
-        });
-}
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     //LOCATION PROMPT POPUP
         window.addEventListener("load", function() {
