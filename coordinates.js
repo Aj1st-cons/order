@@ -16,6 +16,11 @@ let locations = {
 "City A14": { lat: 25.223, lng: 55.223 }, 
 "City A15": { lat: 25.323, lng: 55.323 } 
     },
+    "Sharjah": { 
+"City C1": { lat: 27.123, lng: 57.123 }, 
+"City C2": { lat: 27.223, lng: 57.223 }, 
+"City C3": { lat: 27.323, lng: 57.323 } 
+    },    
     "Abu Dhabi": { 
 "City C1": { lat: 27.123, lng: 57.123 }, 
 "City C2": { lat: 27.223, lng: 57.223 }, 
