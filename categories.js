@@ -9,7 +9,7 @@ const categoryUrls = {
             "bakery": "https://order-1ib.pages.dev/Bakery.html",
             "spices": "https://order-1ib.pages.dev/Spices.html",
             "rice & grains": "https://order-1ib.pages.dev/Rice & Grains.html",
-            "meat": "https://order-1ib.pages.dev/Meat.html",
+            "frozen": "https://order-1ib.pages.dev/Frozen.html",
             "ready to cook": "https://order-1ib.pages.dev/Ready to cook.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
