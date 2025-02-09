@@ -404,27 +404,48 @@
 
 
 
-let locationRetryCount = 0; // Track retry attempts
-
 function useCurrentLocation() {
+    // Create timer elements
+    const timerContainer = document.createElement('div');
+    timerContainer.style.position = 'fixed';
+    timerContainer.style.top = '50%';
+    timerContainer.style.left = '50%';
+    timerContainer.style.transform = 'translate(-50%, -50%)';
+    timerContainer.style.fontSize = '30px';
+    timerContainer.style.color = '#009500';
+    timerContainer.style.zIndex = '9999';
+    timerContainer.innerText = '30s'; // Initial countdown text
+
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.zIndex = '9998';
+    document.body.appendChild(overlay);
+    document.body.appendChild(timerContainer);
+
+    let timeLeft = 30;
+
+    // Update the timer every second
+    const countdown = setInterval(() => {
+        if (timeLeft > 0) {
+            timeLeft--;
+            timerContainer.innerText = `${timeLeft}s`;
+        } else {
+            clearInterval(countdown);
+        }
+    }, 1000);
+
     if (navigator.geolocation) {
-        showLoadingAnimation(); // Show loading spinner with countdown
-
-        let timeout = setTimeout(() => {
-            hideLoadingAnimation();
-            if (locationRetryCount < 3) { // Retry up to 3 times
-                locationRetryCount++;
-                useCurrentLocation();
-            } else {
-                showLocationError();
-            }
-        }, 30000); // Retry after 30 seconds
-
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                clearTimeout(timeout); // Stop retry timer
-                hideLoadingAnimation(); // Hide spinner
-                
+                clearInterval(countdown); // Stop the countdown on success
+                document.body.removeChild(overlay);
+                document.body.removeChild(timerContainer);
+
                 let userLocation = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
@@ -436,90 +457,20 @@ function useCurrentLocation() {
                 closePopup();
             },
             () => {
-                clearTimeout(timeout); // Stop retry timer
-                hideLoadingAnimation(); // Hide spinner
+                clearInterval(countdown); // Stop the countdown on error
+                document.body.removeChild(overlay);
+                document.body.removeChild(timerContainer);
                 showLocationError();
-            }
+            },
+            { timeout: 30000 } // Timeout after 30 seconds if location is not retrieved
         );
     } else {
+        clearInterval(countdown); // Stop the countdown if geolocation is not supported
+        document.body.removeChild(overlay);
+        document.body.removeChild(timerContainer);
         showLocationError();
     }
 }
-
-// Functions to control loading animation
-function showLoadingAnimation() {
-    let loader = document.createElement("div");
-    loader.id = "location-loader";
-    loader.style.position = "fixed";
-    loader.style.top = "50%";
-    loader.style.left = "50%";
-    loader.style.transform = "translate(-50%, -50%)";
-    loader.style.width = "100px";
-    loader.style.height = "100px";
-    loader.style.background = "rgba(0, 0, 0, 0.8)";
-    loader.style.borderRadius = "50%";
-    loader.style.display = "flex";
-    loader.style.alignItems = "center";
-    loader.style.justifyContent = "center";
-    loader.style.flexDirection = "column";
-    loader.style.color = "#fff";
-    loader.style.fontSize = "16px";
-    loader.style.fontWeight = "bold";
-    loader.style.textAlign = "center";
-    loader.style.zIndex = "9999";
-    
-    let spinner = document.createElement("div");
-    spinner.style.width = "60px";
-    spinner.style.height = "60px";
-    spinner.style.border = "5px solid #fff";
-    spinner.style.borderTop = "5px solid transparent";
-    spinner.style.borderRadius = "50%";
-    spinner.style.position = "absolute";
-    spinner.style.animation = "spin 1s linear infinite";
-
-    let countdown = document.createElement("div");
-    countdown.id = "countdown-timer";
-    countdown.innerText = "30"; // Start countdown from 30 seconds
-    countdown.style.position = "absolute";
-    countdown.style.fontSize = "20px";
-    countdown.style.fontWeight = "bold";
-    countdown.style.zIndex = "100"; // Make sure timer is on top of spinner
-    countdown.style.color = "#fff"; // Ensure countdown text is visible
-
-    loader.appendChild(spinner);
-    loader.appendChild(countdown);
-    document.body.appendChild(loader);
-
-    let timer = 30;
-    let countdownInterval = setInterval(() => {
-        timer--;
-        let countdownElement = document.getElementById("countdown-timer");
-        if (countdownElement) {
-            countdownElement.innerText = timer;
-        }
-        if (timer <= 0) {
-            clearInterval(countdownInterval);
-        }
-    }, 1000);
-}
-
-function hideLoadingAnimation() {
-    let loader = document.getElementById("location-loader");
-    if (loader) {
-        loader.remove();
-    }
-}
-
-// Add CSS animation for spinner
-let style = document.createElement("style");
-style.innerHTML = `
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}`;
-document.head.appendChild(style);
-
-
 
     
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
