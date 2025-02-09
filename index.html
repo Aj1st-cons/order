@@ -41,63 +41,10 @@
         </h1>
       <!--  <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/welcome_image.png?v=1737684481" alt="Welcome Image"> -->
     </div>
-    
-<script>    document.addEventListener("DOMContentLoaded", function () {
-    const welcomeScreen = document.getElementById("welcome");
-    const footer = document.querySelector("footer");
-
-    // Check last visit time from localStorage
-    const lastVisit = localStorage.getItem("lastWelcomeTime");
-    const now = Date.now();
-    const fifteenMinutes = 15 * 60 * 1000; // 15 minutes in milliseconds
-
-    if (!lastVisit || now - lastVisit > fifteenMinutes) {
-        // Save current timestamp
-        localStorage.setItem("lastWelcomeTime", now);
-
-        // Hide footer visually but keep its space
-        if (footer) {
-            footer.style.visibility = "hidden";
-            footer.style.opacity = "0";
-            footer.style.transition = "opacity 0.5s ease-in-out";
-        }
-
-        // Ensure welcome screen stays centered (only fade it out)
-        welcomeScreen.style.visibility = "visible";
-        welcomeScreen.style.opacity = "1";
-        welcomeScreen.style.transition = "opacity 0.5s ease-in-out";
-
-        setTimeout(() => {
-            welcomeScreen.style.opacity = "0"; // Fade out
-            setTimeout(() => {
-                welcomeScreen.style.visibility = "hidden"; // Hide after fade
-            }, 500);
-
-            // Fade-in footer smoothly
-            if (footer) {
-                footer.style.visibility = "visible";
-                footer.style.opacity = "1";
-            }
-        }, 4000);
-    } else {
-        // Skip welcome screen if visited within 15 mins
-        welcomeScreen.style.visibility = "hidden";
-        welcomeScreen.style.opacity = "0";
-        if (footer) {
-            footer.style.visibility = "visible";
-            footer.style.opacity = "1";
-        }
-    }
-});   
-</script>        
+<script src="https://order-1ib.pages.dev/welcome.js"></script>        
                   <!--  -->
        <div id="categories" class="item-grid" style="margin-top: 60px; margin-bottom: 50px;">
-<!-- xxxxxxxxxxxxxxxxxxxx -->           
-           
-           
-           
-           
-
+<!-- xxxxxxxxxxxxxxxxxxxx -->                                                       
 <div class="cardx" onclick="showItems('vegetables')">
         <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072235.webp?v=1738386080" alt="Vegetables">
         <p>Vegetables</p>
@@ -206,10 +153,7 @@
 <div class="cardx" onclick="showItems('home')">
         <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000075595.webp?v=1739037778" alt="Home">
         <p>Home</p>
-</div          
-           
-                                                       
-           
+</div                                                                                       
 <!-- xxxxxxxxxxxxxxxxxxxxxx -->           
        </div> 
                   <!--  -->    
