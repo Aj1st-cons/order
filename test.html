@@ -440,37 +440,7 @@ function useCurrentLocation() {
         }
     }, 1000);
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                clearInterval(countdown); // Stop the countdown on success
-                document.body.removeChild(overlay);
-                document.body.removeChild(timerContainer);
-
-                let userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    timestamp: Date.now(),
-                    type: "device"
-                };
-                saveLocation(userLocation);
-                updateReplaceableText(userLocation);
-                closePopup();
-            },
-            () => {
-                clearInterval(countdown); // Stop the countdown on error
-                document.body.removeChild(overlay);
-                document.body.removeChild(timerContainer);
-                showLocationError();
-            },
-            { timeout: 30000 } // Timeout after 30 seconds if location is not retrieved
-        );
-    } else {
-        clearInterval(countdown); // Stop the countdown if geolocation is not supported
-        document.body.removeChild(overlay);
-        document.body.removeChild(timerContainer);
-        showLocationError();
-    }
+   
 }
 
 
