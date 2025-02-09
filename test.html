@@ -244,6 +244,16 @@
         <br><br>
    <button onclick="closeErrorPopup()">OK</button>
     </div>
+
+
+    <div id="errorPopup2" class="popup2">
+        <h3>Item Not Available</h3>
+        <p>Please Turn <b>ON<b> the location in your device</p>
+        <br><br>
+   <button onclick="closeErrorPopup()">OK</button>
+        </div>
+
+        
                    <!--  -->
     <div id="locationErrorPopup" class="popup2">
         <br>
@@ -436,6 +446,27 @@ function useCurrentLocation() {
             0% { transform: translate(-50%, -50%) rotate(0deg); }
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
+        .popup2 {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+            z-index: 10000;
+        }
+        .popup2 button {
+            padding: 8px 20px;
+            border: none;
+            background: #009500;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
     `;
     document.head.appendChild(style);
 
@@ -454,6 +485,7 @@ function useCurrentLocation() {
     document.body.appendChild(timerContainer);
 
     let timeLeft = 30;
+    let locationRetrieved = false;
 
     // Update the timer every second
     const countdown = setInterval(() => {
@@ -468,6 +500,7 @@ function useCurrentLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
+                locationRetrieved = true;
                 clearInterval(countdown); // Stop the countdown on success
                 document.body.removeChild(overlay);
                 document.body.removeChild(spinner);
@@ -484,6 +517,7 @@ function useCurrentLocation() {
                 closePopup();
             },
             () => {
+                locationRetrieved = true;
                 clearInterval(countdown); // Stop the countdown on error
                 document.body.removeChild(overlay);
                 document.body.removeChild(spinner);
@@ -493,13 +527,47 @@ function useCurrentLocation() {
             { timeout: 30000 } // Timeout after 30 seconds if location is not retrieved
         );
     } else {
+        locationRetrieved = true;
         clearInterval(countdown); // Stop the countdown if geolocation is not supported
         document.body.removeChild(overlay);
         document.body.removeChild(spinner);
         document.body.removeChild(timerContainer);
         showLocationError();
     }
+
+    // Handle case when 30 seconds pass without getting location
+    setTimeout(() => {
+        if (!locationRetrieved) {
+            document.body.removeChild(overlay);
+            document.body.removeChild(spinner);
+            document.body.removeChild(timerContainer);
+            showErrorPopup2();
+        }
+    }, 30000);
+}
+
+// Function to show the error popup
+function showErrorPopup2() {
+    const errorPopup = document.createElement('div');
+    errorPopup.id = "errorPopup2";
+    errorPopup.className = "popup2";
+    errorPopup.innerHTML = `
+        <h3>Item Not Available</h3>
+        <p>Please Turn <b>ON</b> the location in your device</p>
+        <br><br>
+        <button onclick="closeErrorPopup()">OK</button>
+    `;
+    document.body.appendChild(errorPopup);
+}
+
+// Function to close the error popup
+function closeErrorPopup() {
+    const popup = document.getElementById("errorPopup2");
+    if (popup) {
+        document.body.removeChild(popup);
     }
+    }
+                
 
 
 
