@@ -329,6 +329,65 @@ function showItems(category) {
         });
 }
 </script>
+
+
+<script>
+    function useCurrentLocation() {
+    if (navigator.geolocation) {
+        showLoadingOverlay(); // Show spinner overlay
+
+        let secondsElapsed = 0;
+        const timerElement = document.getElementById("location-timer");
+        const intervalId = setInterval(() => {
+            secondsElapsed++;
+            timerElement.textContent = secondsElapsed;
+        }, 1000); // Update seconds every second
+
+        let timeoutId = setTimeout(() => {
+            hideLoadingOverlay();
+            showLocationError(); // Show your existing error popup
+            clearInterval(intervalId);
+        }, 60000); // 60 seconds timeout
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                clearTimeout(timeoutId);
+                clearInterval(intervalId);
+                hideLoadingOverlay(); // Hide overlay on success
+                
+                let userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    timestamp: Date.now(),
+                    type: "device"
+                };
+                saveLocation(userLocation);
+                updateReplaceableText(userLocation);
+                closePopup();
+            },
+            (error) => {
+                clearTimeout(timeoutId);
+                clearInterval(intervalId);
+                hideLoadingOverlay(); // Hide overlay on error
+                showLocationError(); // Show error popup
+
+                // You can modify showLocationError() to handle different errors if needed
+            }
+        );
+    } else {
+        showLocationError();
+    }
+}
+
+function showLoadingOverlay() {
+    document.getElementById("location-overlay").style.display = "flex";
+    document.getElementById("location-timer").textContent = "0"; // Reset timer
+}
+
+function hideLoadingOverlay() {
+    document.getElementById("location-overlay").style.display = "none";
+}
+</script>        
 <!-- ///////////////////////// -->    
          <!-- FOOTER -->
 <footer class="footer">  
