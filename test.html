@@ -412,6 +412,8 @@
 
 
 
+
+
 function useCurrentLocation() {
     if (!navigator.geolocation) {
         showLocationErrorPopup(); // If geolocation is not supported, show error
@@ -506,7 +508,7 @@ function useCurrentLocation() {
             errorPopup2.style.display = "block";
         }
     }
-    }
+}
 
     
 
