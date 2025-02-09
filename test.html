@@ -456,7 +456,7 @@ function showLoadingAnimation() {
     loader.style.transform = "translate(-50%, -50%)";
     loader.style.width = "100px";
     loader.style.height = "100px";
-    loader.style.background = "rgba(0, 0, 0, 0.7)";
+    loader.style.background = "rgba(0, 0, 0, 0.8)";
     loader.style.borderRadius = "50%";
     loader.style.display = "flex";
     loader.style.alignItems = "center";
@@ -469,16 +469,20 @@ function showLoadingAnimation() {
     loader.style.zIndex = "9999";
     
     let spinner = document.createElement("div");
-    spinner.style.width = "50px";
-    spinner.style.height = "50px";
+    spinner.style.width = "60px";
+    spinner.style.height = "60px";
     spinner.style.border = "5px solid #fff";
     spinner.style.borderTop = "5px solid transparent";
     spinner.style.borderRadius = "50%";
+    spinner.style.position = "absolute";
     spinner.style.animation = "spin 1s linear infinite";
 
     let countdown = document.createElement("div");
     countdown.id = "countdown-timer";
-    countdown.innerText = "30s"; // Start countdown from 30 seconds
+    countdown.innerText = "30"; // Start countdown from 30 seconds
+    countdown.style.position = "absolute";
+    countdown.style.fontSize = "20px";
+    countdown.style.fontWeight = "bold";
 
     loader.appendChild(spinner);
     loader.appendChild(countdown);
@@ -487,8 +491,9 @@ function showLoadingAnimation() {
     let timer = 30;
     let countdownInterval = setInterval(() => {
         timer--;
-        if (document.getElementById("countdown-timer")) {
-            document.getElementById("countdown-timer").innerText = timer + "s";
+        let countdownElement = document.getElementById("countdown-timer");
+        if (countdownElement) {
+            countdownElement.innerText = timer;
         }
         if (timer <= 0) {
             clearInterval(countdownInterval);
@@ -511,7 +516,6 @@ style.innerHTML = `
     100% { transform: rotate(360deg); }
 }`;
 document.head.appendChild(style);
-
 
 
 
