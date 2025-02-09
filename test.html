@@ -411,8 +411,9 @@ function useCurrentLocation() {
     timerContainer.style.top = '50%';
     timerContainer.style.left = '50%';
     timerContainer.style.transform = 'translate(-50%, -50%)';
-    timerContainer.style.fontSize = '30px';
+    timerContainer.style.fontSize = '50px';
     timerContainer.style.color = '#009500';
+    timerContainer.style.fontWeight = 'bold';
     timerContainer.style.zIndex = '9999';
     timerContainer.innerText = '30s'; // Initial countdown text
 
@@ -422,7 +423,7 @@ function useCurrentLocation() {
     overlay.style.left = '0';
     overlay.style.width = '100vw';
     overlay.style.height = '100vh';
-    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
     overlay.style.zIndex = '9998';
     document.body.appendChild(overlay);
     document.body.appendChild(timerContainer);
@@ -471,6 +472,7 @@ function useCurrentLocation() {
         showLocationError();
     }
 }
+
 
     
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
