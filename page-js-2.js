@@ -1,89 +1,38 @@
 function getUserLocation() {
-    let savedLocation = getSavedLocation();
+        let savedLocation = getSavedLocation();
 
-    if (savedLocation) {
-        updateReplaceableText(savedLocation);
-    }
+        if (savedLocation) {
+            updateReplaceableText(savedLocation);
+        }
 
-    showLoadingSpinner(); // Show loading spinner
-
-    let locationTimeout = setTimeout(() => {
-        hideLoadingSpinner(); 
-        showEnableLocationPopup(); // Show popup after 60s if location is not retrieved
-    }, 60000);
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                clearTimeout(locationTimeout); // Stop timeout if location is retrieved
-
-                let userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    timestamp: Date.now(),
-                    type: "device"
-                };
-
-                saveLocation(userLocation);
-                updateReplaceableText(userLocation);
-                hideLoadingSpinner(); // Hide spinner after location is retrieved
-            },
-            () => {
-                clearTimeout(locationTimeout);
-                hideLoadingSpinner();
-                if (!savedLocation) {
-                    showLocationPopup(); // Show manual location selection popup
-                }
-            },
-            { timeout: 10000 }
-        );
-    } else {
-        clearTimeout(locationTimeout);
-        hideLoadingSpinner();
-        if (!savedLocation) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    let userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        timestamp: Date.now(),
+                        type: "device"
+                    };
+                    saveLocation(userLocation);
+                    updateReplaceableText(userLocation);
+                },
+                () => {
+                    if (!savedLocation) {
+                        showLocationPopup();
+                    }
+                },
+                { timeout: 10000 }
+            );
+        } else if (!savedLocation) {
             showLocationPopup();
         }
     }
-}
 
-function showLoadingSpinner() {
-    let overlay = document.createElement("div");
-    overlay.id = "loadingOverlay";
-    overlay.style.cssText = `
-        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-        background: rgba(0, 0, 0, 0.5); display: flex; align-items: center;
-        justify-content: center; z-index: 9999;
-    `;
-    
-    let spinner = document.createElement("div");
-    spinner.id = "spinner";
-    spinner.style.cssText = `
-        width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.3);
-        border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite;
-    `;
+    function saveLocation(location) {
+        localStorage.setItem("userLocation", JSON.stringify(location));
+    }
 
-    let style = document.createElement("style");
-    style.innerHTML = `
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-    `;
-
-    document.head.appendChild(style);
-    overlay.appendChild(spinner);
-    document.body.appendChild(overlay);
-}
-
-function hideLoadingSpinner() {
-    let overlay = document.getElementById("loadingOverlay");
-    if (overlay) overlay.remove();
-}
-
-function showEnableLocationPopup() {
-    alert("Please enable location services in your device settings.");
-}
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxx
     function getSavedLocation() {
     let savedLocation = localStorage.getItem("userLocation");
     if (savedLocation) {
@@ -107,7 +56,7 @@ function showEnableLocationPopup() {
     return null;
 }
 
-//××××××××××××××××××××××××××××××××××××
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     function updateReplaceableText(location) {
         let replaceableText = document.querySelector(".replaceable-text");
@@ -137,7 +86,7 @@ function showEnableLocationPopup() {
         }
     }
 
-//×××××××××××××××××××××××××××××××
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     function showLocationPopup() {
         let locationList = `<h4 class="current-location" onclick="useCurrentLocation()">Current Location</h4>`;
@@ -156,30 +105,61 @@ function showEnableLocationPopup() {
         document.getElementById("locationPopup").style.display = "block";
     }
 
-    function useCurrentLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    let userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                        timestamp: Date.now(),
-                        type: "device"
-                    };
-                    saveLocation(userLocation);
-                    updateReplaceableText(userLocation);
-                    closePopup();
-                },
-                () => {
-                    showLocationError();
-                }
-            );
-        } else {
-            showLocationError();
-        }
-    }
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-//××××××××××××××××××××××××××××××××××××
+    function useCurrentLocation() {
+    if (navigator.geolocation) {
+        showLoadingAnimation(); // Show loading indicator
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                hideLoadingAnimation(); // Hide loading indicator
+                
+                let userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    timestamp: Date.now(),
+                    type: "device"
+                };
+                saveLocation(userLocation);
+                updateReplaceableText(userLocation);
+                closePopup();
+            },
+            () => {
+                hideLoadingAnimation(); // Hide loading on error
+                showLocationError();
+            }
+        );
+    } else {
+        showLocationError();
+    }
+}
+
+// Functions to control loading animation
+function showLoadingAnimation() {
+    let loader = document.createElement("div");
+    loader.id = "location-loader";
+    loader.innerHTML = "Fetching location...";
+    loader.style.position = "fixed";
+    loader.style.top = "50%";
+    loader.style.left = "50%";
+    loader.style.transform = "translate(-50%, -50%)";
+    loader.style.padding = "10px 20px";
+    loader.style.background = "rgba(0, 0, 0, 0.7)";
+    loader.style.color = "#fff";
+    loader.style.borderRadius = "5px";
+    loader.style.zIndex = "9999";
+    document.body.appendChild(loader);
+}
+
+function hideLoadingAnimation() {
+    let loader = document.getElementById("location-loader");
+    if (loader) {
+        loader.remove();
+    }
+}
+
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     // Function to open the edit popup
     function openEditPopup() {
@@ -283,23 +263,19 @@ function showEnableLocationPopup() {
         document.getElementById("locationPopup").style.display = "block";
     }
 
-//××××××××××××××××××××××××××××××××××
-//××××××××××××××××××××××××××××××××××
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   
 function saveDeviceLocation() {
     if (navigator.geolocation) {
-        // Show loading animation immediately
-        showLoadingAnimation();
+        showLoadingAnimation(); // Show loading animation
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                // Add a delay before showing the save location popup
                 setTimeout(() => {
                     hideLoadingAnimation(); // Hide loading animation
-                    closeLocationPopup(); // Close locationPopup immediately
+                    closeLocationPopup(); // Close locationPopup
                     openSaveLocationPopup(); // Open saveLocationPopup
 
-                    // Prevent closing until required action is taken
                     document.getElementById("saveLocationConfirm").onclick = function () {
                         const customName = document.getElementById("saveLocationInput").value.trim();
                         if (customName) {
@@ -317,7 +293,7 @@ function saveDeviceLocation() {
                             alert("Please enter a name for this location.");
                         }
                     };
-                }, 1000); // Delay of 1 second
+                }, 1000); // Delay to ensure UI updates smoothly
             },
             (error) => {
                 hideLoadingAnimation(); // Hide loading animation on error
@@ -331,12 +307,22 @@ function saveDeviceLocation() {
 
 function showLoadingAnimation() {
     const loadingOverlay = document.getElementById("loadingOverlay");
-    loadingOverlay.style.display = "flex"; // Show loading overlay
+    if (loadingOverlay) {
+        loadingOverlay.style.display = "flex";
+        console.log("Loading animation shown");
+    } else {
+        console.error("Error: Loading overlay not found!");
+    }
 }
 
 function hideLoadingAnimation() {
     const loadingOverlay = document.getElementById("loadingOverlay");
-    loadingOverlay.style.display = "none"; // Hide loading overlay
+    if (loadingOverlay) {
+        setTimeout(() => {
+            loadingOverlay.style.display = "none";
+            console.log("Loading animation hidden");
+        }, 500); // Small delay to prevent flickering
+    }
 }
 
 function closeLocationPopup() {
@@ -346,16 +332,15 @@ function closeLocationPopup() {
 
 function openSaveLocationPopup() {
     const saveLocationPopup = document.getElementById("saveLocationPopup");
-    saveLocationPopup.style.display = "block"; // Show the popup
+    if (saveLocationPopup) saveLocationPopup.style.display = "block";
 }
 
 function closeSaveLocationPopup() {
     const saveLocationPopup = document.getElementById("saveLocationPopup");
-    saveLocationPopup.style.display = "none"; // Hide the popup
+    if (saveLocationPopup) saveLocationPopup.style.display = "none";
 }
 
-//××××××××××××××××××××××××××××××××××
-//××××××××××××××××××××××××××××××××××
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
           
     function useSavedLocation() {
         const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
@@ -366,7 +351,7 @@ function closeSaveLocationPopup() {
         }
     }
 
-//×××××××××××××××××××××××××××××××××
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    
     function searchItem(item) {
         let userLocation = getSavedLocation();
@@ -408,4 +393,14 @@ function closeSaveLocationPopup() {
 
     // Initialize on page load
     getUserLocation();
-
+    
+    //FOOTER
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector('.home-btn').addEventListener('click', function() {
+        document.querySelectorAll('.popup, .popup2').forEach(popup => {
+            if (popup.style.display !== 'none') {
+                popup.style.display = 'none';
+            }
+        });
+    });
+});        
