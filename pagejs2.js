@@ -105,28 +105,59 @@ function getUserLocation() {
         document.getElementById("locationPopup").style.display = "block";
     }
 
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
     function useCurrentLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    let userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                        timestamp: Date.now(),
-                        type: "device"
-                    };
-                    saveLocation(userLocation);
-                    updateReplaceableText(userLocation);
-                    closePopup();
-                },
-                () => {
-                    showLocationError();
-                }
-            );
-        } else {
-            showLocationError();
-        }
+    if (navigator.geolocation) {
+        showLoadingAnimation(); // Show loading indicator
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                hideLoadingAnimation(); // Hide loading indicator
+                
+                let userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    timestamp: Date.now(),
+                    type: "device"
+                };
+                saveLocation(userLocation);
+                updateReplaceableText(userLocation);
+                closePopup();
+            },
+            () => {
+                hideLoadingAnimation(); // Hide loading on error
+                showLocationError();
+            }
+        );
+    } else {
+        showLocationError();
     }
+}
+
+// Functions to control loading animation
+function showLoadingAnimation() {
+    let loader = document.createElement("div");
+    loader.id = "location-loader";
+    loader.innerHTML = "Fetching location...";
+    loader.style.position = "fixed";
+    loader.style.top = "50%";
+    loader.style.left = "50%";
+    loader.style.transform = "translate(-50%, -50%)";
+    loader.style.padding = "10px 20px";
+    loader.style.background = "rgba(0, 0, 0, 0.7)";
+    loader.style.color = "#fff";
+    loader.style.borderRadius = "5px";
+    loader.style.zIndex = "9999";
+    document.body.appendChild(loader);
+}
+
+function hideLoadingAnimation() {
+    let loader = document.getElementById("location-loader");
+    if (loader) {
+        loader.remove();
+    }
+}
 
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
