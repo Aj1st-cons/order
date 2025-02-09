@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const footer = document.querySelector("footer");
     const lastShown = localStorage.getItem("welcomeLastShown");
     const now = Date.now();
-    const tenMinutes = 10 * 60 * 1000; // 10 minutes in milliseconds
+    const tenMinutes = 15 * 60 * 1000; // 15 minutes in milliseconds
 
     if (!lastShown || now - lastShown > tenMinutes) {
         // Show welcome screen and hide footer initially
