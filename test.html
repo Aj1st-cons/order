@@ -439,36 +439,18 @@ function useCurrentLocation() {
     spinner.style.transform = 'translate(-50%, -50%)';
     spinner.style.zIndex = '9998';
 
-    // Add CSS animation for spinning effect
-    const style = document.createElement('style');
-    style.innerHTML = `
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        .popup2 {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
-            z-index: 10000;
-        }
-        .popup2 button {
-            padding: 8px 20px;
-            border: none;
-            background: #009500;
-            color: white;
-            font-size: 14px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-    `;
-    document.head.appendChild(style);
+    // Add CSS animation for spinning effect if not already added
+    if (!document.getElementById("spinner-style")) {
+        const style = document.createElement('style');
+        style.id = "spinner-style";
+        style.innerHTML = `
+            @keyframes spin {
+                0% { transform: translate(-50%, -50%) rotate(0deg); }
+                100% { transform: translate(-50%, -50%) rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 
     // Create overlay
     const overlay = document.createElement('div');
@@ -492,81 +474,81 @@ function useCurrentLocation() {
         if (timeLeft > 0) {
             timeLeft--;
             timerContainer.innerText = `${timeLeft}s`;
-        } else {
-            clearInterval(countdown);
         }
     }, 1000);
+
+    // Start timeout function
+    const timeoutHandler = setTimeout(() => {
+        if (!locationRetrieved) {
+            removeLoader();
+            showErrorPopup2();
+        }
+    }, 30000); // Show popup if location not retrieved after 30s
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                locationRetrieved = true;
-                clearInterval(countdown); // Stop the countdown on success
-                document.body.removeChild(overlay);
-                document.body.removeChild(spinner);
-                document.body.removeChild(timerContainer);
+                if (!locationRetrieved) {
+                    locationRetrieved = true;
+                    clearInterval(countdown);
+                    clearTimeout(timeoutHandler);
+                    removeLoader();
 
-                let userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    timestamp: Date.now(),
-                    type: "device"
-                };
-                saveLocation(userLocation);
-                updateReplaceableText(userLocation);
-                closePopup();
+                    let userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        timestamp: Date.now(),
+                        type: "device"
+                    };
+                    saveLocation(userLocation);
+                    updateReplaceableText(userLocation);
+                    closePopup();
+                }
             },
             () => {
-                locationRetrieved = true;
-                clearInterval(countdown); // Stop the countdown on error
-                document.body.removeChild(overlay);
-                document.body.removeChild(spinner);
-                document.body.removeChild(timerContainer);
-                showLocationError();
+                if (!locationRetrieved) {
+                    locationRetrieved = true;
+                    clearInterval(countdown);
+                    clearTimeout(timeoutHandler);
+                    removeLoader();
+                    showErrorPopup2();
+                }
             },
-            { timeout: 30000 } // Timeout after 30 seconds if location is not retrieved
+            { timeout: 30000 }
         );
     } else {
-        locationRetrieved = true;
-        clearInterval(countdown); // Stop the countdown if geolocation is not supported
-        document.body.removeChild(overlay);
-        document.body.removeChild(spinner);
-        document.body.removeChild(timerContainer);
-        showLocationError();
+        showErrorPopup2();
     }
-
-    // Handle case when 30 seconds pass without getting location
-    setTimeout(() => {
-        if (!locationRetrieved) {
-            document.body.removeChild(overlay);
-            document.body.removeChild(spinner);
-            document.body.removeChild(timerContainer);
-            showErrorPopup2();
-        }
-    }, 30000);
 }
 
-// Function to show the error popup
+// Function to remove overlay, spinner, and timer
+function removeLoader() {
+    const overlay = document.querySelector("div[style*='rgba(0, 0, 0, 0.7)']");
+    const spinner = document.querySelector("div[style*='border-top: 4px solid #009500']");
+    const timerContainer = document.querySelector("div[style*='font-size: 12px']");
+    
+    if (overlay) document.body.removeChild(overlay);
+    if (spinner) document.body.removeChild(spinner);
+    if (timerContainer) document.body.removeChild(timerContainer);
+}
+
+// Function to show the existing error popup
 function showErrorPopup2() {
-    const errorPopup = document.createElement('div');
-    errorPopup.id = "errorPopup2";
-    errorPopup.className = "popup2";
-    errorPopup.innerHTML = `
-        <h3>Item Not Available</h3>
-        <p>Please Turn <b>ON</b> the location in your device</p>
-        <br><br>
-        <button onclick="closeErrorPopup()">OK</button>
-    `;
-    document.body.appendChild(errorPopup);
+    const errorPopup = document.getElementById("errorPopup2");
+    if (errorPopup) {
+        errorPopup.style.display = "block"; // Show the existing popup
+    }
 }
 
 // Function to close the error popup
 function closeErrorPopup() {
     const popup = document.getElementById("errorPopup2");
     if (popup) {
-        document.body.removeChild(popup);
+        popup.style.display = "none";
     }
-    }
+    } 
+             
+
                 
 
 
