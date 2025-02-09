@@ -2,8 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Orders Made Easy with Order App – Your Nearest Stores in just One Tap</title>
+    <!-- Meta Description -->
+    <meta name="description" content="Order App makes shopping easy by connecting you with nearby stores within 1 KM. Order groceries, clothes, food, accessories, laundry, and more—all with just one tap!">
+    <!-- Open Graph Meta Tags for Facebook and Instagram -->
+    <meta property="og:title" content="Orders Made Easy with Order App – Your Nearest Stores in just One Tap">
+    <meta property="og:description" content="Order App makes shopping easy by connecting you with nearby stores within 1 KM. Order groceries, clothes, food, accessories, laundry, and more—all with just one tap!">
+    <meta property="og:url" content="https://order-1ib.pages.dev">
+    <meta property="og:image" content="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000075498.webp?v=1738901678">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Order App">
+    <meta property="og:locale" content="en_US">
+
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order App</title>
+<!-- xxxxxxxxxxxxxxxxxxxxxx -->
 <link rel="stylesheet" href="https://order-1ib.pages.dev/index.css">     
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&amp;display=swap" rel="stylesheet">       
@@ -272,46 +285,6 @@
 <div id="loadingOverlay" class="loading-overlay" style="display: none;">
     <div class="loading-spinner"></div>
 </div>
-
-<div id="location-overlay" class="overlay">
-    <div class="spinner-container">
-        <div class="spinner"></div>
-        <p>Retrieving location... <span id="location-timer">0</span>s</p>
-    </div>
-</div>
-
-<style>
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none; /* Initially hidden */
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-.spinner-container {
-    text-align: center;
-    color: white;
-    font-size: 18px;
-}
-.spinner {
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid white;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 10px auto;
-}
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-</style>
 <!-- ///////////////////////// -->
 <script src="https://order-1ib.pages.dev/categories.js"></script>
 <script src="https://order-1ib.pages.dev/coordinates.js"></script>
@@ -424,18 +397,33 @@
         document.getElementById("locationPopup").style.display = "block";
     }
 
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 
 
 
 
-    function useCurrentLocation() {
+
+let locationRetryCount = 0; // Track retry attempts
+
+function useCurrentLocation() {
     if (navigator.geolocation) {
-        showLoadingAnimation(); // Show loading indicator
+        showLoadingAnimation(); // Show loading spinner with countdown
+
+        let timeout = setTimeout(() => {
+            hideLoadingAnimation();
+            if (locationRetryCount < 3) { // Retry up to 3 times
+                locationRetryCount++;
+                useCurrentLocation();
+            } else {
+                showLocationError();
+            }
+        }, 30000); // Retry after 30 seconds
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                hideLoadingAnimation(); // Hide loading indicator
+                clearTimeout(timeout); // Stop retry timer
+                hideLoadingAnimation(); // Hide spinner
                 
                 let userLocation = {
                     lat: position.coords.latitude,
@@ -448,7 +436,8 @@
                 closePopup();
             },
             () => {
-                hideLoadingAnimation(); // Hide loading on error
+                clearTimeout(timeout); // Stop retry timer
+                hideLoadingAnimation(); // Hide spinner
                 showLocationError();
             }
         );
@@ -461,17 +450,50 @@
 function showLoadingAnimation() {
     let loader = document.createElement("div");
     loader.id = "location-loader";
-    loader.innerHTML = "Fetching location...";
     loader.style.position = "fixed";
     loader.style.top = "50%";
     loader.style.left = "50%";
     loader.style.transform = "translate(-50%, -50%)";
-    loader.style.padding = "10px 20px";
+    loader.style.width = "100px";
+    loader.style.height = "100px";
     loader.style.background = "rgba(0, 0, 0, 0.7)";
+    loader.style.borderRadius = "50%";
+    loader.style.display = "flex";
+    loader.style.alignItems = "center";
+    loader.style.justifyContent = "center";
+    loader.style.flexDirection = "column";
     loader.style.color = "#fff";
-    loader.style.borderRadius = "5px";
+    loader.style.fontSize = "16px";
+    loader.style.fontWeight = "bold";
+    loader.style.textAlign = "center";
     loader.style.zIndex = "9999";
+    
+    let spinner = document.createElement("div");
+    spinner.style.width = "50px";
+    spinner.style.height = "50px";
+    spinner.style.border = "5px solid #fff";
+    spinner.style.borderTop = "5px solid transparent";
+    spinner.style.borderRadius = "50%";
+    spinner.style.animation = "spin 1s linear infinite";
+
+    let countdown = document.createElement("div");
+    countdown.id = "countdown-timer";
+    countdown.innerText = "30s"; // Start countdown from 30 seconds
+
+    loader.appendChild(spinner);
+    loader.appendChild(countdown);
     document.body.appendChild(loader);
+
+    let timer = 30;
+    let countdownInterval = setInterval(() => {
+        timer--;
+        if (document.getElementById("countdown-timer")) {
+            document.getElementById("countdown-timer").innerText = timer + "s";
+        }
+        if (timer <= 0) {
+            clearInterval(countdownInterval);
+        }
+    }, 1000);
 }
 
 function hideLoadingAnimation() {
@@ -481,6 +503,19 @@ function hideLoadingAnimation() {
     }
 }
 
+// Add CSS animation for spinner
+let style = document.createElement("style");
+style.innerHTML = `
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}`;
+document.head.appendChild(style);
+
+
+
+
+    
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
     // Function to open the edit popup
@@ -782,7 +817,6 @@ function showItems(category) {
         });
 }
 </script>
-
 <!-- ///////////////////////// -->    
          <!-- FOOTER -->
 <footer class="footer">  
