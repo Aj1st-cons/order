@@ -483,6 +483,8 @@ function showLoadingAnimation() {
     countdown.style.position = "absolute";
     countdown.style.fontSize = "20px";
     countdown.style.fontWeight = "bold";
+    countdown.style.zIndex = "100"; // Make sure timer is on top of spinner
+    countdown.style.color = "#fff"; // Ensure countdown text is visible
 
     loader.appendChild(spinner);
     loader.appendChild(countdown);
