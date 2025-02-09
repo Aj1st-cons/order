@@ -1,38 +1,89 @@
-    function getUserLocation() {
-        let savedLocation = getSavedLocation();
+function getUserLocation() {
+    let savedLocation = getSavedLocation();
 
-        if (savedLocation) {
-            updateReplaceableText(savedLocation);
-        }
+    if (savedLocation) {
+        updateReplaceableText(savedLocation);
+    }
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    let userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                        timestamp: Date.now(),
-                        type: "device"
-                    };
-                    saveLocation(userLocation);
-                    updateReplaceableText(userLocation);
-                },
-                () => {
-                    if (!savedLocation) {
-                        showLocationPopup();
-                    }
-                },
-                { timeout: 10000 }
-            );
-        } else if (!savedLocation) {
+    showLoadingSpinner(); // Show loading spinner
+
+    let locationTimeout = setTimeout(() => {
+        hideLoadingSpinner(); 
+        showEnableLocationPopup(); // Show popup after 60s if location is not retrieved
+    }, 60000);
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                clearTimeout(locationTimeout); // Stop timeout if location is retrieved
+
+                let userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    timestamp: Date.now(),
+                    type: "device"
+                };
+
+                saveLocation(userLocation);
+                updateReplaceableText(userLocation);
+                hideLoadingSpinner(); // Hide spinner after location is retrieved
+            },
+            () => {
+                clearTimeout(locationTimeout);
+                hideLoadingSpinner();
+                if (!savedLocation) {
+                    showLocationPopup(); // Show manual location selection popup
+                }
+            },
+            { timeout: 10000 }
+        );
+    } else {
+        clearTimeout(locationTimeout);
+        hideLoadingSpinner();
+        if (!savedLocation) {
             showLocationPopup();
         }
     }
+}
 
-    function saveLocation(location) {
-        localStorage.setItem("userLocation", JSON.stringify(location));
-    }
+function showLoadingSpinner() {
+    let overlay = document.createElement("div");
+    overlay.id = "loadingOverlay";
+    overlay.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(0, 0, 0, 0.5); display: flex; align-items: center;
+        justify-content: center; z-index: 9999;
+    `;
+    
+    let spinner = document.createElement("div");
+    spinner.id = "spinner";
+    spinner.style.cssText = `
+        width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite;
+    `;
 
+    let style = document.createElement("style");
+    style.innerHTML = `
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    `;
+
+    document.head.appendChild(style);
+    overlay.appendChild(spinner);
+    document.body.appendChild(overlay);
+}
+
+function hideLoadingSpinner() {
+    let overlay = document.getElementById("loadingOverlay");
+    if (overlay) overlay.remove();
+}
+
+function showEnableLocationPopup() {
+    alert("Please enable location services in your device settings.");
+}
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxx
     function getSavedLocation() {
     let savedLocation = localStorage.getItem("userLocation");
     if (savedLocation) {
