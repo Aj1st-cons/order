@@ -8,8 +8,8 @@
             setTimeout(function() {
                 const locationPrompt = document.getElementById("locationPromptPopup");
                 locationPrompt.style.display = "block";
-                setTimeout(() => locationPrompt.style.display = "none", 4000);
-            }, 1000);
+                setTimeout(() => locationPrompt.style.display = "none", 3000);
+            }, 3000);
         }
     });
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
