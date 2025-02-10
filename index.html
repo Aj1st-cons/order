@@ -836,39 +836,14 @@ function showItems(category) {
                 }, 1000); // Delay to ensure UI updates smoothly
             },
             (error) => {
-                hideLoadingAnimation(); // Hide loading animation on error
+                hideLoadingAnimation(); 
                 showLocationError(error);
             }
         );
     } else {
-        alert("Geolocation is not supported by your browser.");
+    showGeolocationErrorPopup();
     }
-}
-
-function showLoadingAnimation() {
-    const loadingOverlay = document.getElementById("loadingOverlay");
-    if (loadingOverlay) {
-        loadingOverlay.style.display = "flex";
-        console.log("Loading animation shown");
-    } else {
-        console.error("Error: Loading overlay not found!");
-    }
-}
-
-function hideLoadingAnimation() {
-    const loadingOverlay = document.getElementById("loadingOverlay");
-    if (loadingOverlay) {
-        setTimeout(() => {
-            loadingOverlay.style.display = "none";
-            console.log("Loading animation hidden");
-        }, 500); // Small delay to prevent flickering
-    }
-}
-
-function closeLocationPopup() {
-    const locationPopup = document.getElementById("locationPopup");
-    if (locationPopup) locationPopup.style.display = "none";
-}
+   }
 
 function openSaveLocationPopup() {
     const saveLocationPopup = document.getElementById("saveLocationPopup");
@@ -879,6 +854,16 @@ function closeSaveLocationPopup() {
     const saveLocationPopup = document.getElementById("saveLocationPopup");
     if (saveLocationPopup) saveLocationPopup.style.display = "none";
 }
+
+
+function showGeolocationErrorPopup() {
+    errorPopup2.style.display = 'block';
+}
+
+function closeGeolocationErrorPopup() {
+    errorPopup2.style.display = 'none';
+}
+
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     function useCurrentLocation() {
     if (navigator.geolocation) {
@@ -904,9 +889,9 @@ function closeSaveLocationPopup() {
             }
         );
     } else {
-        showLocationError();
+    showGeolocationErrorPopup();
     }
-}
+   }
 
 // Functions to control loading animation
 function showLoadingAnimation() {
@@ -932,5 +917,3 @@ function hideLoadingAnimation() {
     }
 }
 </script>
-                
-                
