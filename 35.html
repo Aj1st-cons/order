@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders Made Easy with Order App – Your Nearest Stores in just One Tap</title>
+    <!-- Meta Description -->
+    <meta name="description" content="Order App makes shopping easy by connecting you with nearby stores within 1 KM. Order groceries, clothes, food, accessories, laundry, and more—all with just one tap!">
+    <!-- Open Graph Meta Tags for Facebook and Instagram -->
+    <meta property="og:title" content="Orders Made Easy with Order App – Your Nearest Stores in just One Tap">
+    <meta property="og:description" content="Order App makes shopping easy by connecting you with nearby stores within 1 KM. Order groceries, clothes, food, accessories, laundry, and more—all with just one tap!">
+    <meta property="og:url" content="https://order-1ib.pages.dev">
+    <meta property="og:image" content="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000075498.webp?v=1738901678">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Order App">
+    <meta property="og:locale" content="en_US">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- xxxxxxxxxxxxxxxxxxxxxx -->   
+  <style>
+    body.dimmed {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      transition: background-color 0.5s;
+    }
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      visibility: hidden;
+      z-index: 10;
+    }
+    #overlay.active {
+      visibility: visible;
+    }
+    .spinner-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+    .spinner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+      height: 100px;
+      border: 7px solid #fff;
+      border-top-color: #009500;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .timer {
+      position: absolute;
+      top: calc(50% + 5px);
+      left: calc(50% + 5px);
+      transform: translate(-50%, -50%);
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+    }
+    #startButton {
+      position: relative;
+      z-index: 1;
+    }
+    #errorPopup2 {
+  position: fixed;
+  display: none; /* Hidden by default */
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto; /* Adjust height to fit content */
+  background-color: white;
+  border: 2px solid #009500;
+  border-radius: 5px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  z-index: 9999; /* Ensure it appears above other elements */
+  padding: 10px; 
+  box-sizing: border-box; 
+  text-align: center; /* Center-align text and content */
+}
+
+#errorPopup2 h3 {
+  margin-top: 10px; 
+  white-space: nowrap;
+  color: #009500;
+}
+
+#errorPopup2 p {
+  margin-bottom: 20px; /* Add spacing below the paragraph */
+}
+
+#errorPopup2 button {
+  background-color: #009500;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#errorPopup2 button:hover {
+  background-color: #007a00; /* Darker green on hover */
+}
+
+</style>
+<link rel="stylesheet" href="https://order-1ib.pages.dev/style2.css">    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&amp;display=swap" rel="stylesheet">       
+</head>
+    <body onload="getUserLocation()">
+
+        <div class="header">
+    <a href="https://order-1ib.pages.dev" style="margin-right: 10px;">
+        <h1 style="margin: 0;">Order App</h1>
+    </a>    
+    <div class="replaceable-text" onclick="showLocationPopup()" style="margin-right: 10px; margin-top:5px; cursor: pointer;">
+    Change Location
+   </div>
+   <div class="icon-container" onclick="showLocationPopup()" style="cursor: pointer; margin-top:5px;">
+    <i class="fa-solid fa-rotate" style="color: #009500;"></i>
+   </div>
+       </div>
+          <!-- Welcome Screen -->
+<div id="welcome" class="visible">    
+        <h1>
+            <span>O</span><span>r</span><span>d</span><span>e</span><span>r</span>
+            <span class="space"></span>
+            <span>A</span><span>p</span><span>p</span>
+        </h1>
+       <!-- <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/welcome_image.png?v=1737684481" alt="Welcome Image"> -->
+    </div>  
+          <!--  -->
+       <div id="categories" class="item-grid" style="margin-top: 60px; margin-bottom: 50px;">
+<!-- xxxxxxxxxxxxxxxxxxxx -->                                                       
+<div class="cardx" onclick="showItems('vegetables')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072235.webp?v=1738386080" alt="Vegetables">
+        <p>Vegetables</p>
+    </div>
+    
+<div class="cardx" onclick="showItems('fruits')">
+       <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072237.webp?v=1738385978" alt="Fruits">
+       <p>Fruits</p>
+    </div>
+    
+<div class="cardx" onclick="showItems('meat')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072170.webp?v=1738385944" alt="Meat">
+        <p>Meat & Chicken</p>
+    </div>
+
+<div class="cardx" onclick="showItems('cafeteria')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072168.webp?v=1738385898" alt="Cafeteria">
+        <p>Cafeteria</p>
+    </div>
+
+<div class="cardx" onclick="showItems('restaurants')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072167.webp?v=1738386042" alt="Restaurants">
+        <p>Restaurants</p>
+    </div>
+
+<div class="cardx" onclick="showItems('bakery')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072169.webp?v=1738385927" alt="Bakery">
+        <p>Bakery & Spreads</p>
+    </div>
+
+<div class="cardx" onclick="showItems('oils')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072175.webp?v=1738385868" alt="Oils">
+        <p>Oils & Season</p>
+    </div>
+
+<div class="cardx" onclick="showItems('seafood')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072243.webp?v=1738385970" alt="Seafood">
+        <p>Seafood</p>
+    </div>
+
+<div class="cardx" onclick="showItems('spices')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072183.webp?v=1738386023" alt="Spices">
+        <p>Spices</p>
+    </div>
+
+<div class="cardx" onclick="showItems('beverages')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072229.webp?v=1738385955" alt="Beverages">
+        <p>Beverages</p>
+    </div>
+
+<div class="cardx" onclick="showItems('beauty')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072220.webp?v=1738385848" alt="Beauty">
+        <p>Beauty</p>
+    </div>
+
+<div class="cardx" onclick="showItems('eggs')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072226.webp?v=1738385841" alt="Eggs">
+        <p>Eggs & Dairy</p>
+    </div>
+
+<div class="cardx" onclick="showItems('ready to cook')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072181.webp?v=1738386054" alt="Ready to cook">
+        <p>Ready to cook</p>
+    </div>
+
+<div class="cardx" onclick="showItems('snacks')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072182.webp?v=1738385890" alt="Snacks">
+        <p>Snacks & Sweets</p>
+    </div>
+
+<div class="cardx" onclick="showItems('rice & grains')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072172.webp?v=1738385935" alt="Rice & Grains">
+        <p>Rice & Grains</p>
+    </div>
+
+<div class="cardx" onclick="showItems('delicatessen')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072171.webp?v=1738386062" alt="Delicatessen">
+        <p>Delicatessen</p>
+    </div>
+
+<div class="cardx" onclick="showItems('nuts')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072255.webp?v=1738386004" alt="Nuts">
+        <p>Nuts</p>
+    </div>
+
+<div class="cardx" onclick="showItems('frozen')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072174.webp?v=1738386033" alt="Frozen">
+        <p>Frozen & Can</p>
+    </div>
+
+<div class="cardx" onclick="showItems('tea')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072177.webp?v=1738385962" alt="Tea & coffee">
+        <p>Tea & coffee</p>
+    </div>
+
+<div class="cardx" onclick="showItems('babies')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072254.webp?v=1738385879" alt="Babies">
+        <p>Babies</p>
+    </div>
+
+<div class="cardx" onclick="showItems('personal')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072250.webp?v=1738385859" alt="Personal care">
+        <p>Personal care</p>
+</div>           
+           
+<div class="cardx" onclick="showItems('home')">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000075595.webp?v=1739037778" alt="Home">
+        <p>Home</p>
+</div>                                                                                      
+<!-- xxxxxxxxxxxxxxxxxxxxxx -->           
+       </div> 
+          <!--  -->    
+    <div id="itemPopup" class="popup">        
+ <div id="itemList"></div></div>                              
+          <!--  -->
+<div id="locationPopup" class="popup2">  
+    <div class="popup-footer">
+        <span></span>
+        <button onclick="closePopup()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>      
+    <div id="locationsList" class="popup-content"></div></div>
+          <!--  -->
+<div id="cityPopup" class="popup2">  
+    <div class="popup-footer">
+        <button class="back-btn" onclick="goBackToLocations()">
+       <i class="fas fa-arrow-left"></i> 
+        </button>
+        <button onclick="closePopup()">
+       <i class="fas fa-times"></i>
+        </button>
+    </div>     
+    <div id="cityList" class="popup-content"></div></div>
+          <!--  -->   
+    <div id="errorPopup" class="popup2">
+        <h3>Item Not Available</h3>
+        <p>The selected item is not available nearby.</p>
+        <br><br>
+   <button onclick="closeErrorPopup()">OK</button>
+    </div>
+          <!--  -->
+    <div id="locationErrorPopup" class="popup2">
+        <br>
+        <h3>Error</h3>
+        <p>Unable to get your current location. Please turn <b>ON</b> the location</p>
+        <br><br>
+    <button onclick="closePopup()">OK</button>
+    </div>
+          <!--  -->
+    <div id="locationPromptPopup" class="bottom-popup">
+        <p>Please turn on your location services for a better experience.</p>
+    </div>        
+          <!--  -->     
+     <div id="selectLocationPopup" class="bottom-popup" style="display: none;">
+    <p>Please turn your location <b>ON</b><br><br>OR<br><br>if <b>ON</b> REFRESH the page</p>
+     </div>
+          <!--  -->
+<div id="saveLocationPopup">
+    <h3>Your Favourite Location</h3>
+    <div class="input-container">
+        <input type="text" id="saveLocationInput" placeholder="Home / Office" maxlength="14">
+    </div>
+    <div class="popup-buttons">
+        <button id="cancelButton" onclick="closeSaveLocationPopup()">Cancel</button>
+        <button id="saveLocationConfirm">Save</button>
+    </div>
+</div>    
+          <!--  -->
+<div id="editPopup">
+    <h3>Change Saved Location?</h3>
+    <div class="input-container">
+        <input type="text" id="editNameInput" placeholder="Enter new name" maxlength="14">
+    </div>
+    <div class="popup-buttons">
+        <button id="editNoButton" onclick="handleEditNo()">No</button>
+        <button id="editYesButton" onclick="handleEditYes()">Yes</button>
+    </div>
+</div>          
+          <!--  -->
+<div id="overlay">
+    <div class="spinner-container">
+        <div class="spinner"></div> <!-- Rotating spinner -->
+        <div class="timer" id="timer">30s</div> <!-- Static timer -->
+    </div>
+</div>
+          <!--  -->
+<div id="errorPopup2" class="popup2">
+    <h3>Location Not Available</h3>
+    <p>Please turn <b>ON</b> your Location in device's settings.</p>
+    <br><br>
+    <button onclick="closeErrorPopup()">OK</button>
+</div> 
+          <!--  -->         
+<!-- ///////////////////////// -->
+<script src="https://order-1ib.pages.dev/welcome.js"></script>
+<script src="https://order-1ib.pages.dev/categories.js"></script>
+<script src="https://order-1ib.pages.dev/coordinates.js"></script>
+<script src="https://order-1ib.pages.dev/page.js"></script>
+<script src="https://order-1ib.pages.dev/pagejs2.js"></script>
+<script src="https://order-1ib.pages.dev/page"></script>
+<script>
+    //when the back button is pressed
+window.addEventListener('popstate', function (e) {
+    const popup = document.getElementById("itemPopup");
+
+    // Check if the popup is open
+    if (popup.style.display === "block") {
+        // Close the popup
+        popup.style.display = "none";
+        
+        // Prevent the default behavior of going back
+        history.pushState(null, null, location.href);
+    }
+});
+
+// Function to open the popup and update the browser history state
+function showItems(category) {
+    fetch(categoryUrls[category])
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
+        })
+        .then(data => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(data, "text/html");
+            let items = [];
+
+            doc.querySelectorAll(".item-card").forEach(card => {
+                let img = card.querySelector("img")?.src;
+                let name = card.querySelector("p")?.textContent;
+                if (img && name) items.push({ name, image: img });
+            });
+
+            let itemList = `<div class="item-grid">`;
+            items.forEach(item => {
+                itemList += `
+                    <div class="item-card" onclick="searchItem('${item.name}')">
+                        <img src="${item.image}" alt="${item.name}" loading="lazy">
+                        <p>${item.name}</p>
+                    </div>
+                `;
+            });
+            itemList += `</div>`;
+            document.getElementById("itemList").innerHTML = itemList;
+            document.getElementById("itemPopup").style.display = "block";
+
+            // Push state to the history to avoid going back to previous page
+            history.pushState(null, null, location.href);
+        })
+        .catch(error => {
+            console.error("Error loading items:", error);
+            document.getElementById("errorPopup").style.display = "block";
+        });
+}
+</script>
+<!-- ///////////////////////// -->    
+         <!-- FOOTER -->
+<footer class="footer">  
+    <a href="https://order-app-ae.myshopify.com/cart" class="footer-btn">
+        <i class="fas fa-shopping-cart"></i>
+    </a>
+    <button class="footer-btn home-btn">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000074587.webp?v=1738560869" alt="Home" style="width: 80px; height: auto; margin-bottom: 0px; margin-left: -7px;">
+    </button>            
+    <a href="https://shopify.com/66437513414/account" class="footer-btn">
+        <i class="fas fa-user"></i>
+    </a>
+</footer>
+<script>   
+        function useCurrentLocation() {
+    if (navigator.geolocation) {
+        let isLocationRetrieved = false; // Flag to track if location is retrieved
+
+        // Set a timeout for 10 seconds
+        const timeout = setTimeout(() => {
+            if (!isLocationRetrieved) {
+                showErrorPopup(); // Show error popup if location is not retrieved within 10 seconds
+            }
+        }, 10000); // 10,000 milliseconds = 10 seconds
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                isLocationRetrieved = true; // Mark location as retrieved
+                clearTimeout(timeout); // Clear the timeout since location was successfully retrieved
+
+                let userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    timestamp: Date.now(),
+                    type: "device"
+                };
+                saveLocation(userLocation);
+                updateReplaceableText(userLocation);
+                closePopup();
+            },
+            () => {
+                isLocationRetrieved = true; // Mark location as retrieved to prevent timeout error
+                clearTimeout(timeout); // Clear the timeout
+                showLocationError();
+            }
+        );
+    } else {
+        showErrorPopup();
+    }
+}
+
+//---------------------------------
+    function saveDeviceLocation() {
+    if (navigator.geolocation) {
+        let isLocationRetrieved = false; // Flag to track if location is retrieved
+
+        // Set a timeout for 10 seconds
+        const timeout = setTimeout(() => {
+            if (!isLocationRetrieved) {
+                showErrorPopup(); // Show error popup if location is not retrieved within 10 seconds
+            }
+        }, 10000); // 10,000 milliseconds = 10 seconds
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                isLocationRetrieved = true; // Mark location as retrieved
+                clearTimeout(timeout); // Clear the timeout since location was successfully retrieved
+
+                // Add a delay before showing the save location popup
+                setTimeout(() => {
+                    openSaveLocationPopup();
+
+                    // Prevent closing until required action is taken
+                    document.getElementById("saveLocationConfirm").onclick = function () {
+                        const customName = document.getElementById("saveLocationInput").value.trim();
+                        if (customName) {
+                            const savedLocation = {
+                                name: customName,
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                                type: "saved"
+                            };
+                            localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
+                            updateReplaceableText(savedLocation);
+                            closeSaveLocationPopup();
+                            setTimeout(() => location.reload(), 500);
+                        } else {
+                            alert("Please enter a name for this location.");
+                        }
+                    };
+                }, 1000); // Delay of 1 second
+            },
+            (error) => {
+                isLocationRetrieved = true; // Mark location as retrieved to prevent timeout error
+                clearTimeout(timeout); // Clear the timeout
+                showLocationError(error);
+            }
+        );
+    } else {
+        showErrorPopup(); // Show error popup if geolocation is not supported by the browser
+    }
+}
+
+function showErrorPopup() {
+    errorPopup2.style.display = 'block';}
+
+function closeErrorPopup() {
+    errorPopup2.style.display = 'none';}
+  </script>
