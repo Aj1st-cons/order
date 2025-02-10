@@ -420,7 +420,7 @@ function showItems(category) {
             if (!isLocationRetrieved) {
                 showErrorPopup(); // Show error popup if location is not retrieved within 10 seconds
             }
-        }, 10000); // 10,000 milliseconds = 10 seconds
+        }, 30000); // 10,000 milliseconds = 10 seconds
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -458,7 +458,7 @@ function showItems(category) {
             if (!isLocationRetrieved) {
                 showErrorPopup(); // Show error popup if location is not retrieved within 10 seconds
             }
-        }, 10000); // 10,000 milliseconds = 10 seconds
+        }, 30000); // 10,000 milliseconds = 10 seconds
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
