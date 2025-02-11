@@ -164,8 +164,9 @@ function showLocationServicesPopup() {
     popupBox.style.justifyContent = "center";
     popupBox.style.alignItems = "center";
 
+    // Error message with bold and red color
     let messageText = document.createElement("p");
-    messageText.innerHTML = "<strong>Error</strong><br><br> Unable to get your location. Please check your location services in device settings.";
+    messageText.innerHTML = "<strong style='color: red;'>Error</strong><br><br>Unable to get your location. Please check your location services in device settings.";
     
     let okButton = document.createElement("button");
     okButton.textContent = "OK";
@@ -185,7 +186,6 @@ function showLocationServicesPopup() {
     popupOverlay.appendChild(popupBox);
     document.body.appendChild(popupOverlay);
 }
-
 
 
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -366,10 +366,10 @@ function showLocationServicesPopup() {
     popupBox.style.justifyContent = "center";
     popupBox.style.alignItems = "center";
 
+    // Error message with bold and red color
     let messageText = document.createElement("p");
-    messageText.textContent =
-        "Unable to fetch your location. Please check your location services in device settings.";
-
+    messageText.innerHTML = "<strong style='color: red;'>Error</strong><br><br>Unable to get your location. Please check your location services in device settings.";
+    
     let okButton = document.createElement("button");
     okButton.textContent = "OK";
     okButton.onclick = () => {
@@ -415,4 +415,4 @@ function closeSaveLocationPopup() {
             saveLocation(savedLocation); // Set as the current active location
             closePopup();
         }
-        }
+}
