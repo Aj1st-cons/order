@@ -165,9 +165,8 @@ function showLocationServicesPopup() {
     popupBox.style.alignItems = "center";
 
     let messageText = document.createElement("p");
-    messageText.textContent =
-        "<strong>Error</strong><br><br> unable to get your location. Please check your location services in device settings.";
-
+    messageText.innerHTML = "<strong>Error</strong><br><br> Unable to get your location. Please check your location services in device settings.";
+    
     let okButton = document.createElement("button");
     okButton.textContent = "OK";
     okButton.onclick = () => {
