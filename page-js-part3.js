@@ -141,39 +141,51 @@ function showLocationServicesPopup() {
     popupOverlay.style.left = "0";
     popupOverlay.style.width = "100%";
     popupOverlay.style.height = "100%";
-    popupOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-    popupOverlay.style.zIndex = "10000";
+    popupOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
+    popupOverlay.style.zIndex = "9999";
 
     let popupBox = document.createElement("div");
     popupBox.id = "popup-box";
     popupBox.style.position = "fixed";
-    popupBox.style.top = "50%";
+    popupBox.style.top = "20%";
     popupBox.style.left = "50%";
-    popupBox.style.transform = "translate(-50%, -50%)";
-    popupBox.style.padding = "20px";
-    popupBox.style.backgroundColor = "#fff";
-    popupBox.style.color = "#000";
+    popupBox.style.transform = "translateX(-50%)";
+    popupBox.style.width = "200px";
+    popupBox.style.height = "250px";
+    popupBox.style.backgroundColor = "white";
+    popupBox.style.border = "2px solid #009500";
     popupBox.style.borderRadius = "5px";
+    popupBox.style.boxShadow = "0 0 30px 30px rgba(0, 0, 0, 0.3)";
+    popupBox.style.padding = "10px";
+    popupBox.style.boxSizing = "border-box";
     popupBox.style.textAlign = "center";
+    popupBox.style.display = "flex";
+    popupBox.style.flexDirection = "column";
+    popupBox.style.justifyContent = "center";
+    popupBox.style.alignItems = "center";
 
     let messageText = document.createElement("p");
     messageText.textContent =
         "Unable to fetch your location. Please check your location services in device settings.";
 
-    // OK Button
     let okButton = document.createElement("button");
     okButton.textContent = "OK";
     okButton.onclick = () => {
         popupOverlay.remove();
     };
-    okButton.style.marginTop = "10px";
+    okButton.style.marginTop = "15px";
+    okButton.style.padding = "5px 15px";
+    okButton.style.border = "none";
+    okButton.style.backgroundColor = "#009500";
+    okButton.style.color = "white";
+    okButton.style.borderRadius = "3px";
+    okButton.style.cursor = "pointer";
 
     popupBox.appendChild(messageText);
     popupBox.appendChild(okButton);
     popupOverlay.appendChild(popupBox);
     document.body.appendChild(popupOverlay);
-}    
-
+}
 
 
 
@@ -404,4 +416,4 @@ function closeSaveLocationPopup() {
             saveLocation(savedLocation); // Set as the current active location
             closePopup();
         }
-                    }
+        }
