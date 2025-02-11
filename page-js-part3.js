@@ -166,7 +166,7 @@ function showLocationServicesPopup() {
 
     let messageText = document.createElement("p");
     messageText.textContent =
-        "Unable to fetch your location. Please check your location services in device settings.";
+        "<strong>Error</strong><br><br> unable to get your location. Please check your location services in device settings.";
 
     let okButton = document.createElement("button");
     okButton.textContent = "OK";
