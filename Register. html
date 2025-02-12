@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration of Sellers</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+}
+input {
+    display: block;
+    margin: 10px auto;
+    width: 90%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Slightly rounded corners */
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+#location-btn {
+    background: #009500;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px 15px; /* Matches input padding */
+    height: 42px; /* Ensure it matches input height */
+    display: flex;
+    align-items: center; /* Centers text vertically */
+    justify-content: center; /* Centers text horizontally */
+    border-radius: 5px; /* Slightly rounded corners */
+    white-space: nowrap;
+    margin-left: 10px; /* Space between input and button */
+}
+
+button {
+    background: #009500;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px 20px; /* Adjusts button size to fit text */
+    border-radius: 20px; /* Rounded corners */
+    white-space: nowrap;
+    width: auto; /* Adjust width to fit text */
+    display: block;
+    margin: 10px auto; /* Centers the button */
+    font-size: 16px;
+}
+
+.error-popup {
+    display: none;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 2px solid red;
+    text-align: center;
+    width: 80%; /* Ensure it doesn't overflow */
+    max-width: 350px; /* Limit size on large screens */
+}
+
+h1 {
+    color: red;
+    font-weight: bold;
+    font-size: 16px;
+}
+#countdown {
+    color: #009500;
+    font-weight: bold;
+    margin-top: 10px; /* Adds space between countdown and other elements */
+}
+    </style>
+</head>
+<body>
+
+    <h2>Vendor Registration</h2>
+    
+    <input type="text" id="first-name" placeholder="First Name">
+    <input type="text" id="last-name" placeholder="Last Name">
+    <input type="text" id="business-name" placeholder="Business Name">
+    <input type="text" id="shop" placeholder="Shop Name">
+    <input type="text" id="address" placeholder="Shop Address">
+    
+    <div style="display: flex;">
+        <input type="text" id="coordinates" placeholder="Shop Location Coordinates" readonly style="flex: 1;">
+        <button id="location-btn" onclick="getLocation()">Get Location</button>
+    </div>
+    
+    <p id="countdown"></p>
+    
+    <input type="email" id="email" placeholder="Email">
+    <input type="text" id="contact" placeholder="Contact Number">
+    <input type="text" id="referral-code" placeholder="Referral Code">
+    
+    <button id="submit-btn" onclick="submitForm()">Submit</button>
+
+    <div id="error-popup" class="error-popup">
+        <h1>Location Not Received</h1>
+        <p>Please make sure location services are <b>ON</b> and try again.</p>
+        <button onclick="closePopup()">OK</button>
+    </div>
+
+<script>
+    let approvedCodes = {
+        "WDTY53": "ajanth988@gmail.com",
+        "GTS23D": "the.ajanth@gmail.com"
+    };
+
+    function getLocation() {
+        let countdown = 30;
+        let countdownText = document.getElementById("countdown");
+        countdownText.textContent = `Receiving location... (${countdown}s)`;
+
+        let timer = setInterval(() => {
+            countdown--;
+            countdownText.textContent = `Receiving location... (${countdown}s)`;
+            if (countdown === 0) {
+                clearInterval(timer);
+                countdownText.textContent = "";
+                document.getElementById("error-popup").style.display = "block";
+            }
+        }, 1000);
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                clearInterval(timer);
+                countdownText.textContent = "";
+                let lat = position.coords.latitude.toFixed(5);
+                let lng = position.coords.longitude.toFixed(5);
+                let businessName = document.getElementById("business-name").value.trim();
+                document.getElementById("coordinates").value = `"${businessName}": { lat: ${lat}, lng: ${lng} }`;
+            },
+            () => {
+                clearInterval(timer);
+                countdownText.textContent = "";
+                document.getElementById("error-popup").style.display = "block";
+            },
+            { timeout: 30000 }
+        );
+    }
+
+    function closePopup() {
+        document.getElementById("error-popup").style.display = "none";
+    }
+
+    function submitForm() {
+        let firstName = document.getElementById("first-name").value.trim();
+        let lastName = document.getElementById("last-name").value.trim();
+        let businessName = document.getElementById("business-name").value.trim();
+        let address = document.getElementById("address").value.trim();
+        let coordinates = document.getElementById("coordinates").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let contact = document.getElementById("contact").value.trim();
+        let referralCode = document.getElementById("referral-code").value.trim();
+
+        if (!approvedCodes[referralCode]) {
+            let errorPopup = document.createElement("div");
+            errorPopup.style.cssText = "position:fixed;top:40%;left:50%;transform:translate(-50%, -50%);background:white;padding:20px;border:2px solid red;text-align:center;";
+            errorPopup.innerHTML = `<h1>Code Not Matched</h1>`;
+            document.body.appendChild(errorPopup);
+            setTimeout(() => { document.body.removeChild(errorPopup); }, 3000);
+            return;
+        }
+
+        if (businessName === "" || coordinates === "") {
+            alert("Please enter all required fields.");
+            return;
+        }
+
+        // Construct the email content without headings
+        let emailBody = `
+${firstName}
+${lastName}
+${businessName}  <!-- Now labeled as Shop/Business Name -->
+${address}
+${coordinates}
+${email}
+${contact}
+${referralCode}
+        `;
+
+        let adminEmail = "admin@aj1st.com";
+        let referrerEmail = approvedCodes[referralCode];
+
+        let mailtoLink = `mailto:${adminEmail},${referrerEmail}?subject=New Vendor Registration&body=${encodeURIComponent(emailBody)}`;
+        window.location.href = mailtoLink;
+    }
+</script>
+    
+</body>
+</html>
