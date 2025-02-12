@@ -136,7 +136,7 @@ h1 {
                 countdownText.textContent = "";
                 let lat = position.coords.latitude.toFixed(5);
                 let lng = position.coords.longitude.toFixed(5);
-                document.getElementById("coordinates").value = `{ lat: ${lat}, lng: ${lng} }`;
+                document.getElementById("coordinates").value = `"""${document.getElementById("business-name").value}""": { lat: ${lat}, lng: ${lng} }`;
             },
             () => {
                 clearInterval(timer);
@@ -152,9 +152,14 @@ h1 {
     }
 
     function submitForm() {
+        let firstName = document.getElementById("first-name").value.trim();
+        let lastName = document.getElementById("last-name").value.trim();
         let businessName = document.getElementById("business-name").value.trim();
+        let shop = document.getElementById("shop").value.trim();
+        let address = document.getElementById("address").value.trim();
         let coordinates = document.getElementById("coordinates").value.trim();
         let email = document.getElementById("email").value.trim();
+        let contact = document.getElementById("contact").value.trim();
         let referralCode = document.getElementById("referral-code").value.trim();
 
         if (!approvedCodes[referralCode]) {
@@ -171,19 +176,8 @@ h1 {
             return;
         }
 
-        let formattedCoordinates = `"${businessName}": ${coordinates}`;
-
-        let emailBody = `
-            Vendor Details:\n
-            Name: ${document.getElementById("first-name").value} ${document.getElementById("last-name").value}\n
-            Business: ${businessName}\n
-            Shop: ${document.getElementById("shop").value}\n
-            Address: ${document.getElementById("address").value}\n
-            Coordinates: ${formattedCoordinates}\n
-            Email: ${email}\n
-            Contact: ${document.getElementById("contact").value}\n
-            Referral Code: ${referralCode}
-        `;
+        // Construct the email content as a table row
+        let emailBody = `${firstName}\t${lastName}\t${businessName}\t${shop}\t${address}\t${coordinates}\t${email}\t${contact}\t${referralCode}`;
 
         let adminEmail = "admin@aj1st.com";
         let referrerEmail = approvedCodes[referralCode];
@@ -191,6 +185,6 @@ h1 {
         let mailtoLink = `mailto:${adminEmail},${referrerEmail}?subject=New Vendor Registration&body=${encodeURIComponent(emailBody)}`;
         window.location.href = mailtoLink;
     }
-</script>
+    </script>
 </body>
 </html>
