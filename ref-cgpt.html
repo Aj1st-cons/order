@@ -136,7 +136,8 @@ h1 {
                 countdownText.textContent = "";
                 let lat = position.coords.latitude.toFixed(5);
                 let lng = position.coords.longitude.toFixed(5);
-                document.getElementById("coordinates").value = `"""${document.getElementById("business-name").value}""": { lat: ${lat}, lng: ${lng} }`;
+                let businessName = document.getElementById("business-name").value.trim();
+                document.getElementById("coordinates").value = `"${businessName}": { lat: ${lat}, lng: ${lng} }`;
             },
             () => {
                 clearInterval(timer);
@@ -155,7 +156,6 @@ h1 {
         let firstName = document.getElementById("first-name").value.trim();
         let lastName = document.getElementById("last-name").value.trim();
         let businessName = document.getElementById("business-name").value.trim();
-        let shop = document.getElementById("shop").value.trim();
         let address = document.getElementById("address").value.trim();
         let coordinates = document.getElementById("coordinates").value.trim();
         let email = document.getElementById("email").value.trim();
@@ -176,25 +176,16 @@ h1 {
             return;
         }
 
-        // Construct the email content as an HTML table row (without headings)
+        // Construct the email content without headings
         let emailBody = `
-            <html>
-                <body>
-                    <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
-                        <tr>
-                            <td>${firstName}</td>
-                            <td>${lastName}</td>
-                            <td>${businessName}</td>
-                            <td>${shop}</td>
-                            <td>${address}</td>
-                            <td>${coordinates}</td>
-                            <td>${email}</td>
-                            <td>${contact}</td>
-                            <td>${referralCode}</td>
-                        </tr>
-                    </table>
-                </body>
-            </html>
+${firstName}
+${lastName}
+${businessName}
+${address}
+${coordinates}
+${email}
+${contact}
+${referralCode}
         `;
 
         let adminEmail = "admin@aj1st.com";
@@ -204,7 +195,6 @@ h1 {
         window.location.href = mailtoLink;
     }
 </script>
-
     
 </body>
 </html>
