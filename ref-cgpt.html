@@ -110,82 +110,87 @@ h1 {
     </div>
 
     <script>
-        let approvedCodes = {
-            "WDTY53": "ajanth988@gmail.com",
-            "GTS23D": "the.ajanth@gmail.com"
-        };
+    let approvedCodes = {
+        "WDTY53": "ajanth988@gmail.com",
+        "GTS23D": "the.ajanth@gmail.com"
+    };
 
-        function getLocation() {
-            let countdown = 30;
-            let countdownText = document.getElementById("countdown");
+    function getLocation() {
+        let countdown = 30;
+        let countdownText = document.getElementById("countdown");
+        countdownText.textContent = `Receiving location... (${countdown}s)`;
+
+        let timer = setInterval(() => {
+            countdown--;
             countdownText.textContent = `Receiving location... (${countdown}s)`;
-
-            let timer = setInterval(() => {
-                countdown--;
-                countdownText.textContent = `Receiving location... (${countdown}s)`;
-                if (countdown === 0) {
-                    clearInterval(timer);
-                    countdownText.textContent = "";
-                    document.getElementById("error-popup").style.display = "block";
-                }
-            }, 1000);
-
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    clearInterval(timer);
-                    countdownText.textContent = "";
-                    document.getElementById("coordinates").value = 
-                        `{ lat: ${position.coords.latitude}, lng: ${position.coords.longitude} }`;
-                },
-                () => {
-                    clearInterval(timer);
-                    countdownText.textContent = "";
-                    document.getElementById("error-popup").style.display = "block";
-                },
-                { timeout: 30000 }
-            );
-        }
-
-        function closePopup() {
-            document.getElementById("error-popup").style.display = "none";
-        }
-
-        function submitForm() {
-            let businessName = document.getElementById("business-name").value.trim();
-            let coordinates = document.getElementById("coordinates").value.trim();
-            let email = document.getElementById("email").value.trim();
-            let referralCode = document.getElementById("referral-code").value.trim();
-
-            if (!approvedCodes[referralCode]) {
-                let errorPopup = document.createElement("div");
-                errorPopup.style.cssText = "position:fixed;top:40%;left:50%;transform:translate(-50%, -50%);background:white;padding:20px;border:2px solid red;text-align:center;";
-                errorPopup.innerHTML = `<h1>Code Not Matched</h1>`;
-                document.body.appendChild(errorPopup);
-                setTimeout(() => { document.body.removeChild(errorPopup); }, 3000);
-                return;
+            if (countdown === 0) {
+                clearInterval(timer);
+                countdownText.textContent = "";
+                document.getElementById("error-popup").style.display = "block";
             }
+        }, 1000);
 
-            let tableRow = `"${businessName}": ${coordinates}`;
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                clearInterval(timer);
+                countdownText.textContent = "";
+                let lat = position.coords.latitude.toFixed(5);
+                let lng = position.coords.longitude.toFixed(5);
+                document.getElementById("coordinates").value = `{ lat: ${lat}, lng: ${lng} }`;
+            },
+            () => {
+                clearInterval(timer);
+                countdownText.textContent = "";
+                document.getElementById("error-popup").style.display = "block";
+            },
+            { timeout: 30000 }
+        );
+    }
 
-            let emailBody = `
-                Vendor Details:\n
-                Name: ${document.getElementById("first-name").value} ${document.getElementById("last-name").value}\n
-                Business: ${businessName}\n
-                Shop: ${document.getElementById("shop").value}\n
-                Address: ${document.getElementById("address").value}\n
-                Coordinates: ${coordinates}\n
-                Email: ${email}\n
-                Contact: ${document.getElementById("contact").value}\n
-                Referral Code: ${referralCode}
-            `;
+    function closePopup() {
+        document.getElementById("error-popup").style.display = "none";
+    }
 
-            let adminEmail = "admin@aj1st.com";
-            let referrerEmail = approvedCodes[referralCode];
+    function submitForm() {
+        let businessName = document.getElementById("business-name").value.trim();
+        let coordinates = document.getElementById("coordinates").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let referralCode = document.getElementById("referral-code").value.trim();
 
-            let mailtoLink = `mailto:${adminEmail},${referrerEmail}?subject=New Vendor Registration&body=${encodeURIComponent(emailBody)}`;
-            window.location.href = mailtoLink;
+        if (!approvedCodes[referralCode]) {
+            let errorPopup = document.createElement("div");
+            errorPopup.style.cssText = "position:fixed;top:40%;left:50%;transform:translate(-50%, -50%);background:white;padding:20px;border:2px solid red;text-align:center;";
+            errorPopup.innerHTML = `<h1>Code Not Matched</h1>`;
+            document.body.appendChild(errorPopup);
+            setTimeout(() => { document.body.removeChild(errorPopup); }, 3000);
+            return;
         }
-    </script>
 
+        if (businessName === "" || coordinates === "") {
+            alert("Please enter all required fields.");
+            return;
+        }
+
+        let formattedCoordinates = `"${businessName}": ${coordinates}`;
+
+        let emailBody = `
+            Vendor Details:\n
+            Name: ${document.getElementById("first-name").value} ${document.getElementById("last-name").value}\n
+            Business: ${businessName}\n
+            Shop: ${document.getElementById("shop").value}\n
+            Address: ${document.getElementById("address").value}\n
+            Coordinates: ${formattedCoordinates}\n
+            Email: ${email}\n
+            Contact: ${document.getElementById("contact").value}\n
+            Referral Code: ${referralCode}
+        `;
+
+        let adminEmail = "admin@aj1st.com";
+        let referrerEmail = approvedCodes[referralCode];
+
+        let mailtoLink = `mailto:${adminEmail},${referrerEmail}?subject=New Vendor Registration&body=${encodeURIComponent(emailBody)}`;
+        window.location.href = mailtoLink;
+    }
+</script>
 </body>
 </html>
