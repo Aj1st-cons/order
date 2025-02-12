@@ -109,7 +109,7 @@ h1 {
         <button onclick="closePopup()">OK</button>
     </div>
 
-    <script>
+<script>
     let approvedCodes = {
         "WDTY53": "ajanth988@gmail.com",
         "GTS23D": "the.ajanth@gmail.com"
@@ -176,8 +176,26 @@ h1 {
             return;
         }
 
-        // Construct the email content as a table row
-        let emailBody = `${firstName}\t${lastName}\t${businessName}\t${shop}\t${address}\t${coordinates}\t${email}\t${contact}\t${referralCode}`;
+        // Construct the email content as an HTML table row (without headings)
+        let emailBody = `
+            <html>
+                <body>
+                    <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                        <tr>
+                            <td>${firstName}</td>
+                            <td>${lastName}</td>
+                            <td>${businessName}</td>
+                            <td>${shop}</td>
+                            <td>${address}</td>
+                            <td>${coordinates}</td>
+                            <td>${email}</td>
+                            <td>${contact}</td>
+                            <td>${referralCode}</td>
+                        </tr>
+                    </table>
+                </body>
+            </html>
+        `;
 
         let adminEmail = "admin@aj1st.com";
         let referrerEmail = approvedCodes[referralCode];
@@ -185,6 +203,8 @@ h1 {
         let mailtoLink = `mailto:${adminEmail},${referrerEmail}?subject=New Vendor Registration&body=${encodeURIComponent(emailBody)}`;
         window.location.href = mailtoLink;
     }
-    </script>
+</script>
+
+    
 </body>
 </html>
