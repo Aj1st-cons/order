@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration of Sellers</title>
+    <title>Vendor Registration</title>
     <style>
         body {
     font-family: Arial, sans-serif;
@@ -11,6 +11,7 @@
     margin: auto;
     padding: 20px;
 }
+
 input {
     display: block;
     margin: 10px auto;
@@ -85,9 +86,8 @@ h1 {
     
     <input type="text" id="first-name" placeholder="First Name">
     <input type="text" id="last-name" placeholder="Last Name">
-    <input type="text" id="business-name" placeholder="Business Name">
-    <input type="text" id="shop" placeholder="Shop Name">
-    <input type="text" id="address" placeholder="Shop Address">
+    <input type="text" id="business-name" placeholder="Shop/ Business Name">
+    <input type="text" id="shop"  placeholder="Shop Address">
     
     <div style="display: flex;">
         <input type="text" id="coordinates" placeholder="Shop Location Coordinates" readonly style="flex: 1;">
@@ -108,7 +108,7 @@ h1 {
         <button onclick="closePopup()">OK</button>
     </div>
 
-<script>
+    <script>
     let approvedCodes = {
         "WDTY53": "ajanth988@gmail.com",
         "GTS23D": "the.ajanth@gmail.com"
@@ -179,7 +179,7 @@ h1 {
         let emailBody = `
 ${firstName}
 ${lastName}
-${businessName}  <!-- Now labeled as Shop/Business Name -->
+${businessName}
 ${address}
 ${coordinates}
 ${email}
@@ -194,6 +194,5 @@ ${referralCode}
         window.location.href = mailtoLink;
     }
 </script>
-    
 </body>
 </html>
