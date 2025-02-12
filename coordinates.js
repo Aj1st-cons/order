@@ -55,6 +55,6 @@ let vendors = {
 "ND": { lat: 26.125, lng: 56.126 },
 "GF": { lat: 25.225, lng: 55.226 },
 "C": { lat: 26.125, lng: 56.126 }, 
-"Colobiano Cofee House": { lat: 24.391555, lng: 54.578581 },    
+"Colombiano Cofee House": { lat: 24.391548, lng: 54.578581 },    
 "D": { lat: 27.125, lng: 57.126 }
 };
