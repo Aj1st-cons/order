@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Store the timestamp
             localStorage.setItem("welcomeLastShown", now);
-        }, 3000); // Show welcome screen for 1 seconds
+        }, 5000); // Show welcome screen for 1 seconds
     } else {
         // Hide welcome screen immediately if within 10 minutes
         welcomeScreen.style.display = "none";
