@@ -209,6 +209,8 @@ body {
             display: flex;
             align-items: center;
             justify-content: center;
+            -webkit-tap-highlight-color: transparent; 
+    outline: none; 
         }
         .footer-btn i {
             font-size: 28px;
