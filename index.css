@@ -212,6 +212,10 @@ body {
             -webkit-tap-highlight-color: transparent; 
     outline: none; 
         }
+
+        .footer-btn:focus {
+    outline: none;
+        }
         .footer-btn i {
             font-size: 28px;
         }
