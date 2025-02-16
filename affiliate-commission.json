@@ -1,6 +1,7 @@
 [
   {
     "REF-CODE ": "",
+    "Affiliate's  email": "",
     "vendor ": "",
     "address": "",
     "corrdinates": "",
@@ -13,7 +14,8 @@
     "balance affiliate's commission ": ""
   },
   {
-    "REF-CODE ": "DFR856",
+    "REF-CODE ": "123456",
+    "Affiliate's  email": "ajanth988@gmail.com",
     "vendor ": "vendor 1",
     "address": "Shop no 12, B Block, Al Nadah, Sharjah",
     "corrdinates": "24.39360, 54.58439",
@@ -26,7 +28,8 @@
     "balance affiliate's commission ": 9
   },
   {
-    "REF-CODE ": "DFR858",
+    "REF-CODE ": "ABC123",
+    "Affiliate's  email": "ajanth@gmail.com",
     "vendor ": "vendor 1",
     "address": "Shop no 12, B Block, Al Nadah, Sharjah",
     "corrdinates": "24.39360, 54.58439",
@@ -40,6 +43,7 @@
   },
   {
     "REF-CODE ": "DFF856",
+    "Affiliate's  email": "the.ajanth@gmail.com",
     "vendor ": "vendor 1",
     "address": "Shop no 12, B Block, Al Nadah, Sharjah",
     "corrdinates": "24.39360, 54.58439",
@@ -50,96 +54,5 @@
     "Total affiliate's commission ": 32.699999999999996,
     "payable affiliate's commission ": 29.7,
     "balance affiliate's commission ": 3
-  },
-  {
-    "REF-CODE ": "",
-    "vendor ": "",
-    "address": "",
-    "corrdinates": "",
-    "contact No.": "",
-    "total sales": "",
-    "paid for sales": "",
-    "balance to be paid": "",
-    "Total affiliate's commission ": "",
-    "payable affiliate's commission ": "",
-    "balance affiliate's commission ": ""
-  },
-  {
-    "REF-CODE ": "",
-    "vendor ": "",
-    "address": "",
-    "corrdinates": "",
-    "contact No.": "",
-    "total sales": "",
-    "paid for sales": "",
-    "balance to be paid": "",
-    "Total affiliate's commission ": "",
-    "payable affiliate's commission ": "",
-    "balance affiliate's commission ": ""
-  },
-  {
-    "REF-CODE ": "",
-    "vendor ": "",
-    "address": "",
-    "corrdinates": "",
-    "contact No.": "",
-    "total sales": "",
-    "paid for sales": "",
-    "balance to be paid": "",
-    "Total affiliate's commission ": "",
-    "payable affiliate's commission ": "",
-    "balance affiliate's commission ": ""
-  },
-  {
-    "REF-CODE ": "",
-    "vendor ": "",
-    "address": "",
-    "corrdinates": "",
-    "contact No.": "",
-    "total sales": "",
-    "paid for sales": "",
-    "balance to be paid": "",
-    "Total affiliate's commission ": "",
-    "payable affiliate's commission ": "",
-    "balance affiliate's commission ": ""
-  },
-  {
-    "REF-CODE ": "",
-    "vendor ": "",
-    "address": "",
-    "corrdinates": "",
-    "contact No.": "",
-    "total sales": "",
-    "paid for sales": "",
-    "balance to be paid": "",
-    "Total affiliate's commission ": "",
-    "payable affiliate's commission ": "",
-    "balance affiliate's commission ": ""
-  },
-  {
-    "REF-CODE ": "",
-    "vendor ": "",
-    "address": "",
-    "corrdinates": "",
-    "contact No.": "",
-    "total sales": "",
-    "paid for sales": "",
-    "balance to be paid": "",
-    "Total affiliate's commission ": "",
-    "payable affiliate's commission ": "",
-    "balance affiliate's commission ": ""
-  },
-  {
-    "REF-CODE ": "",
-    "vendor ": "",
-    "address": "",
-    "corrdinates": "",
-    "contact No.": "",
-    "total sales": "",
-    "paid for sales": "",
-    "balance to be paid": "",
-    "Total affiliate's commission ": "",
-    "payable affiliate's commission ": "",
-    "balance affiliate's commission ": ""
   }
 ]
