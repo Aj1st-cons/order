@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affiliate Commission Table</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,9 +28,9 @@
             font-weight: bold;
             padding: 10px;
             text-align: center;
-            min-width: 10ch; /* Ensures a minimum width of 10 letters */
-            word-wrap: break-word; /* Allows wrapping */
-            white-space: normal; /* Enables text wrapping */
+            min-width: 10ch;
+            word-wrap: break-word;
+            white-space: normal;
         }
         .affiliate-table td {
             padding: 10px;
@@ -56,13 +57,67 @@
             color: red;
             font-size: 14px;
             margin-top: 5px;
-            text-align: center; /* Center the error text */
-            display: none; /* Hidden by default */
+            text-align: center;
+            display: none;
+        }
+        .register-text {
+            text-align: center;
+            color: #666;
+            margin-top: 10px;
+        }
+        .register-link {
+            color: #009500;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .ref-code-box {
+            background-color: white;
+            border: 2px solid #009500;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-style: italic;
+            color: #009500;
+            margin: 20px 0;
+        }
+        .copy-button {
+            background-color: #009500;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
-
     <h2>Affiliate Commission Rates</h2>
 
     <!-- Input fields for Refcode and Email -->
@@ -74,7 +129,13 @@
 
     <!-- Login Button -->
     <button class="login-button" id="loginButton">Login</button>
-    
+
+    <!-- Register Text and Link -->
+    <div class="register-text">
+        If not registered, <span class="register-link" id="registerLink">Create Account</span>
+    </div>
+
+    <!-- Table Container -->
     <div class="affiliate-table-container" id="tableContainer">
         <table class="affiliate-table">
             <thead>
@@ -84,12 +145,71 @@
         </table>
     </div>
 
+    <!-- Registration Modal -->
+    <div class="modal" id="registrationModal">
+        <div class="modal-content">
+            <span class="close-button" id="closeRegistrationModal"><i class="fas fa-times"></i></span>
+            <h3>Create Account</h3>
+            <input class="input-field" type="text" id="name" placeholder="Enter Name">
+            <div id="name-error" class="error-text">Name is required</div>
+
+            <input class="input-field" type="email" id="newEmail" placeholder="Enter Email">
+            <div id="new-email-error" class="error-text">Invalid Email</div>
+
+            <select class="input-field" id="socialMedia" multiple>
+                <option value="TikTok">TikTok</option>
+                <option value="Instagram">Instagram</option>
+                <option value="YouTube">YouTube</option>
+                <option value="Blog">Blog</option>
+                <option value="Website">Website</option>
+                <option value="Facebook">Facebook</option>
+                <option value="Twitter">Twitter</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Pinterest">Pinterest</option>
+                <option value="Snapchat">Snapchat</option>
+            </select>
+            <div id="social-media-error" class="error-text">Select at least one platform</div>
+
+            <input class="input-field" type="text" id="platformId" placeholder="Enter Platform ID">
+            <div id="platform-id-error" class="error-text">Platform ID is required</div>
+
+            <input class="input-field" type="number" id="contactNumber" placeholder="Enter Contact Number">
+            <div id="contact-number-error" class="error-text">Invalid Contact Number</div>
+
+            <button class="login-button" id="createAccountButton">Create</button>
+        </div>
+    </div>
+
+    <!-- Ref-Code Modal -->
+    <div class="modal" id="refCodeModal">
+        <div class="modal-content">
+            <span class="close-button" id="closeRefCodeModal"><i class="fas fa-times"></i></span>
+            <h3>Your Ref-Code</h3>
+            <div class="ref-code-box" id="refCodeDisplay"></div>
+            <button class="copy-button" id="copyRefCodeButton">Copy</button>
+            <p>Your Ref-Code will be active for vendors after 24 hours.</p>
+            <button class="login-button" id="loginAfterRegistration">Login</button>
+        </div>
+    </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Attach event listener to the login button
-            document.getElementById("loginButton").addEventListener("click", function () {
-                const refcode = document.getElementById("refcode").value;
-                const email = document.getElementById("email").value;
+            const refcodeInput = document.getElementById("refcode");
+            const emailInput = document.getElementById("email");
+            const loginButton = document.getElementById("loginButton");
+            const registerLink = document.getElementById("registerLink");
+            const registrationModal = document.getElementById("registrationModal");
+            const closeRegistrationModal = document.getElementById("closeRegistrationModal");
+            const createAccountButton = document.getElementById("createAccountButton");
+            const refCodeModal = document.getElementById("refCodeModal");
+            const closeRefCodeModal = document.getElementById("closeRefCodeModal");
+            const copyRefCodeButton = document.getElementById("copyRefCodeButton");
+            const loginAfterRegistration = document.getElementById("loginAfterRegistration");
+
+            // Login Button Event Listener
+            loginButton.addEventListener("click", function () {
+                const refcode = refcodeInput.value;
+                const email = emailInput.value;
 
                 // Hide error messages
                 document.getElementById("refcode-error").style.display = "none";
@@ -100,16 +220,110 @@
                 }
             });
 
+            // Register Link Event Listener
+            registerLink.addEventListener("click", function () {
+                registrationModal.style.display = "flex";
+            });
+
+            // Close Registration Modal
+            closeRegistrationModal.addEventListener("click", function () {
+                registrationModal.style.display = "none";
+            });
+
+            // Close Ref-Code Modal
+            closeRefCodeModal.addEventListener("click", function () {
+                refCodeModal.style.display = "none";
+            });
+
+            // Create Account Button Event Listener
+            createAccountButton.addEventListener("click", function () {
+                const name = document.getElementById("name").value;
+                const newEmail = document.getElementById("newEmail").value;
+                const socialMedia = document.getElementById("socialMedia").selectedOptions;
+                const platformId = document.getElementById("platformId").value;
+                const contactNumber = document.getElementById("contactNumber").value;
+
+                // Validate Inputs
+                let isValid = true;
+                if (!name) {
+                    document.getElementById("name-error").style.display = "block";
+                    isValid = false;
+                } else {
+                    document.getElementById("name-error").style.display = "none";
+                }
+
+                if (!newEmail || !validateEmail(newEmail)) {
+                    document.getElementById("new-email-error").style.display = "block";
+                    isValid = false;
+                } else {
+                    document.getElementById("new-email-error").style.display = "none";
+                }
+
+                if (socialMedia.length === 0) {
+                    document.getElementById("social-media-error").style.display = "block";
+                    isValid = false;
+                } else {
+                    document.getElementById("social-media-error").style.display = "none";
+                }
+
+                if (!platformId) {
+                    document.getElementById("platform-id-error").style.display = "block";
+                    isValid = false;
+                } else {
+                    document.getElementById("platform-id-error").style.display = "none";
+                }
+
+                if (!contactNumber || isNaN(contactNumber)) {
+                    document.getElementById("contact-number-error").style.display = "block";
+                    isValid = false;
+                } else {
+                    document.getElementById("contact-number-error").style.display = "none";
+                }
+
+                if (isValid) {
+                    // Generate Ref-Code
+                    const refCode = generateRefCode();
+                    document.getElementById("refCodeDisplay").textContent = refCode;
+
+                    // Show Ref-Code Modal
+                    registrationModal.style.display = "none";
+                    refCodeModal.style.display = "flex";
+
+                    // Save to Local Storage
+                    localStorage.setItem(refCode, newEmail);
+
+                    // Send Email to Admin
+                    setTimeout(() => {
+                        const emailBody = `Name: ${name}\nEmail: ${newEmail}\nSocial Media: ${Array.from(socialMedia).map(opt => opt.value).join(", ")}\nPlatform ID: ${platformId}\nContact Number: ${contactNumber}\nRef-Code: ${refCode}`;
+                        window.location.href = `mailto:admin@aj1st.com?subject=New Registration&body=${encodeURIComponent(emailBody)}`;
+                    }, 1000);
+                }
+            });
+
+            // Copy Ref-Code Button Event Listener
+            copyRefCodeButton.addEventListener("click", function () {
+                const refCode = document.getElementById("refCodeDisplay").textContent;
+                navigator.clipboard.writeText(refCode);
+            });
+
+            // Login After Registration Button Event Listener
+            loginAfterRegistration.addEventListener("click", function () {
+                refCodeModal.style.display = "none";
+                refcodeInput.value = document.getElementById("refCodeDisplay").textContent;
+                emailInput.value = document.getElementById("newEmail").value;
+            });
+
             function showTable(refcode, email) {
                 fetch("https://order-1ib.pages.dev/affiliate-commission.json")
                     .then(response => response.json())
                     .then(data => {
                         if (checkCredentials(data, refcode, email)) {
                             // Hide the login form (inputs and button)
-                            document.getElementById("refcode").style.display = "none";
-                            document.getElementById("email").style.display = "none";
-                            document.getElementById("loginButton").style.display = "none";
-                            
+                            refcodeInput.style.display = "none";
+                            emailInput.style.display = "none";
+                            loginButton.style.display = "none";
+                            document.querySelector(".register-text").style.display = "none";
+
                             // Show the table
                             createAffiliateTable(data);
                             document.getElementById("tableContainer").style.display = "block";
@@ -121,8 +335,13 @@
             }
 
             function checkCredentials(data, refcode, email) {
-                // Check if any row's first and second column matches the Refcode and Email
-                return data.some(row => row[Object.keys(row)[0]] === refcode && row[Object.keys(row)[1]] === email);
+                // Check JSON first
+                const isJsonMatch = data.some(row => row[Object.keys(row)[0]] === refcode && row[Object.keys(row)[1]] === email);
+                if (isJsonMatch) return true;
+
+                // Check Local Storage
+                const storedEmail = localStorage.getItem(refcode);
+                return storedEmail === email;
             }
 
             function handleError(refcode, email) {
@@ -142,12 +361,12 @@
 
             function checkRefcode(refcode) {
                 // Replace with your refcode validation logic
-                return refcode === "DSR323" || refcode === "GHF437" || refcode === "HUO820";
+                return refcode === "DSR323" || refcode === "GHF437" || refcode === "HUO820" || localStorage.getItem(refcode);
             }
 
             function checkEmail(email) {
                 // Replace with your email validation logic
-                return email === "ajanth988@gmail.com" || email === "the.ajanth@gmail.com" || email === "ajanth.official@Gmail.com";
+                return email === "ajanth988@gmail.com" || email === "the.ajanth@gmail.com" || email === "ajanth.official@Gmail.com" || Object.values(localStorage).includes(email);
             }
 
             function createAffiliateTable(data) {
@@ -181,8 +400,157 @@
                     tableBody.appendChild(tr);
                 });
             }
+
+            function generateRefCode() {
+                const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const numbers = "0123456789";
+                let refCode = "";
+
+                // Generate 3 random letters
+                for (let i = 0; i < 3; i++) {
+                    refCode += letters[Math.floor(Math.random() * letters.length)];
+                }
+
+                // Generate 3 unique random numbers
+                const usedNumbers = new Set();
+                while (usedNumbers.size < 3) {
+                    const num = numbers[Math.floor(Math.random() * numbers.length)];
+                    usedNumbers.add(num);
+                }
+                refCode += Array.from(usedNumbers).join("");
+
+                return refCode;
+            }
+
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
         });
     </script>
+    <script>
+         document.addEventListener("DOMContentLoaded", function () {
+    // Function to create and display the affiliate table
+    function createAffiliateTable(data, refcode) {
+        if (!data || data.length === 0) {
+            console.error("No data found in JSON");
+            return;
+        }
 
+        let tableHead = document.getElementById("table-head");
+        let tableBody = document.getElementById("table-body");
+
+        // Clear previous table content
+        tableHead.innerHTML = "";
+        tableBody.innerHTML = "";
+
+        // Extract column names from the first object
+        let columns = Object.keys(data[0]);
+        columns.forEach(column => {
+            let th = document.createElement("th");
+            th.textContent = column.replace(/_/g, " ").toUpperCase().trim(); // Format column names
+            tableHead.appendChild(th);
+        });
+
+        // Filter data based on refcode (trim keys to handle extra spaces)
+        const filteredData = data.filter(row => row["REF-CODE "]?.trim() === refcode.trim());
+
+        // Populate table rows
+        if (filteredData.length > 0) {
+            filteredData.forEach(row => {
+                let tr = document.createElement("tr");
+                columns.forEach(column => {
+                    let td = document.createElement("td");
+                    td.textContent = row[column] || ""; // Handle empty values gracefully
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        } else {
+            // Show "vendors not registered yet" message if no rows match
+            let tr = document.createElement("tr");
+            let td = document.createElement("td");
+            td.colSpan = columns.length; // Span across all columns
+            td.style.fontStyle = "italic";
+            td.style.color = "#009500";
+            td.style.textAlign = "center";
+            td.textContent = "Vendors not registered yet";
+            tr.appendChild(td);
+            tableBody.appendChild(tr);
+        }
+    }
+
+    // Function to show the affiliate table after filtering
+    function showTable(refcode, email) {
+        fetch("https://order-1ib.pages.dev/affiliate-commission.json")
+            .then(response => response.json())
+            .then(data => {
+                if (checkCredentials(data, refcode, email)) {
+                    // Hide the login form (inputs and button)
+                    refcodeInput.style.display = "none";
+                    emailInput.style.display = "none";
+                    loginButton.style.display = "none";
+                    document.querySelector(".register-text").style.display = "none";
+
+                    // Show the table
+                    createAffiliateTable(data, refcode); // Pass refcode to createAffiliateTable
+                    document.getElementById("tableContainer").style.display = "block";
+                } else {
+                    handleError(refcode, email);
+                }
+            })
+            .catch(error => console.error("Error fetching JSON:", error));
+    }
+
+    // Function to validate credentials (refcode and email)
+    function checkCredentials(data, refcode, email) {
+        const isJsonMatch = data.some(
+            row =>
+                row["REF-CODE "]?.trim() === refcode.trim() &&
+                row["Affiliate's  email"]?.trim().toLowerCase() === email.trim().toLowerCase()
+        );
+
+        if (isJsonMatch) return true;
+
+        const storedEmail = localStorage.getItem(refcode.trim());
+        return storedEmail && storedEmail.trim().toLowerCase() === email.trim().toLowerCase();
+    }
+
+    // Function to handle errors when credentials are invalid
+    function handleError(refcode, email) {
+        const isRefcodeValid = checkRefcode(refcode);
+        const isEmailValid = checkEmail(email);
+
+        if (!isEmailValid) {
+            document.getElementById("email-error").style.display = "block";
+        }
+
+        if (!isRefcodeValid) {
+            document.getElementById("refcode-error").style.display = "block";
+        }
+    }
+
+    // Helper functions for validation
+    function checkRefcode(refcode) {
+        return (
+            ["123456", "ABC123", "DFF856"].includes(refcode.trim()) ||
+            localStorage.getItem(refcode.trim())
+        );
+    }
+
+    function checkEmail(email) {
+        return (
+            ["ajanth988@gmail.com", "ajanth@gmail.com", "the.ajanth@gmail.com"].includes(
+                email.trim().toLowerCase()
+            ) || Object.values(localStorage).some(storedEmail => storedEmail.trim().toLowerCase() === email.trim().toLowerCase())
+        );
+    }
+
+    // Add event listeners for login button and other interactions...
+});
+
+
+    </script>
+    
 </body>
-  </html>
+</html>
