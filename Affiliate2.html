@@ -101,7 +101,7 @@
             });
 
             function showTable(refcode, email) {
-                fetch("https://cdn.shopify.com/s/files/1/0664/3751/3414/files/affiliate-commission.json?v=1739691295")
+                fetch("https://order-1ib.pages.dev/affiliate-commission.json")
                     .then(response => response.json())
                     .then(data => {
                         if (checkCredentials(data, refcode, email)) {
