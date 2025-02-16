@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Login</title>
+    
+<style>
+    body {
+    background-color: #fff;
+    color: #333;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 400px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin: auto;
+}
+
+label {
+    display: block;
+    color: #333;
+    font-weight: bold;
+    margin: 10px 0 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #009500;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+button {
+    background-color: #009500;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 10px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #007a00;
+}
+
+#createAccountLink {
+    color: #009500;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.9);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    max-width: 400px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+}
+
+.close-btn:hover {
+    color: red;
+}
+
+#generatedCode {
+    font-size: 24px;
+    font-weight: bold;
+    color: #009500;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #009500;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.hidden {
+    display: none;
+}
+</style>    
+    
+    
+    <script src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/affiliates.js?v=1739672757"></script>
+    <script src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/affiliates-commission.js?v=1739673932"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Affiliate Login</h2>
+        <label for="email">Email ID</label>
+        <input type="email" id="email" placeholder="Enter your email">
+        
+        <label for="refCode">REF-CODE</label>
+        <input type="text" id="refCode" placeholder="Enter your REF-CODE">
+        
+        <button id="loginBtn">Login</button>
+
+        <p>If not registered, <span id="createAccountLink">Create Account</span></p>
+    </div>
+
+    <!-- Create Account Modal -->
+    <div id="createAccountModal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-times close-btn" id="closeCreateAccount"></i>
+            <h2>Create Account</h2>
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Enter your name">
+            
+            <label for="platform">Platform</label>
+            <select id="platform">
+                <option value="TikTok">TikTok</option>
+                <option value="Instagram">Instagram</option>
+                <option value="Telegram">Telegram</option>
+                <option value="Snapchat">Snapchat</option>
+                <option value="Website">Website</option>
+                <option value="Blog">Blog</option>
+            </select>
+            
+            <label for="userId">User ID</label>
+            <input type="text" id="userId" placeholder="Enter your User ID">
+            
+            <label for="accountEmail">Email</label>
+            <input type="email" id="accountEmail" placeholder="Enter your email">
+            
+            <label for="contact">Contact</label>
+            <input type="text" id="contact" placeholder="Enter your contact number">
+            
+            <button id="createBtn">Create</button>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('loginBtn').addEventListener('click', function () {
+    let email = document.getElementById('email').value.trim();
+    let refCode = document.getElementById('refCode').value.trim();
+    
+    if (approvedCodes[refCode] === email) {
+        document.querySelector('.container').style.display = 'none';
+        document.getElementById('dashboard').classList.remove('hidden');
+        loadAffiliateData(refCode);
+    } else {
+        alert("Invalid credentials!");
+    }
+});
+
+document.getElementById('createAccountLink').addEventListener('click', function () {
+    document.getElementById('createAccountModal').style.display = 'flex';
+});
+
+document.getElementById('closeCreateAccount').addEventListener('click', function () {
+    document.getElementById('createAccountModal').style.display = 'none';
+});
+
+document.getElementById('createBtn').addEventListener('click', function () {
+    let name = document.getElementById('name').value.trim();
+    let platform = document.getElementById('platform').value;
+    let userId = document.getElementById('userId').value.trim();
+    let email = document.getElementById('accountEmail').value.trim();
+    let contact = document.getElementById('contact').value.trim();
+
+    let refCode;
+    do {
+        refCode = generateRefCode();
+    } while (approvedCodes[refCode]);
+
+    sendDataToAdmin(name, platform, userId, email, contact, refCode);
+
+    document.getElementById('generatedCode').innerText = refCode;
+    document.getElementById('createAccountModal').style.display = 'none';
+});
+
+function generateRefCode() {
+    let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let numbers = "0123456789";
+    return (
+        letters[Math.floor(Math.random() * 26)] +
+        letters[Math.floor(Math.random() * 26)] +
+        letters[Math.floor(Math.random() * 26)] +
+        numbers[Math.floor(Math.random() * 10)] +
+        numbers[Math.floor(Math.random() * 10)] +
+        numbers[Math.floor(Math.random() * 10)]
+    );
+}
+
+function sendDataToAdmin(name, platform, userId, email, contact, refCode) {
+    let message = `New Registration:\nName: ${name}\nPlatform: ${platform}\nUser ID: ${userId}\nEmail: ${email}\nContact: ${contact}\nREF-CODE: ${refCode}`;
+    window.location.href = `mailto:admin@aj1st.com?subject=Affiliate Registration&body=${encodeURIComponent(message)}`;
+}
+    </script>
+</body>
+</html>
