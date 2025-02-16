@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Commission Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h2 {
+            text-align: center;
+        }
+        .affiliate-table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 20px;
+            display: none; /* Hidden by default */
+        }
+        .affiliate-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .affiliate-table th {
+            background-color: #009500;
+            color: white;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            min-width: 10ch; /* Ensures a minimum width of 10 letters */
+            word-wrap: break-word; /* Allows wrapping */
+            white-space: normal; /* Enables text wrapping */
+        }
+        .affiliate-table td {
+            padding: 10px;
+            border-bottom: 1px solid #777;
+            white-space: nowrap;
+            text-align: left;
+        }
+        .input-field {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 200px;
+        }
+        .login-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .error-text {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: center; /* Center the error text */
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Affiliate Commission Rates</h2>
+
+    <!-- Input fields for Refcode and Email -->
+    <input class="input-field" type="text" id="refcode" placeholder="Enter Refcode">
+    <div id="refcode-error" class="error-text">Invalid Ref-code</div>
+
+    <input class="input-field" type="email" id="email" placeholder="Enter Email">
+    <div id="email-error" class="error-text">Email not found</div>
+
+    <!-- Login Button -->
+    <button class="login-button" id="loginButton">Login</button>
+    
+    <div class="affiliate-table-container" id="tableContainer">
+        <table class="affiliate-table">
+            <thead>
+                <tr id="table-head"></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Attach event listener to the login button
+            document.getElementById("loginButton").addEventListener("click", function () {
+                const refcode = document.getElementById("refcode").value;
+                const email = document.getElementById("email").value;
+
+                // Hide error messages
+                document.getElementById("refcode-error").style.display = "none";
+                document.getElementById("email-error").style.display = "none";
+
+                if (refcode && email) {
+                    showTable(refcode, email);
+                }
+            });
+
+            function showTable(refcode, email) {
+                fetch("https://cdn.shopify.com/s/files/1/0664/3751/3414/files/affiliate-commission.json?v=1739691295")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (checkCredentials(data, refcode, email)) {
+                            // Hide the login form (inputs and button)
+                            document.getElementById("refcode").style.display = "none";
+                            document.getElementById("email").style.display = "none";
+                            document.getElementById("loginButton").style.display = "none";
+                            
+                            // Show the table
+                            createAffiliateTable(data);
+                            document.getElementById("tableContainer").style.display = "block";
+                        } else {
+                            handleError(refcode, email);
+                        }
+                    })
+                    .catch(error => console.error("Error fetching JSON:", error));
+            }
+
+            function checkCredentials(data, refcode, email) {
+                // Check if any row's first and second column matches the Refcode and Email
+                return data.some(row => row[Object.keys(row)[0]] === refcode && row[Object.keys(row)[1]] === email);
+            }
+
+            function handleError(refcode, email) {
+                // Check if refcode and email are valid
+                const isRefcodeValid = checkRefcode(refcode);
+                const isEmailValid = checkEmail(email);
+
+                // Show appropriate error messages
+                if (!isEmailValid) {
+                    document.getElementById("email-error").style.display = "block";
+                }
+
+                if (!isRefcodeValid) {
+                    document.getElementById("refcode-error").style.display = "block";
+                }
+            }
+
+            function checkRefcode(refcode) {
+                // Replace with your refcode validation logic
+                return refcode === "DSR323" || refcode === "GHF437" || refcode === "HUO820";
+            }
+
+            function checkEmail(email) {
+                // Replace with your email validation logic
+                return email === "ajanth988@gmail.com" || email === "the.ajanth@gmail.com" || email === "ajanth.official@Gmail.com";
+            }
+
+            function createAffiliateTable(data) {
+                if (!data || data.length === 0) {
+                    console.error("No data found in JSON");
+                    return;
+                }
+
+                let tableHead = document.getElementById("table-head");
+                let tableBody = document.getElementById("table-body");
+
+                // Extract column names from the first object
+                let columns = Object.keys(data[0]);
+                columns.forEach(column => {
+                    let th = document.createElement("th");
+                    th.textContent = column.replace(/_/g, " ").toUpperCase(); // Formatting column names
+                    tableHead.appendChild(th);
+                });
+
+                // Populate table rows, skipping empty rows
+                data.forEach(row => {
+                    if (Object.values(row).every(value => value === "" || value === null)) {
+                        return; // Skip row if all values are empty
+                    }
+                    let tr = document.createElement("tr");
+                    columns.forEach(column => {
+                        let td = document.createElement("td");
+                        td.textContent = row[column];
+                        tr.appendChild(td);
+                    });
+                    tableBody.appendChild(tr);
+                });
+            }
+        });
+    </script>
+
+</body>
+  </html>
