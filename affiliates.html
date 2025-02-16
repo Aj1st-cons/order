@@ -6,7 +6,7 @@
     <title>Affiliate Login</title>
     
 <style>
-    body {
+body {
     background-color: #fff;
     color: #333;
     font-family: Arial, sans-serif;
@@ -15,7 +15,7 @@
 }
 
 .container {
-    max-width: 400px;
+    max-width: 800px;
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 8px;
@@ -94,9 +94,24 @@ button:hover {
     color: red;
 }
 
-#generatedCode {
+#refCodeScreen {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.95);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+#refCodeBox {
     font-size: 24px;
     font-weight: bold;
+    font-style: italic;
     color: #009500;
     background-color: #fff;
     padding: 10px;
@@ -105,20 +120,82 @@ button:hover {
     margin: 10px 0;
 }
 
-.hidden {
-    display: none;
+#loginBtnRef {
+    background-color: #009500;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 50%;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.copy-btn {
+    background-color: #009500;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.copy-btn:hover {
+    background-color: #007a00;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #009500;
+    color: #fff;
+}
+
+.no-vendors {
+    font-style: italic;
+    color: #009500;
+    text-align: center;
+    padding: 20px;
+}
+
+.copy-btn-disabled {
+    background-color: #dcdcdc;
+    cursor: not-allowed;
 }
 </style>    
     
-    
-    <script src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/affiliates.js?v=1739672757"></script>
-    <script src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/affiliates-commission.js?v=1739673932"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<script src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/affiliates.js?v=1739672757"></script>
+<script src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/affiliates-commission.js?v=1739673932"></script>
+
 </head>
+
 <body>
 
-    <div class="container">
+    <div class="container" id="loginContent">
         <h2>Affiliate Login</h2>
+        <div id="errorMessage" class="error-message"></div>
         <label for="email">Email ID</label>
         <input type="email" id="email" placeholder="Enter your email">
         
@@ -133,7 +210,7 @@ button:hover {
     <!-- Create Account Modal -->
     <div id="createAccountModal" class="modal">
         <div class="modal-content">
-            <i class="fas fa-times close-btn" id="closeCreateAccount"></i>
+            <span class="close-btn" id="closeCreateAccount">&times;</span>
             <h2>Create Account</h2>
             <label for="name">Name</label>
             <input type="text" id="name" placeholder="Enter your name">
@@ -161,63 +238,181 @@ button:hover {
         </div>
     </div>
     
-    <script>
-        document.getElementById('loginBtn').addEventListener('click', function () {
-    let email = document.getElementById('email').value.trim();
-    let refCode = document.getElementById('refCode').value.trim();
+    <!-- REF-CODE Display Screen -->
+    <div id="refCodeScreen" class="modal">
+        <div class="modal-content">
+            <h2>Your REF-CODE</h2>
+            <div id="refCodeBox"></div>
+            <button id="copyRefCodeBtn" class="copy-btn">Copy</button>
+            <p>This REF-CODE will be available for vendors after 12 hours. Use it to earn commissions on vendor sales.</p>
+            <button id="loginBtnRef">Login</button>
+        </div>
+    </div>
+
+    <!-- Original Content (Table) -->
+    <div id="originalContent" class="container" style="display: none;">
+        <h2>Affiliate Commission Data</h2>
+        <table id="affiliatesTable">
+            <thead>
+                <tr>
+                    <th>REF-CODE</th>
+                    <th>Vendor</th>
+                    <th>Address</th>
+                    <th>Coordinates</th>
+                    <th>Contact No.</th>
+                    <th>Total Sales</th>
+                    <th>Paid for Sales</th>
+                    <th>Balance to be Paid</th>
+                    <th>Total Affiliate's Commission</th>
+                    <th>Payable Affiliate's Commission</th>
+                    <th>Balance Affiliate's Commission</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
     
-    if (approvedCodes[refCode] === email) {
-        document.querySelector('.container').style.display = 'none';
-        document.getElementById('dashboard').classList.remove('hidden');
-        loadAffiliateData(refCode);
-    } else {
-        alert("Invalid credentials!");
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const createAccountModal = document.getElementById("createAccountModal");
+    const refCodeScreen = document.getElementById("refCodeScreen");
+    const loginContent = document.getElementById("loginContent");
+    const originalContent = document.getElementById("originalContent");
+    const errorMessage = document.getElementById("errorMessage");
+
+    let loggedInRefCode = "";
+
+    // Open Create Account Modal
+    document.getElementById("createAccountLink").addEventListener("click", function () {
+        loginContent.style.display = "none";
+        createAccountModal.style.display = "flex";
+    });
+
+    // Close Create Account Modal
+    document.getElementById("closeCreateAccount").addEventListener("click", function () {
+        createAccountModal.style.display = "none";
+        loginContent.style.display = "block";
+    });
+
+    // Create Account
+    document.getElementById("createBtn").addEventListener("click", function () {
+        let name = document.getElementById("name").value.trim();
+        let platform = document.getElementById("platform").value;
+        let userId = document.getElementById("userId").value.trim();
+        let email = document.getElementById("accountEmail").value.trim();
+        let contact = document.getElementById("contact").value.trim();
+
+        if (!name || !userId || !email || !contact) {
+            alert("All fields are required!");
+            return;
+        }
+
+        // Generate REF-CODE
+        let refCode = generateRefCode();
+        document.getElementById("refCodeBox").innerText = refCode;
+
+        // Save to localStorage
+        localStorage.setItem(email, JSON.stringify({ refCode, name, platform, userId, contact }));
+
+        // Show REF-CODE Screen
+        createAccountModal.style.display = "none";
+        refCodeScreen.style.display = "flex";
+
+        // Copy REF-CODE Button
+        document.getElementById("copyRefCodeBtn").addEventListener("click", function () {
+            navigator.clipboard.writeText(refCode).then(() => {
+                document.getElementById("copyRefCodeBtn").style.backgroundColor = "#c4e8c4"; // Dim the button color
+            });
+        });
+
+        // Send Email (optional)
+        setTimeout(() => {
+            window.location.href = `mailto:admin@aj1st.com?subject=Affiliate Registration&body=${encodeURIComponent(
+                `New Registration:\nName: ${name}\nPlatform: ${platform}\nUser ID: ${userId}\nEmail: ${email}\nContact: ${contact}\nREF-CODE: ${refCode}`
+            )}`;
+        }, 1000);
+    });
+
+    // Login
+    document.getElementById("loginBtn").addEventListener("click", function () {
+        let email = document.getElementById("email").value.trim();
+        let refCode = document.getElementById("refCode").value.trim();
+
+        if (!email || !refCode) {
+            errorMessage.innerText = "Please enter both email and REF-CODE.";
+            return;
+        }
+
+        // Check localStorage first
+        let userData = JSON.parse(localStorage.getItem(email));
+        if (userData && userData.refCode === refCode) {
+            loggedInRefCode = refCode;
+            showOriginalContent();
+        } else {
+            // Check hosted affiliates.js (mock implementation)
+            let hostedData = window.affiliatesData || {}; // Replace with actual hosted data
+            if (hostedData[email] && hostedData[email].refCode === refCode) {
+                loggedInRefCode = refCode;
+                showOriginalContent();
+            } else if (!hostedData[email]) {
+                errorMessage.innerText = "Email not registered.";
+            } else {
+                errorMessage.innerText = "Code not matched.";
+            }
+        }
+    });
+
+    // Show Original Content (Table)
+    function showOriginalContent() {
+        loginContent.style.display = "none";
+        createAccountModal.style.display = "none";
+        refCodeScreen.style.display = "none";
+        originalContent.style.display = "block";
+
+        // Filter and display table
+        const tableBody = document.querySelector("#affiliatesTable tbody");
+        tableBody.innerHTML = ""; // Clear existing rows
+
+        const filteredData = window.affiliatesCommissionData.filter(
+            (row) => row["REF-CODE "] === loggedInRefCode
+        );
+
+        if (filteredData.length > 0) {
+            filteredData.forEach((row) => {
+                const tr = document.createElement("tr");
+                Object.values(row).forEach((value) => {
+                    const td = document.createElement("td");
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        } else {
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+            td.setAttribute("colspan", "11");
+            td.classList.add("no-vendors");
+            td.textContent = "No vendors registered still";
+            tr.appendChild(td);
+            tableBody.appendChild(tr);
+        }
     }
+
+    // Generate REF-CODE
+    function generateRefCode() {
+        return Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
+    // Handle login button on REF-CODE screen
+    document.getElementById("loginBtnRef").addEventListener("click", function () {
+        // Close all screens and show the original content
+        refCodeScreen.style.display = "none";
+        originalContent.style.display = "block";
+    });
 });
+</script>
 
-document.getElementById('createAccountLink').addEventListener('click', function () {
-    document.getElementById('createAccountModal').style.display = 'flex';
-});
-
-document.getElementById('closeCreateAccount').addEventListener('click', function () {
-    document.getElementById('createAccountModal').style.display = 'none';
-});
-
-document.getElementById('createBtn').addEventListener('click', function () {
-    let name = document.getElementById('name').value.trim();
-    let platform = document.getElementById('platform').value;
-    let userId = document.getElementById('userId').value.trim();
-    let email = document.getElementById('accountEmail').value.trim();
-    let contact = document.getElementById('contact').value.trim();
-
-    let refCode;
-    do {
-        refCode = generateRefCode();
-    } while (approvedCodes[refCode]);
-
-    sendDataToAdmin(name, platform, userId, email, contact, refCode);
-
-    document.getElementById('generatedCode').innerText = refCode;
-    document.getElementById('createAccountModal').style.display = 'none';
-});
-
-function generateRefCode() {
-    let letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let numbers = "0123456789";
-    return (
-        letters[Math.floor(Math.random() * 26)] +
-        letters[Math.floor(Math.random() * 26)] +
-        letters[Math.floor(Math.random() * 26)] +
-        numbers[Math.floor(Math.random() * 10)] +
-        numbers[Math.floor(Math.random() * 10)] +
-        numbers[Math.floor(Math.random() * 10)]
-    );
-}
-
-function sendDataToAdmin(name, platform, userId, email, contact, refCode) {
-    let message = `New Registration:\nName: ${name}\nPlatform: ${platform}\nUser ID: ${userId}\nEmail: ${email}\nContact: ${contact}\nREF-CODE: ${refCode}`;
-    window.location.href = `mailto:admin@aj1st.com?subject=Affiliate Registration&body=${encodeURIComponent(message)}`;
-}
-    </script>
 </body>
 </html>
