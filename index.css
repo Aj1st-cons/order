@@ -4,7 +4,7 @@ body {
              text-align: center; 
          }
          .header {
-             background-color: #eeeeee; 
+             background-color: #000; 
              text-align: center; 
              padding: 10px 0; 
              position: fixed; 
@@ -26,7 +26,7 @@ body {
              left: 20px;
              color: #009500;              
              font-weight: bold; 
-             text-shadow: 3px 3px 3px #000; 
+             text-shadow: 3px 3px 3px #fff; 
              font-size: 30px; 
              margin: 0; 
              margin-bottom: 0px;
