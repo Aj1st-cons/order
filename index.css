@@ -43,8 +43,7 @@ body {
              display: flex;
              align-items: center;
              margin-right: 10px; 
-             cursor: pointer;
-             margin-top:10px;
+             cursor: pointer;             
         }
         .popup {
             position: fixed;
