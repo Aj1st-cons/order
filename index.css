@@ -305,7 +305,7 @@ body {
             border-radius: 8px;
         }
         .item-card p {
-            margin-top: 0px;
+            margin-top: -3px;
             line-height: 0.8;
             color: #52595d;
             font-size: 13px;
