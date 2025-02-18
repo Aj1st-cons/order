@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<body>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendor Registration</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family:       
+            Arial, sans-serif;
             max-width: 400px;
             margin: auto;
             padding: 20px;
+            overflow-y: auto;
         }
         input {
             display: block;
@@ -48,7 +48,7 @@
             width: auto;
             display: block;
             margin: 10px auto;
-            font-size: 16px;
+            font-size: 16px;            
         }
         .error-popup {
             display: none;
@@ -73,121 +73,297 @@
             font-weight: bold;
             margin-top: 10px;
         }
-    </style>
-</head>
-<body>
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background-color: black;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    z-index: 1000;
+  }
+  .footer-btn {
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .footer-btn:focus {
+    outline: none;
+  }
+  .footer-btn i {
+    font-size: 28px;
+  }
+  .footer-btn img {
+  margin-top: -30px;
+  }
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: block;
+}
+</style>
 
     <h2 style="text-align:center;">Vendor Registration</h2>
-    
-    <input type="text" id="first-name" placeholder="First Name">
-    <input type="text" id="last-name" placeholder="Last Name">
-    <input type="text" id="business-name" placeholder="Shop/ Business Name">
-    <input type="text" id="shop"  placeholder="Shop Address">
-    
-    <div style="display: flex;">
-        <input type="text" id="coordinates" placeholder="Shop Location Coordinates" readonly style="flex: 1;">
-        <button id="location-btn" onclick="getLocation()">Get Location</button>
-    </div>
-    
-    <p id="countdown"></p>
-    
-    <input type="email" id="email" placeholder="Email">
-    <input type="text" id="contact" placeholder="Contact Number">
-    <input type="text" id="referral-code" placeholder="Referral Code">
-    
-    <button id="submit-btn" type="button" onclick="submitForm()">Submit</button>
 
-    <div id="error-popup" class="error-popup">
-        <h1>Location Not Received</h1>
-        <p>Please make sure location services are <b>ON</b> and try again.</p>
-        <button onclick="closePopup()">OK</button>
-    </div>
+<input type="text" id="first-name" placeholder="First Name">
+<span class="error-message" id="error-first-name"></span>
 
-    <script>
-        let approvedCodes = {
-            "WDTY53": "ajanth988@gmail.com",
-            "GTS23D": "the.ajanth@gmail.com"
-        };
+<input type="text" id="last-name" placeholder="Last Name">
+<span class="error-message" id="error-last-name"></span>
 
-        function getLocation() {
-            let countdown = 30;
-            let countdownText = document.getElementById("countdown");
-            countdownText.textContent = `Receiving location... (${countdown}s)`;
+<input type="text" id="business-name" placeholder="Shop/Business Name">
+<span class="error-message" id="error-business-name"></span>
 
-            let timer = setInterval(() => {
-                countdown--;
-                countdownText.textContent = `Receiving location... (${countdown}s)`;
-                if (countdown === 0) {
-                    clearInterval(timer);
-                    countdownText.textContent = "";
-                    document.getElementById("error-popup").style.display = "block";
-                }
-            }, 1000);
+<input type="text" id="shop" placeholder="Shop Address">
+<span class="error-message" id="error-shop"></span>
 
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    clearInterval(timer);
-                    countdownText.textContent = "";
-                    let lat = position.coords.latitude.toFixed(5);
-                    let lng = position.coords.longitude.toFixed(5);
-                    let businessName = document.getElementById("business-name").value.trim();
-                    document.getElementById("coordinates").value = `"${businessName}": { lat: ${lat}, lng: ${lng} }`;
-                },
-                () => {
-                    clearInterval(timer);
-                    countdownText.textContent = "";
-                    document.getElementById("error-popup").style.display = "block";
-                },
-                { timeout: 30000 }
-            );
+<div style="display: flex;">
+    <input type="text" id="coordinates" placeholder="Shop Location Coordinates" readonly style="flex: 1;">
+    <button id="location-btn" onclick="getLocation()">Get Location</button>
+</div>
+<p id="countdown"></p>
+<span class="error-message" id="error-coordinates"></span>
+
+<input type="email" id="email" placeholder="Email">
+<span class="error-message" id="error-email"></span>
+
+<input type="text" id="contact" placeholder="Contact Number">
+<span class="error-message" id="error-contact"></span>
+
+<input type="text" id="referral-code" placeholder="Referral Code">
+<span class="error-message" id="error-referral"></span>
+
+<button id="submit-btn" type="button" onclick="submitForm()">Submit</button>
+
+<div style="margin-top: 100px;"></div>
+
+<p id="submit-message"></p>
+
+<script>
+let approvedCodes = {};
+
+fetch("https://order-1ib.pages.dev/affiliates.json")
+    .then(response => response.json())
+    .then(data => {
+        approvedCodes = {};
+        data.forEach(entry => {
+            let refCode = entry["REF-CODE "]?.trim();
+            let email = entry["Affiliate's  email"]?.trim();
+            if (refCode && email) {
+                approvedCodes[refCode] = email;
+            }
+        });
+    })
+    .catch(error => console.error("Error fetching affiliate data:", error));
+
+function getLocation() {
+    let countdown = 30;
+    let countdownText = document.getElementById("countdown");
+    countdownText.textContent = `Receiving location... (${countdown}s)`;
+
+    let timer = setInterval(() => {
+        countdown--;
+        countdownText.textContent = `Receiving location... (${countdown}s)`;
+        if (countdown === 0) {
+            clearInterval(timer);
+            countdownText.textContent = "";
+            document.getElementById("error-coordinates").textContent = "Location not received. Ensure location services are ON.";
         }
+    }, 1000);
 
-        function closePopup() {
-            document.getElementById("error-popup").style.display = "none";
-        }
-
-        function submitForm() {
-            let firstName = document.getElementById("first-name").value.trim();
-            let lastName = document.getElementById("last-name").value.trim();
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            clearInterval(timer);
+            countdownText.textContent = "";
+            let lat = position.coords.latitude.toFixed(5);
+            let lng = position.coords.longitude.toFixed(5);
             let businessName = document.getElementById("business-name").value.trim();
-            let address = document.getElementById("shop").value.trim();
-            let coordinates = document.getElementById("coordinates").value.trim();
-            let email = document.getElementById("email").value.trim();
-            let contact = document.getElementById("contact").value.trim();
-            let referralCode = document.getElementById("referral-code").value.trim();
+            document.getElementById("coordinates").value = `"${businessName}": { lat: ${lat}, lng: ${lng} }`;
+            document.getElementById("error-coordinates").textContent = "";
+        },
+        () => {
+            clearInterval(timer);
+            countdownText.textContent = "";
+            document.getElementById("error-coordinates").textContent = "Location not received. Ensure location services are ON.";
+        },
+        { timeout: 30000 }
+    );
+}
 
-            if (!approvedCodes[referralCode]) {
-                let errorPopup = document.createElement("div");
-                errorPopup.style.cssText = "position:fixed;top:40%;left:50%;transform:translate(-50%, -50%);background:white;padding:20px;border:2px solid red;text-align:center;";
-                errorPopup.innerHTML = `<h1>Code Not Matched</h1>`;
-                document.body.appendChild(errorPopup);
-                setTimeout(() => { document.body.removeChild(errorPopup); }, 3000);
-                return;
-            }
+function submitForm() {
+    let hasError = false;
 
-            if (businessName === "" || coordinates === "") {
-                alert("Please enter all required fields.");
-                return;
-            }
+    function showError(id, message) {
+        document.getElementById(id).textContent = message;
+        hasError = true;
+    }
 
-            let emailBody = `
-${firstName}
-${lastName}
-${businessName}
-${address}
-${coordinates}
-${email}
-${contact}
-${referralCode}
-            `;
+    function clearError(id) {
+        document.getElementById(id).textContent = "";
+    }
 
-            let adminEmail = "admin@aj1st.com";
-            let referrerEmail = approvedCodes[referralCode];
+    const firstName = document.getElementById("first-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
+    const businessName = document.getElementById("business-name").value.trim();
+    const address = document.getElementById("shop").value.trim();
+    const coordinates = document.getElementById("coordinates").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const contact = document.getElementById("contact").value.trim();
+    const referralCode = document.getElementById("referral-code").value.trim();
 
-            let mailtoLink = `mailto:${adminEmail},${referrerEmail}?subject=New Vendor Registration&body=${encodeURIComponent(emailBody)}`;
-            window.location.href = mailtoLink;
+    // Clear previous error messages
+    ["error-first-name", "error-last-name", "error-business-name", "error-shop", 
+     "error-coordinates", "error-email", "error-contact", "error-referral"]
+    .forEach(clearError);
+
+    if (!firstName) showError("error-first-name", "First name is required.");
+    if (!lastName) showError("error-last-name", "Last name is required.");
+    if (!businessName) showError("error-business-name", "Business name is required.");
+    if (!address) showError("error-shop", "Shop address is required.");
+    if (!coordinates) showError("error-coordinates", "Shop location is required.");
+    if (!email) showError("error-email", "Email is required.");
+    if (!contact) showError("error-contact", "Contact number is required.");
+    if (!referralCode) showError("error-referral", "Referral code is required.");
+    else if (!approvedCodes[referralCode]) showError("error-referral", "Referral code not matched.");
+
+    if (hasError) return;
+
+    const emailBody = [
+        firstName,
+        lastName,
+        businessName,
+        address,
+        coordinates,
+        email,
+        contact,
+        referralCode
+    ].join("\n");
+
+    const adminEmail = "admin@aj1st.com";
+    const referrerEmail = approvedCodes[referralCode];
+sendEmailInBackground(adminEmail, referrerEmail, emailBody);    
+}
+ <!-- font-end to call API in background -->
+function sendEmailInBackground(adminEmail, referrerEmail, emailBody) {
+    fetch("https://bitter-spotted-muscle.glitch.me/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ adminEmail, referrerEmail, emailBody })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById("submit-message").textContent = "Form submitted successfully!";
+            document.getElementById("submit-message").style.color = "green";
+        } else {
+            document.getElementById("submit-message").textContent = "Failed to submit form. Try again!";
+            document.getElementById("submit-message").style.color = "red";
         }
-    </script>
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        document.getElementById("submit-message").textContent = "Error sending email.";
+        document.getElementById("submit-message").style.color = "red";
+    });
+}
 
-</body>
-</html>
+function submitForm() {
+    let hasError = false;
+
+    function showError(id, message) {
+        document.getElementById(id).textContent = message;
+        hasError = true;
+    }
+
+    function clearError(id) {
+        document.getElementById(id).textContent = "";
+    }
+
+    const firstName = document.getElementById("first-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
+    const businessName = document.getElementById("business-name").value.trim();
+    const address = document.getElementById("shop").value.trim();
+    const coordinates = document.getElementById("coordinates").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const contact = document.getElementById("contact").value.trim();
+    const referralCode = document.getElementById("referral-code").value.trim();
+
+    ["error-first-name", "error-last-name", "error-business-name", "error-shop", 
+     "error-coordinates", "error-email", "error-contact", "error-referral"]
+    .forEach(clearError);
+
+    if (!firstName) showError("error-first-name", "First name is required.");
+    if (!lastName) showError("error-last-name", "Last name is required.");
+    if (!businessName) showError("error-business-name", "Business name is required.");
+    if (!address) showError("error-shop", "Shop address is required.");
+    if (!coordinates) showError("error-coordinates", "Shop location is required.");
+    if (!email) showError("error-email", "Email is required.");
+    if (!contact) showError("error-contact", "Contact number is required.");
+    if (!referralCode) showError("error-referral", "Referral code is required.");
+    else if (!approvedCodes[referralCode]) showError("error-referral", "Referral code not matched.");
+
+    if (hasError) return;
+
+    const emailBody = [
+        `First Name: ${firstName}`,
+        `Last Name: ${lastName}`,
+        `Business Name: ${businessName}`,
+        `Shop Address: ${address}`,
+        `Location: ${coordinates}`,
+        `Email: ${email}`,
+        `Contact: ${contact}`,
+        `Referral Code: ${referralCode}`
+    ].join("\n");
+
+    sendEmailInBackground("admin@aj1st.com", approvedCodes[referralCode], emailBody);
+}
+</script>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<footer class="footer">
+    <a href="https://order-app-ae.myshopify.com/cart" class="footer-btn" style="color:#000; margin-left:30px;">
+        <i class="fas fa-shopping-cart"></i>
+    </a>
+    <button class="footer-btn home-btn">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000074587.webp?v=1738560869"
+             alt="Home"
+             style="width: 80px; height: auto; margin-left:2px;">
+    </button>
+    <a href="https://shopify.com/66437513414/account" class="footer-btn" style="margin-right:40px;">
+        <i class="fas fa-user"></i>
+    </a>
+</footer>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector('.home-btn').addEventListener('click', function() {
+        const popups = document.querySelectorAll('.popup, .popup2');
+        let popupOpen = false;
+
+        popups.forEach(popup => {
+            if (popup.style.display !== 'none') {
+                popup.style.display = 'none';
+                popupOpen = true;
+            }
+        });
+
+        if (!popupOpen && window.location.href !== "https://order-app-ae.myshopify.com/") {
+            window.history.back();
+        }
+    });
+});
+                    </script>
