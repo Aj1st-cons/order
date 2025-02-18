@@ -203,62 +203,9 @@ function getLocation() {
     );
 }
 
-function submitForm() {
-    let hasError = false;
-
-    function showError(id, message) {
-        document.getElementById(id).textContent = message;
-        hasError = true;
-    }
-
-    function clearError(id) {
-        document.getElementById(id).textContent = "";
-    }
-
-    const firstName = document.getElementById("first-name").value.trim();
-    const lastName = document.getElementById("last-name").value.trim();
-    const businessName = document.getElementById("business-name").value.trim();
-    const address = document.getElementById("shop").value.trim();
-    const coordinates = document.getElementById("coordinates").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const contact = document.getElementById("contact").value.trim();
-    const referralCode = document.getElementById("referral-code").value.trim();
-
-    // Clear previous error messages
-    ["error-first-name", "error-last-name", "error-business-name", "error-shop", 
-     "error-coordinates", "error-email", "error-contact", "error-referral"]
-    .forEach(clearError);
-
-    if (!firstName) showError("error-first-name", "First name is required.");
-    if (!lastName) showError("error-last-name", "Last name is required.");
-    if (!businessName) showError("error-business-name", "Business name is required.");
-    if (!address) showError("error-shop", "Shop address is required.");
-    if (!coordinates) showError("error-coordinates", "Shop location is required.");
-    if (!email) showError("error-email", "Email is required.");
-    if (!contact) showError("error-contact", "Contact number is required.");
-    if (!referralCode) showError("error-referral", "Referral code is required.");
-    else if (!approvedCodes[referralCode]) showError("error-referral", "Referral code not matched.");
-
-    if (hasError) return;
-
-    const emailBody = [
-        firstName,
-        lastName,
-        businessName,
-        address,
-        coordinates,
-        email,
-        contact,
-        referralCode
-    ].join("\n");
-
-    const adminEmail = "admin@aj1st.com";
-    const referrerEmail = approvedCodes[referralCode];
-sendEmailInBackground(adminEmail, referrerEmail, emailBody);    
-}
  <!-- font-end to call API in background -->
 function sendEmailInBackground(adminEmail, referrerEmail, emailBody) {
-    fetch("https://bitter-spotted-muscle.glitch.me/send-email", {
+    fetch("https://mails-jktnzrjtu-ajanths-projects-2c384602.vercel.app/api/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ adminEmail, referrerEmail, emailBody })
@@ -330,40 +277,4 @@ function submitForm() {
 
     sendEmailInBackground("admin@aj1st.com", approvedCodes[referralCode], emailBody);
 }
-</script>
-
-
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<footer class="footer">
-    <a href="https://order-app-ae.myshopify.com/cart" class="footer-btn" style="color:#000; margin-left:30px;">
-        <i class="fas fa-shopping-cart"></i>
-    </a>
-    <button class="footer-btn home-btn">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000074587.webp?v=1738560869"
-             alt="Home"
-             style="width: 80px; height: auto; margin-left:2px;">
-    </button>
-    <a href="https://shopify.com/66437513414/account" class="footer-btn" style="margin-right:40px;">
-        <i class="fas fa-user"></i>
-    </a>
-</footer>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector('.home-btn').addEventListener('click', function() {
-        const popups = document.querySelectorAll('.popup, .popup2');
-        let popupOpen = false;
-
-        popups.forEach(popup => {
-            if (popup.style.display !== 'none') {
-                popup.style.display = 'none';
-                popupOpen = true;
-            }
-        });
-
-        if (!popupOpen && window.location.href !== "https://order-app-ae.myshopify.com/") {
-            window.history.back();
-        }
-    });
-});
-                    </script>
+    </script>
