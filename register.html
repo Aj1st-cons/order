@@ -150,8 +150,6 @@
 
 <div style="margin-top: 100px;"></div>
 
-<p id="submit-message"></p>
-
 <script>
 let approvedCodes = {};
 
@@ -202,41 +200,25 @@ function getLocation() {
         { timeout: 30000 }
     );
 }
-
- <!-- font-end to call API in background -->
-function sendEmailInBackground(adminEmail, referrerEmail, emailBody) {
-    fetch("https://mails-jktnzrjtu-ajanths-projects-2c384602.vercel.app/api/send-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ adminEmail, referrerEmail, emailBody })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById("submit-message").textContent = "Form submitted successfully!";
-            document.getElementById("submit-message").style.color = "green";
-        } else {
-            document.getElementById("submit-message").textContent = "Failed to submit form. Try again!";
-            document.getElementById("submit-message").style.color = "red";
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        document.getElementById("submit-message").textContent = "Error sending email.";
-        document.getElementById("submit-message").style.color = "red";
-    });
-}
-
-function submitForm() {
+<!-- ################# -->
+<!-- ################# -->
+<!-- ################# -->
+async function submitForm() {
     let hasError = false;
 
     function showError(id, message) {
-        document.getElementById(id).textContent = message;
+        const errorElement = document.getElementById(id);
+        if (errorElement) {
+            errorElement.textContent = message;
+        }
         hasError = true;
     }
 
     function clearError(id) {
-        document.getElementById(id).textContent = "";
+        const errorElement = document.getElementById(id);
+        if (errorElement) {
+            errorElement.textContent = "";
+        }
     }
 
     const firstName = document.getElementById("first-name").value.trim();
@@ -248,10 +230,12 @@ function submitForm() {
     const contact = document.getElementById("contact").value.trim();
     const referralCode = document.getElementById("referral-code").value.trim();
 
-    ["error-first-name", "error-last-name", "error-business-name", "error-shop", 
+    // Clear previous error messages
+    ["error-first-name", "error-last-name", "error-business-name", "error-shop",
      "error-coordinates", "error-email", "error-contact", "error-referral"]
-    .forEach(clearError);
+        .forEach(clearError);
 
+    // Validate inputs
     if (!firstName) showError("error-first-name", "First name is required.");
     if (!lastName) showError("error-last-name", "Last name is required.");
     if (!businessName) showError("error-business-name", "Business name is required.");
@@ -262,19 +246,107 @@ function submitForm() {
     if (!referralCode) showError("error-referral", "Referral code is required.");
     else if (!approvedCodes[referralCode]) showError("error-referral", "Referral code not matched.");
 
+    // If there are validation errors, stop the form submission
     if (hasError) return;
 
+    // Construct email body
     const emailBody = [
         `First Name: ${firstName}`,
         `Last Name: ${lastName}`,
         `Business Name: ${businessName}`,
-        `Shop Address: ${address}`,
-        `Location: ${coordinates}`,
+        `Address: ${address}`,
+        `Coordinates: ${coordinates}`,
         `Email: ${email}`,
         `Contact: ${contact}`,
         `Referral Code: ${referralCode}`
     ].join("\n");
 
-    sendEmailInBackground("admin@aj1st.com", approvedCodes[referralCode], emailBody);
+    const adminEmail = "admin@aj1st.com";
+    const referrerEmail = approvedCodes[referralCode];
+
+    // Show a loading message while sending the email
+    const submitButton = document.getElementById("submit-btn");
+    submitButton.disabled = true;
+    submitButton.textContent = "Submitting...";
+
+    try {
+        // Simulate sending email via backend API (replace with your actual API endpoint)
+        const response = await fetch("https://caring-beryl-bakery.glitch.me/send-email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                to: [adminEmail, referrerEmail],
+                subject: "New Vendor Registration",
+                body: emailBody
+            })
+        });
+
+        if (!response.ok) throw new Error("Failed to send email.");
+
+        // Email sent successfully
+        submitButton.textContent = "Submitted Successfully!";
+        setTimeout(() => {
+            submitButton.textContent = "Submit";
+            submitButton.disabled = false;
+            alert("Thank you! Your details have been submitted successfully. Please wait for a confirmation email within 60 minutes.");
+            location.reload(); // Reload the page after submission
+        }, 2000);
+
+    } catch (err) {
+        // Show error message below the button
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit";
+        
+        const errorMessageContainer = document.createElement("p");
+        errorMessageContainer.style.color = "red";
+        errorMessageContainer.style.marginTop = "10px";
+        errorMessageContainer.textContent =
+            "An error occurred while sending your details. Please try again.";
+        
+        // Append the error message below the button only once
+        if (!document.querySelector("#submit-btn + p")) {
+            submitButton.parentNode.insertBefore(errorMessageContainer, submitButton.nextSibling);
+        }
+
+        console.error(err);
+    }
 }
-    </script>
+
+
+</script>
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<footer class="footer">
+    <a href="https://order-app-ae.myshopify.com/cart" class="footer-btn" style="color:#000; margin-left:30px;">
+        <i class="fas fa-shopping-cart"></i>
+    </a>
+    <button class="footer-btn home-btn">
+        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000074587.webp?v=1738560869"
+             alt="Home"
+             style="width: 80px; height: auto; margin-left:2px;">
+    </button>
+    <a href="https://shopify.com/66437513414/account" class="footer-btn" style="margin-right:40px;">
+        <i class="fas fa-user"></i>
+    </a>
+</footer>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector('.home-btn').addEventListener('click', function() {
+        const popups = document.querySelectorAll('.popup, .popup2');
+        let popupOpen = false;
+
+        popups.forEach(popup => {
+            if (popup.style.display !== 'none') {
+                popup.style.display = 'none';
+                popupOpen = true;
+            }
+        });
+
+        if (!popupOpen && window.location.href !== "https://order-app-ae.myshopify.com/") {
+            window.history.back();
+        }
+    });
+});
+  </script>
