@@ -53,5 +53,5 @@ let vendors = {
     "AJ": { lat: 24.396973, lng: 54.588957, categories: ["Cafeteria"] },
     "CC": { lat: 24.391549, lng: 54.578581, categories: ["Salon", "Laundry"] },
     "ColombianoCofeeHouse": { lat: 24.391548, lng: 54.578581, categories: ["Cafeteria"] },    
-    "D": { lat: 27.125, lng: 57.126, categories: ["Grocery"] }
+    "AD": { lat: 24.3969, lng: 54.5889, categories: ["Grocery"] }
 };
