@@ -94,7 +94,7 @@ body {
             background-color: #ffffff;
             display: none;
             overflow: auto; 
-            z-index: 10;
+            z-index: 100;
             box-sizing: border-box;
             border: 2px solid #009500;
  
