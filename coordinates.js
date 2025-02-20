@@ -49,12 +49,9 @@ let locations = {
 };
 
 let vendors = {
-"A": { lat: 25.125, lng: 55.126 },
-"AJ": { lat: 24.396973, lng: 54.588957 },
-"CC": { lat: 24.391549, lng: 54.578581 },
-"ND": { lat: 26.125, lng: 56.126 },
-"GF": { lat: 25.225, lng: 55.226 },
-"C": { lat: 26.125, lng: 56.126 }, 
-"Colombiano Cofee House": { lat: 24.391548, lng: 54.578581 },    
-"D": { lat: 27.125, lng: 57.126 }
+    "A": { lat: 25.125, lng: 55.126, categories: ["Grocery", "Laundry"] },
+    "AJ": { lat: 24.396973, lng: 54.588957, categories: ["Cafeteria"] },
+    "CC": { lat: 24.391549, lng: 54.578581, categories: ["Salon", "Laundry"] },
+    "ColombianoCofeeHouse": { lat: 24.391548, lng: 54.578581, categories: ["Cafeteria"] },    
+    "D": { lat: 27.125, lng: 57.126, categories: ["Grocery"] }
 };
