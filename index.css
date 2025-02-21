@@ -251,7 +251,7 @@
                            
         .item-card {
             margin-top: 0px;              
-            background: #fff;
+            background: linear-gradient(to left bottom, #fff, #999);
             box-shadow: -2px 2px 0px rgba(0, 0, 0, 0.5);
 
             border-radius: 8px;
