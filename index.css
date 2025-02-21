@@ -71,7 +71,7 @@
 #itemPopup, #storesPopup {
   position: fixed;
   width: 100%;
-  height: calc(100% - 110px);
+  height: calc(100% - 105px);
   background-color: #ffffff;
   display: none;
   overflow-y: auto;
@@ -81,8 +81,6 @@
   padding-bottom: 70px;
   box-sizing: border-box;
 }
-
-
          #errorPopup {
             position: fixed;
             display: none;
@@ -243,7 +241,7 @@
             border-radius: 8px;
         }
         .cardx p {
-            margin-top: 1px;
+            margin-top: -5px;
             line-height: 0.8;
             color: #52595d;
             font-weight: bold;
