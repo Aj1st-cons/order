@@ -218,14 +218,14 @@
         }
         .cardx { 
             margin-top: 0px;              
-            background: linear-gradient(to top right, #00950025, #eeeeee);
+            background: linear-gradient(to top right, #00950025, #fff);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
             text-align: center;
             padding: 5px;            
             cursor: pointer;
             width: 100px;
-            height: 115px;
+            height: 120px;
             transition: transform 0.2s;            
         }
         .cardx:last-child {
@@ -241,7 +241,7 @@
             border-radius: 8px;
         }
         .cardx p {
-            margin-top: -5px;
+            margin-top: -10px;
             line-height: 0.8;
             color: #52595d;
             font-weight: bold;
