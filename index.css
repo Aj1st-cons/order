@@ -69,19 +69,8 @@
   box-sizing: border-box;
 }
 
-#itemPopup, #storesPopup {
-  position: fixed;
-  width: 100%;
-  height: calc(100% - 120px);
-  background-color: #ffffff;
-  display: none;
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 10;
-  margin-top: 50px;
-  padding-bottom: 70px;
-  box-sizing: border-box;
-}
+
+
          #errorPopup {
             position: fixed;
             display: none;
@@ -198,41 +187,6 @@
             border-radius: 5px;
             display: none;
             z-index: 9999 !important;
-        }
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 30px;
-            background-color: black;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-            z-index: 1000;
-        }
-        .footer-btn {
-            color: white;
-            font-size: 24px;
-            text-decoration: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            -webkit-tap-highlight-color: transparent; 
-    outline: none; 
-        }
-        .footer-btn:focus {
-    outline: none;
-        }
-        .footer-btn i {
-            font-size: 28px;
-        }
-        .footer-btn img {
-            margin-top: -30px;
         }
         html, body {
             margin: 0;
