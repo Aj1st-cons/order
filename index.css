@@ -322,10 +322,7 @@
             box-sizing: border-box;
         }                   
         .stores-card {
-            margin-top: 0px;              
-            background: linear-gradient(to top right, #eeeeee, #fff);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
+            margin-top: 0px;                                      
             text-align: center;
             padding: 5px;            
             cursor: pointer;
@@ -346,7 +343,7 @@
     border-radius: 50%; 
 }
         .stores-card p {
-            margin-top: -3px;
+            margin-top: 3px;
             line-height: 0.8;
             color: #52595d;
             font-size: 13px;
