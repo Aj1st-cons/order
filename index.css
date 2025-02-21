@@ -218,7 +218,7 @@
         }
         .cardx { 
             margin-top: 0px;              
-            background: linear-gradient(to top right, #eeeeee, #fff);
+            background: linear-gradient(to top right, #00950025, #eeeee);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
             text-align: center;
@@ -251,7 +251,7 @@
                            
         .item-card {
             margin-top: 0px;              
-            background: linear-gradient(to top right, #eeeeee, #fff);
+            background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
             text-align: center;
