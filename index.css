@@ -249,9 +249,7 @@
         }
                            
         .item-card {
-            margin-top: 0px;              
-            background: linear-gradient(to top, #00950025 0%, #00950025 20%, #fff 30%, #fff 100%);
-            border-radius: 8px;
+            margin-top: 0px;                                      
             text-align: center;
             padding: 5px;            
             cursor: pointer;
@@ -265,8 +263,9 @@
         .item-card img {
             width: 100%;
             height: auto;
+            outline: 0.5px solid #009500; 
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 10px;
         }
         .item-card p {
             margin-top: -3px;
