@@ -1,5 +1,40 @@
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    function openCityPopup(region) {
+        let cityList = ``;
+        for (const city in locations[region]) {
+            cityList += `<h4 onclick="selectCity('${city}', ${locations[region][city].lat}, ${locations[region][city].lng})">${city}</h4>`;
+        }
+        document.getElementById("cityList").innerHTML = cityList;
+        document.getElementById("cityPopup").style.display = "block";
+        document.getElementById("locationPopup").style.display = "none";
+    }
 
+    function selectCity(city, lat, lng) {
+        const selectedLocation = {
+            name: city,
+            lat: lat,
+            lng: lng,
+            type: "saved"
+        };
+        saveLocation(selectedLocation);
+        updateReplaceableText(selectedLocation);
+        closePopup();
+    }
+
+    function showLocationError() {
+        document.getElementById("locationErrorPopup").style.display = "block";
+    }
+
+    function closePopup() {
+        document.querySelectorAll(".popup, .popup2").forEach(popup => {
+            popup.style.display = "none";
+        });
+    }
+
+    function goBackToLocations() {
+        document.getElementById('cityPopup').style.display = 'none';
+        document.getElementById('locationPopup').style.display = 'flex';
+    }
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     //LOCATION PROMPT POPUP
         window.addEventListener("load", function() {
@@ -12,9 +47,7 @@
             }, 3000);
         }
     });
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-      
-//××××××××××××××××××××××××××××××××        
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          
        function showItems(category) {
 
         fetch(categoryUrls[category])
@@ -55,47 +88,7 @@
   function closeErrorPopup() {
     document.getElementById("errorPopup").style.display = "none";
 }    
-
-//×××××××÷÷×××××××××××××××××××××
-    function openCityPopup(region) {
-        let cityList = ``;
-        for (const city in locations[region]) {
-            cityList += `<h4 onclick="selectCity('${city}', ${locations[region][city].lat}, ${locations[region][city].lng})">${city}</h4>`;
-        }
-        document.getElementById("cityList").innerHTML = cityList;
-        document.getElementById("cityPopup").style.display = "block";
-        document.getElementById("locationPopup").style.display = "none";
-    }
-
-    function selectCity(city, lat, lng) {
-        const selectedLocation = {
-            name: city,
-            lat: lat,
-            lng: lng,
-            type: "saved"
-        };
-        saveLocation(selectedLocation);
-        updateReplaceableText(selectedLocation);
-        closePopup();
-    }
-
-    function showLocationError() {
-        document.getElementById("locationErrorPopup").style.display = "block";
-    }
-
-    function closePopup() {
-        document.querySelectorAll(".popup, .popup2").forEach(popup => {
-            popup.style.display = "none";
-        });
-    }
-
-    function goBackToLocations() {
-        document.getElementById('cityPopup').style.display = 'none';
-        document.getElementById('locationPopup').style.display = 'flex';
-    }
-
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
 function showStores(category) {
 
         fetch(categoryUrls[category])
@@ -136,49 +129,106 @@ function showStores(category) {
   function closeErrorPopup() {
     document.getElementById("errorPopup").style.display = "none";
 }  
+</script>
+<script>
+    function searchStores(stores) {
+  let userLocation = getSavedLocation();
   
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  if (!userLocation) {
+    const locationPopup = document.getElementById("selectLocationPopup");
+    locationPopup.style.display = "block";
+    setTimeout(() => {
+      locationPopup.style.display = "none";
+    }, 4000);
+    return;
+  }
+  
+  // Define reference coordinates from user's saved location
+  const refLat = userLocation.lat;
+  const refLng = userLocation.lng;
 
-     function searchStores(stores) {
-        let userLocation = getSavedLocation();
-
-        if (!userLocation) {
-            const locationPopup = document.getElementById("selectLocationPopup");
-            locationPopup.style.display = "block";
-            setTimeout(() => {
-                locationPopup.style.display = "none";
-            }, 4000);
-            return;
-        }
-
-        let nearbyVendors = [];
-let selectedCategory = document.querySelector(".stores-card p").textContent.trim();
-
-for (const vendor in vendors) {
-    let distance = getDistance(
-        userLocation.lat, userLocation.lng,
-        vendors[vendor].lat, vendors[vendor].lng
-    );
-    if (distance <= 1 && vendors[vendor].categories.includes(selectedCategory)) {
-        nearbyVendors.push(`${vendor}`);
+  let nearbyVendors = [];
+  let selectedCategory = document.querySelector(".stores-card p").textContent.trim();
+  const radii = [1, 2, 3, 4, 5];
+  
+  // Loop through increasing radii until matches are found
+  for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
+    const radius = radii[i];
+    nearbyVendors = [];
+    
+    for (let vendor in vendors) {
+      const vendorData = vendors[vendor];
+      // Use getDistance instead of calculateDistance
+      const distance = getDistance(refLat, refLng, vendorData.lat, vendorData.lng);
+      
+      if (distance <= radius && vendorData.categories.includes(selectedCategory)) {
+        nearbyVendors.push(vendor);
+      }
     }
+  }
+  
+  if (nearbyVendors.length > 0) {
+    window.location.href = `https://order-app-ae.myshopify.com/pages/stores?collections=${nearbyVendors.join(",")}`;
+  } else {
+    document.getElementById("errorPopup").style.display = "block";
+  }
 }
 
-if (nearbyVendors.length > 0) {
-            window.location.href = `https://order-app-ae.myshopify.com/pages/stores?collections=${nearbyVendors.join(",")}`; 
-        } else {
-                    document.getElementById("errorPopup").style.display = "block";
-        }
-    }
-
-    function getDistance(lat1, lon1, lat2, lon2) {
-        const R = 6371;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Radius of the Earth in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    }
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}    
+</script>
+<script>
+    function searchItem(item) {
+  let userLocation = getSavedLocation();
 
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  if (!userLocation) {
+    const locationPopup = document.getElementById("selectLocationPopup");
+    locationPopup.style.display = "block";
+    setTimeout(() => {
+      locationPopup.style.display = "none";
+    }, 4000);
+    return;
+  }
+
+  const radii = [1, 2, 3, 4, 5];
+  let nearbyVendors = [];
+
+  // Loop through radii until vendors are found or maximum radius reached
+  for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
+    const radius = radii[i];
+    nearbyVendors = []; // reset for this radius
+
+    for (const vendor in vendors) {
+      let distance = getDistance(
+        userLocation.lat, userLocation.lng,
+        vendors[vendor].lat, vendors[vendor].lng
+      );
+      if (distance <= radius) {
+        nearbyVendors.push(`vendor:${vendor}`);
+      }
+    }
+  }
+
+  if (nearbyVendors.length > 0) {
+    window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
+  } else {
+    document.getElementById("errorPopup").style.display = "block";
+  }
+}
+
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
