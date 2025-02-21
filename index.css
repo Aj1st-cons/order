@@ -66,6 +66,7 @@
             overflow-y: auto; 
             overflow-x: hidden; 
             z-index: 10; 
+            margin-top: 50px;
             padding-bottom: 70px; 
             box-sizing: border-box;             
         }
@@ -340,6 +341,7 @@
     .cardz p {
         margin: 10px;
         margin-top:0px;
+        font-size: 10px;
         padding: 5px; 
         white-space: nowrap;
     }
@@ -352,6 +354,7 @@
             overflow-y: auto; 
             overflow-x: hidden; 
             z-index: 10; 
+            margin-top: 50px;
             padding-bottom: 70px; 
             box-sizing: border-box;             
         }
