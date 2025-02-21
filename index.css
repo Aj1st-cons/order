@@ -57,7 +57,19 @@
             display: none;            
             overflow-y: auto;
         }
-       
+#itemPopup, #storesPopup {
+  position: fixed;
+  width: 100%;
+  height: calc(100% - 120px);
+  background-color: #ffffff;
+  display: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 10;
+  margin-top: 50px;
+  padding-bottom: 70px;
+  box-sizing: border-box;
+}
          #errorPopup {
             position: fixed;
             display: none;
@@ -201,7 +213,6 @@
             -webkit-tap-highlight-color: transparent; 
     outline: none; 
         }
-
         .footer-btn:focus {
     outline: none;
         }
@@ -216,7 +227,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        #categorie {            
+        #categories {            
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
             gap: 20px; 
@@ -226,7 +237,7 @@
             padding: 20px;             
             box-sizing: border-box;    
             background-color: #fff;
-            margin-top: 50px;
+            margin-top: 100px;
             margin-bottom: 50px;
         }
         .cardx { 
