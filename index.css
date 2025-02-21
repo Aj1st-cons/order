@@ -57,7 +57,31 @@
             display: none;            
             overflow-y: auto;
         }
+         .item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  gap: 20px;
+  width: calc(100% - 120px);
+  margin: 0 auto;
+  margin-top: 0px;
+  padding: 10px;
+  box-sizing: border-box;
+}
 
+#itemPopup, #storesPopup {
+  position: fixed;
+  width: 100%;
+  height: calc(100% - 120px);
+  background-color: #ffffff;
+  display: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 10;
+  margin-top: 50px;
+  padding-bottom: 70px;
+  box-sizing: border-box;
+}
          #errorPopup {
             position: fixed;
             display: none;
