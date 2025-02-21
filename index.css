@@ -241,6 +241,7 @@ body {
             margin-bottom: 50px;
         }
         .cardx { 
+        .cardx { 
             margin-top: 0px;              
             background: linear-gradient(to top right, #eeeeee, #fff);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
@@ -249,7 +250,7 @@ body {
             padding: 5px;            
             cursor: pointer;
             width: 100px;
-            height: 50px;
+            height: 115px;
             transition: transform 0.2s;            
         }
         .cardx:last-child {
@@ -258,12 +259,19 @@ body {
         .cardx:hover {
             transform: scale(1.05);    
         }
+        .cardx img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+        }
         .cardx p {
-            margin-top: -5px;
-            white-space: nowrap;
+            margin-top: 1px;
+            line-height: 0.8;
             color: #52595d;
             font-weight: bold;
-            font-size: 10px;            
+            font-size: 13px;
+            white-space: nowrap;
         }
         .item-grid {            
             display: grid; 
@@ -305,16 +313,16 @@ body {
             white-space: nowrap;
             font-weight: bold;
         }  
-         .select-store {
+    .select-store {
         display:flex; 
         gap: 20px; 
         position:fixed; 
         overflow-y:hidden; 
-        top: -3%;         
+        top: ;         
         left:15%; 
         width: 100%
-        height: 50px;
-        padding: 10px;
+        height: 20px;
+        padding: 5px;
         justify-content:center;    
         margin-top:100px; 
         z-index:11;
@@ -332,7 +340,7 @@ body {
         }
     .cardz p {
         margin: 10px;
-        margin-top:7px;
+        margin-top:0px;
         padding: 5px;        
     }
     #storesPopup {
