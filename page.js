@@ -129,8 +129,7 @@ function showStores(category) {
   function closeErrorPopup() {
     document.getElementById("errorPopup").style.display = "none";
 }  
-</script>
-<script>
+
     function searchStores(stores) {
   let userLocation = getSavedLocation();
   
@@ -183,8 +182,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }    
-</script>
-<script>
+
     function searchItem(item) {
   let userLocation = getSavedLocation();
 
