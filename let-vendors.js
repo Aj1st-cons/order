@@ -1,7 +1,7 @@
 let vendors = {
-    "A": { lat: 25.125, lng: 55.126, categories: ["Grocery", "Laundry"] },
-    "AJ": { lat: 24.396973, lng: 54.588957, categories: ["Cafeteria"] },
-    "CC": { lat: 25.124, lng: 55.124, categories: ["Salon", "Grocery"] },
-    "ColombianoCofeeHouse": { lat: 24.391548, lng: 54.578581, categories: ["Cafeteria"] },    
-    "AD": { lat: 24.3969, lng: 54.5889, categories: ["Grocery"] }
+"AJ": { lat: 24.385, lng: 54.584, categories: ["Grocery", "Laundry"] },
+"GH": { lat: 24.400, lng: 54.588, categories: ["Cafeteria"] },
+"Jithu": { lat: 24.375, lng: 54.586, categories: ["Salon", "Grocery"] },
+"B": { lat: 24.410, lng: 54.582, categories: ["Cafeteria", "Grocery"] },    
+"C": { lat: 24.373, lng: 54.580, categories: ["Salon"] }
 };
