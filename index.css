@@ -250,7 +250,7 @@
                            
         .item-card {
             margin-top: 0px;              
-            background: linear-gradient(to top right, #fff, #00950025, #fff);
+            background: linear-gradient(to top, #00950025 0%, #00950025 20%, #fff 30%, #fff 100%);
             border-radius: 8px;
             text-align: center;
             padding: 5px;            
