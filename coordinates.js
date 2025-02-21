@@ -1,6 +1,6 @@
 let locations = {
     "Dubai": { 
-"City A1": { lat: 25.123, lng: 55.123 }, 
+"City A1": { lat: 24.393, lng: 54.584 }, 
 "City A2": { lat: 25.223, lng: 55.223 }, 
 "City A3": { lat: 26.323, lng: 55.323 },
 "City A4": { lat: 25.123, lng: 55.123 }, 
