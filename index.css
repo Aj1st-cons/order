@@ -76,7 +76,7 @@
   display: none;
   overflow-y: auto;
   overflow-x: hidden;
-  z-index: 10;
+  z-index: ;
   margin-top: 50px;
   padding-bottom: 70px;
   box-sizing: border-box;
@@ -293,7 +293,7 @@
   padding: 5px;
   justify-content: center;
   margin-top: 94px;
-  z-index: 10;
+  z-index: ;
 }
 .cardz {
   margin-top: 5px;
