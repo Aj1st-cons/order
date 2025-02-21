@@ -57,19 +57,7 @@
             display: none;            
             overflow-y: auto;
         }
-       #itemPopup {
-            position: fixed; 
-            width: 100%; 
-            height: calc(100% - 60px); 
-            background-color: #ffffff; 
-            display: none; 
-            overflow-y: auto; 
-            overflow-x: hidden; 
-            z-index: 10; 
-            margin-top: 50px;
-            padding-bottom: 70px; 
-            box-sizing: border-box;             
-        }
+       
          #errorPopup {
             position: fixed;
             display: none;
@@ -313,20 +301,39 @@
             white-space: nowrap;
             font-weight: bold;
         }  
-
-    #storesPopup {
-            position: fixed; 
-            width: 100%; 
-            height: calc(100% - 60px); 
-            background-color: #ffffff; 
-            display: none; 
-            overflow-y: auto; 
-            overflow-x: hidden; 
-            z-index: 10; 
-            margin-top: 50px;
-            padding-bottom: 70px; 
-            box-sizing: border-box;             
-        }
+.select-store {
+  display: flex;
+  gap: 20px;
+  position: fixed;
+  overflow-y: hidden;
+  top: -5%;
+  left: 0%;
+  width: 100%;
+  height: 40px;
+  padding: 5px;
+  justify-content: center;
+  margin-top: 100px;
+  z-index: 11;
+}
+.cardz {
+  margin-top: 0px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+  border-radius: 10px;
+  text-align: center;
+  height: 30px;
+  cursor: pointer;
+}
+.cardz:hover {
+  color: darkred;
+}
+.cardz p {
+  margin: 10px;
+  margin-top: -3px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px;
+  white-space: nowrap;
+}
         .stores-grid {            
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
