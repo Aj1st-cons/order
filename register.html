@@ -63,24 +63,25 @@ button {
 <div style="display: flex; flex-direction: column; gap: 5px;">
   <div style="display: flex; align-items: center;">
     <input type="text" id="reffCode" placeholder="Click 'Validate' to validate" name="reffCode" />
-    <button style="margin-bottom:-5px; padding:0 15px;" type="button" id="validate">Validate</button>
+    <button style="margin-bottom:-5px; padding:10px 15px;" type="button" id="validate">Validate</button>
   </div>
   <!-- Error message container -->
   <div id="errorMsg" style="color: red; font-size: 0.9em;"></div>
 </div>  
   
 <!--  -->  
-  <input type="email" id="affiliateEmail" placeholder="affiliateEmail" name="affiliateEmail" style="display: hidden;" />
+  <input type="email" id="affiliateEmail" placeholder="Affiliate Email" name="affiliateEmail" style="display: none;" />
 
 <input type="text" id="storeName" placeholder="Store Name" name="storeName" required />
 
 <input type="text" id="storeCategory" placeholder="Store Category (e.g., Grocery, Electronics, Laundry, etc.)" name="storeCategory" required />
 
 <!--  -->
-  <div style="display: flex;">
+  <div style="display: flex; flex-direction: column; gap: 5px;">
+  <div style="display: flex; align-items: center;">
     <input type="text" id="storeLocation" placeholder="Click 'Get' to get location" name="storeLocation" disabled />
-    <button style="margin-bottom:-5px; padding:0 15px;" type="button" id="getLocationButton">Get</button>
-  </div>
+    <button style="margin-bottom:-5px; padding:10px 15px;" type="button" id="getLocationButton">Get</button>
+  </div></div>
 
   <div id="timer" class="countdown"></div>
 <!--  -->
@@ -289,19 +290,23 @@ document.addEventListener("DOMContentLoaded", function () {
             return false;
           });
           
-          if (matchedRecord) {
+         if (matchedRecord) {
             // If a matching record is found, get the affiliate's email.
             // Note the key in JSON is "Affiliate's  email" (with double spaces); adjust as needed.
             const affEmail = matchedRecord["Affiliate's  email"];
             if (affEmail) {
               emailInput.value = affEmail;
               // Optionally reveal the email input if needed
-              emailInput.style.display = "block";
-            } else {
-              errorMsg.textContent = "Affiliate email not found in the record.";
+  emailInput.style.display = "block";
+  errorMsg.style.color = "green";   
+  errorMsg.textContent = "REFF-code validated!";
+  } else {
+  errorMsg.style.color = "red";
+  errorMsg.textContent = "REFF-code not matched.";
             }
-          } else {
-            errorMsg.textContent = "REFF-code not matched. Please try again.";
+  } else {
+  errorMsg.style.color = "red";
+  errorMsg.textContent = "REFF-code not matched.";
           }
         })
         .catch(error => {
