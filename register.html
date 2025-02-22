@@ -122,7 +122,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
     storeCategory: document.getElementById('storeCategory').value,
     storeLocation: document.getElementById('storeLocation').value,
     storesAddress: document.getElementById('storesAddress').value,
-    email: document.getElementById('email').value,
+    email: document.getElementById('email').value,    
     contactNumber: document.getElementById('contactNumber').value,
     reffCode: document.getElementById('reffCode').value
   };
@@ -158,6 +158,71 @@ document.getElementById('contactForm').addEventListener('submit', async function
     document.getElementById('responseMessage').textContent = 'An error occurred. Please try again.';
     submitButton.textContent = 'Submit';
     submitButton.disabled = false;
+  }
+});
+  </script>
+  <script>      document.getElementById('getLocationButton').addEventListener('click', function() {
+  // Disable button while waiting for location
+  const button = document.getElementById('getLocationButton');
+  button.disabled = true;
+  let countdown = 30;
+  const timerElement = document.getElementById('timer');
+  
+  // Start countdown timer immediately when button is clicked
+  const countdownInterval = setInterval(function() {
+    countdown--;
+    timerElement.textContent = `Please wait... ${countdown}s remaining`;
+
+    if (countdown <= 0) {
+      clearInterval(countdownInterval);
+      timerElement.textContent = 'Time out! Location not received.';
+      timerElement.style.color = '#B83C08'; // Color for time out
+      button.disabled = false; // Enable button again if timeout
+    }
+  }, 1000);
+
+  // Request location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      // Get store name and category
+      const storeName = document.getElementById('storeName').value.trim().replace(/\s+/g, '');
+      const storeCategory = document.getElementById('storeCategory').value;
+
+      // Check if store name and category are filled
+      if (storeName && storeCategory) {
+        // Construct the object with store name as the key (no spaces and in quotes)
+        const locationData = `"${storeName}": { lat: ${lat}, lng: ${lng}, categories: ["${storeCategory}"] }`;
+
+        // Update location input with the formatted data
+        document.getElementById('storeLocation').value = locationData;
+
+        // Stop the countdown and show success message
+        clearInterval(countdownInterval);
+        timerElement.textContent = 'Thank you! Your location has been saved.';
+        timerElement.style.color = 'green'; // Success color
+      } else {
+        // Stop countdown if input is incomplete
+        clearInterval(countdownInterval);
+        timerElement.textContent = 'Please fill in both store name and category.';
+        timerElement.style.color = 'red';
+        button.disabled = false; // Enable button again if fields are empty
+        return; // Exit the function early
+      }
+    }, function(error) {
+      console.error(error);
+      clearInterval(countdownInterval); // Stop countdown on error
+      timerElement.textContent = 'Location unavailable. Turn it ON.';
+      timerElement.style.color = '#B83C08'; // Error color
+      timerElement.style.fontSize = '16px';
+      button.disabled = false; // Enable button again if there's an error
+    });
+  } else {
+    clearInterval(countdownInterval); // Stop countdown if geolocation is not supported
+    timerElement.textContent = 'Geolocation is not supported by this browser.';
+    button.disabled = false; // Enable button if geolocation is not supported
   }
 });
   </script>  
