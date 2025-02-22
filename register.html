@@ -58,6 +58,8 @@ button {
   <input type="text" id="firstName" placeholder="First Name" name="firstName" required /> 
 
   <input type="text" id="lastName" placeholder="Last Name" name="lastName" required />
+  
+  <input type="text" id="reffCode" placeholder="REFF-Code" name="reffCode" required />
 
 <input type="text" id="storeName" placeholder="Store Name" name="storeName" required />
 
@@ -77,8 +79,6 @@ button {
 <input type="email" id="email" placeholder="Email Address" name="email" required />
 
 <input type="text" id="contactNumber" placeholder="Contact Number" name="contactNumber" required />
-
-<input type="text" id="reffCode" placeholder="REFF-Code" name="reffCode" required />
 
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <button type="submit">Submit</button>
@@ -118,13 +118,13 @@ document.getElementById('contactForm').addEventListener('submit', async function
   const formData = {
     firstName: document.getElementById('firstName').value,
     lastName: document.getElementById('lastName').value,
+    reffCode: document.getElementById('reffCode').value,
     storeName: document.getElementById('storeName').value,
     storeCategory: document.getElementById('storeCategory').value,
     storeLocation: document.getElementById('storeLocation').value,
     storesAddress: document.getElementById('storesAddress').value,
     email: document.getElementById('email').value,    
-    contactNumber: document.getElementById('contactNumber').value,
-    reffCode: document.getElementById('reffCode').value
+    contactNumber: document.getElementById('contactNumber').value    
   };
 
   try {
@@ -226,5 +226,70 @@ document.getElementById('contactForm').addEventListener('submit', async function
   }
 });
   </script>  
+  
+  <script>
+      document.getElementById('contactForm').addEventListener('submit', async function(e) { e.preventDefault(); const submitButton = this.querySelector('button[type="submit"]'); submitButton.textContent = 'Submitting...'; submitButton.disabled = true;
+
+const refCodeInput = document.getElementById('reffCode');
+const refCode = refCodeInput.value.trim();
+const errorMessage = document.createElement('div');
+errorMessage.style.color = 'red';
+errorMessage.style.fontSize = '14px';
+errorMessage.style.marginTop = '5px';
+errorMessage.id = 'refCodeError';
+
+// Remove existing error message if any
+const existingError = document.getElementById('refCodeError');
+if (existingError) {
+    existingError.remove();
+}
+
+try {
+    const response = await fetch('https://order-1ib.pages.dev/affiliates.json');
+    if (!response.ok) throw new Error('Failed to fetch data');
+    
+    const data = await response.json();
+    let matchedAffiliate = null;
+
+    for (const entry of data) {
+        if (entry["REF-CODE "] === refCode) {
+            matchedAffiliate = entry["Affiliate's  email"];
+            break;
+        }
+    }
+
+    if (!matchedAffiliate) {
+        errorMessage.textContent = 'Invalid REF-Code. Please enter a valid one.';
+        refCodeInput.parentNode.appendChild(errorMessage);
+        submitButton.textContent = 'Submit';
+        submitButton.disabled = false;
+        return;
+    }
+
+    // Create hidden input for affiliate email
+    let hiddenEmailInput = document.getElementById('affiliateEmail');
+    if (!hiddenEmailInput) {
+        hiddenEmailInput = document.createElement('input');
+        hiddenEmailInput.type = 'hidden';
+        hiddenEmailInput.id = 'affiliateEmail';
+        hiddenEmailInput.name = 'affiliateEmail';
+        this.appendChild(hiddenEmailInput);
+    }
+    hiddenEmailInput.value = matchedAffiliate;
+    
+    refCodeInput.value = '';
+
+    // Proceed with form submission
+    this.submit();
+} catch (error) {
+    console.error('Error:', error);
+    errorMessage.textContent = 'An error occurred. Please try again later.';
+    refCodeInput.parentNode.appendChild(errorMessage);
+    submitButton.textContent = 'Submit';
+    submitButton.disabled = false;
+}
+
+});
+  </script>
 </body>
-</html>
+    </html>
