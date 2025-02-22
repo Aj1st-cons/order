@@ -226,5 +226,96 @@ document.getElementById('contactForm').addEventListener('submit', async function
   }
 });
   </script>
+  
+  <script>     document.getElementById('contactForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const submitButton = this.querySelector('button[type="submit"]');
+  submitButton.textContent = 'Submitting';
+  submitButton.disabled = true;
+
+  // Get the ref code and validate it
+  const refCode = document.getElementById('reffCode').value.trim();
+  const refCodeErrorMessage = document.createElement('div');
+  const refCodeInput = document.getElementById('reffCode');
+  refCodeInput.insertAdjacentElement('afterend', refCodeErrorMessage);
+  
+  // Fetch the affiliates JSON data
+  let affiliateEmail = null;
+  try {
+    const res = await fetch('https://order-1ib.pages.dev/affiliates.json');
+    const affiliates = await res.json();
+    
+    // Match the ref code
+    const matchedAffiliate = affiliates.find(affiliate => affiliate['REF-CODE '] === refCode);
+    
+    if (matchedAffiliate) {
+      affiliateEmail = matchedAffiliate['Affiliate\'s  email'];
+      // Proceed with form submission
+      const formData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        storeName: document.getElementById('storeName').value,
+        storeCategory: document.getElementById('storeCategory').value,
+        storeLocation: document.getElementById('storeLocation').value,
+        storesAddress: document.getElementById('storesAddress').value,
+        email: document.getElementById('email').value,
+        contactNumber: document.getElementById('contactNumber').value,
+        reffCode: refCode
+      };
+
+      // Add affiliate's email to the form data
+      formData.affiliateEmail = affiliateEmail;
+
+      // Proceed with sending data to the server
+      await sendFormData(formData);
+    } else {
+      refCodeErrorMessage.textContent = 'Error: REFF-Code not matched';
+      refCodeErrorMessage.style.color = 'red';
+      submitButton.disabled = false; // Enable button again
+    }
+
+  } catch (error) {
+    console.error('Error fetching affiliates data:', error);
+    refCodeErrorMessage.textContent = 'Error: Could not verify REFF-Code';
+    refCodeErrorMessage.style.color = 'red';
+    submitButton.disabled = false; // Enable button again
+  }
+});
+
+// Function to send form data
+async function sendFormData(formData) {
+  const submitButton = document.querySelector('button[type="submit"]');
+  try {
+    const response = await fetch('https://bronzed-carpal-zone.glitch.me/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+
+    if (response.ok) {
+      document.getElementById('responseMessage').textContent = 'Submitted. Thank you!';
+      document.getElementById('contactForm').reset();
+      submitButton.textContent = 'Submit';
+      submitButton.disabled = false;
+
+      // Show full-screen overlay
+      document.getElementById('overlayMessage').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('overlayMessage').style.display = 'none';
+      }, 5000);
+    } else {
+      document.getElementById('responseMessage').textContent = 'Submission failed. Please try again.';
+      submitButton.textContent = 'Submit';
+      submitButton.disabled = false;
+    }
+  } catch (error) {
+    document.getElementById('responseMessage').textContent = 'An error occurred. Please try again.';
+    submitButton.textContent = 'Submit';
+    submitButton.disabled = false;
+  }
+}
+  </script>
+  
 </body>
 </html>
