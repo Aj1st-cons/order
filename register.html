@@ -146,8 +146,9 @@ document.getElementById('contactForm').addEventListener('submit', async function
                 storesAddress: document.getElementById('storesAddress').value,
                 email: document.getElementById('email').value, // User's email (not recipient)
                 contactNumber: document.getElementById('contactNumber').value,
-                reffCode: refCode,
-                recipientEmail: affiliateEmail // Affiliate's email as recipient
+                reffCode: 
+document.getElementById('reffCode').value,
+                recipientEmail: document.getElementById('affiliateEmail').value,
             };
 
             // Send data to backend
