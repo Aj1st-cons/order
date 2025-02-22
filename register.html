@@ -95,118 +95,71 @@ button {
 <div class="countdown" id="countdownTimer"></div>
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
   <script>
-document.getElementById('contactForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
+      // Extra JS modifications
+document.getElementById('contactForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-    const submitButton = this.querySelector('button[type="submit"]');
-    submitButton.textContent = 'Submitting';
-    submitButton.disabled = true;
+  const submitButton = this.querySelector('button[type="submit"]');
+  submitButton.textContent = 'Submitting';
+  submitButton.disabled = true;
 
-    // Countdown Timer
-    let countdown = 30;
-    const countdownTimer = document.getElementById('countdownTimer');
-    countdownTimer.textContent = countdown + " seconds";
-    const intervalId = setInterval(() => {
-        countdown--;
-        countdownTimer.textContent = countdown + " seconds";
-        if (countdown <= 0) {
-            clearInterval(intervalId);
-        }
-    }, 1000);
-
-    // Get the ref code and validate it
-    const refCode = document.getElementById('reffCode').value.trim();
-    const refCodeErrorMessage = document.createElement('div');
-    const refCodeInput = document.getElementById('reffCode');
-    refCodeInput.insertAdjacentElement('afterend', refCodeErrorMessage);
-
-    // Fetch affiliates JSON data
-    let affiliateEmail = null;
-    try {
-        const res = await fetch('https://order-1ib.pages.dev/affiliates.json');
-        const affiliates = await res.json();
-
-        // Match the ref code
-        const matchedAffiliate = affiliates.find(affiliate => affiliate['REF-CODE '] === refCode);
-
-        if (matchedAffiliate) {
-            affiliateEmail = matchedAffiliate["Affiliate's  email"]; // Get affiliate's email
-
-            if (!affiliateEmail) {
-                throw new Error('Affiliate email not found for the provided REFF-Code.');
-            }
-
-            // Prepare form data
-            const formData = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                storeName: document.getElementById('storeName').value,
-                storeCategory: document.getElementById('storeCategory').value,
-                storeLocation: document.getElementById('storeLocation').value,
-                storesAddress: document.getElementById('storesAddress').value,
-                email: document.getElementById('email').value, // User's email (not recipient)
-                contactNumber: document.getElementById('contactNumber').value,
-                reffCode: refCode,
-                recipientEmail: affiliateEmail // Affiliate's email as recipient
-            };
-
-            // Send data to backend
-            await sendFormData(formData, intervalId);
-        } else {
-            clearInterval(intervalId);
-            refCodeErrorMessage.textContent = 'Error: REFF-Code not matched';
-            refCodeErrorMessage.style.color = 'red';
-            submitButton.disabled = false; // Enable button again
-        }
-    } catch (error) {
-        clearInterval(intervalId);
-        console.error('Error fetching affiliates data:', error);
-        refCodeErrorMessage.textContent = 'Error: Could not verify REFF-Code';
-        refCodeErrorMessage.style.color = 'red';
-        submitButton.disabled = false; // Enable button again
+  let countdown = 30;
+  const countdownTimer = document.getElementById('countdownTimer');
+  countdownTimer.textContent = countdown +       " seconds";
+  
+  const intervalId = setInterval(() => {
+    countdown--;
+    countdownTimer.textContent = countdown;
+    if(countdown <= 0) {
+      clearInterval(intervalId);
     }
+  }, 1000);
+
+  const formData = {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    storeName: document.getElementById('storeName').value,
+    storeCategory: document.getElementById('storeCategory').value,
+    storeLocation: document.getElementById('storeLocation').value,
+    storesAddress: document.getElementById('storesAddress').value,
+    email: document.getElementById('email').value,
+    contactNumber: document.getElementById('contactNumber').value,
+    reffCode: document.getElementById('reffCode').value
+  };
+
+  try {
+    const response = await fetch('https://bronzed-carpal-zone.glitch.me/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    
+    clearInterval(intervalId);
+    
+    if(response.ok){
+      document.getElementById('responseMessage').textContent = 'Submitted. Thank you!';
+      document.getElementById('contactForm').reset();
+      submitButton.textContent = 'Submit';
+      submitButton.disabled = false;
+      // Show full-screen overlay
+      document.getElementById('overlayMessage').style.display = 'block';
+      // Optionally, hide overlay after a few seconds
+      setTimeout(() => {
+        document.getElementById('overlayMessage').style.display = 'none';
+      }, 5000);
+      countdownTimer.textContent = '';
+    } else {
+      document.getElementById('responseMessage').textContent = 'Submission failed. Please try again.';
+      submitButton.textContent = 'Submit';
+      submitButton.disabled = false;
+    }
+  } catch (error) {
+    clearInterval(intervalId);
+    document.getElementById('responseMessage').textContent = 'An error occurred. Please try again.';
+    submitButton.textContent = 'Submit';
+    submitButton.disabled = false;
+  }
 });
-
-// Function to send form data
-async function sendFormData(formData, intervalId) {
-    const submitButton = document.querySelector('button[type="submit"]');
-    try {
-        const response = await fetch('https://bronzed-carpal-zone.glitch.me/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
-
-        clearInterval(intervalId);
-
-        if (response.ok) {
-            document.getElementById('responseMessage').textContent = 'Submitted. Thank you!';
-            document.getElementById('contactForm').reset();
-            submitButton.textContent = 'Submit';
-            submitButton.disabled = false;
-
-            // Show full-screen overlay
-            document.getElementById('overlayMessage').style.display = 'block';
-            setTimeout(() => {
-                document.getElementById('overlayMessage').style.display = 'none';
-            }, 5000);
-            countdownTimer.textContent = '';
-        } else {
-            document.getElementById('responseMessage').textContent =
-                'Submission failed. Please try again.';
-            submitButton.textContent = 'Submit';
-            submitButton.disabled = false;
-        }
-    } catch (error) {
-        clearInterval(intervalId);
-        console.error(error);
-        document.getElementById('responseMessage').textContent =
-            'An error occurred. Please try again.';
-        submitButton.textContent = 'Submit';
-        submitButton.disabled = false;
-    }
-}
-
   </script>
   <script>      document.getElementById('getLocationButton').addEventListener('click', function() {
   // Disable button while waiting for location
@@ -214,65 +167,43 @@ async function sendFormData(formData, intervalId) {
   button.disabled = true;
   let countdown = 30;
   const timerElement = document.getElementById('timer');
-  
-  // Start countdown timer immediately when button is clicked
-  const countdownInterval = setInterval(function() {
-    countdown--;
-    timerElement.textContent = `Please wait... ${countdown}s remaining`;
-
-    if (countdown <= 0) {
-      clearInterval(countdownInterval);
-      timerElement.textContent = 'Time out! Location not received.';
-      timerElement.style.color = '#B83C08'; // Color for time out
-      button.disabled = false; // Enable button again if timeout
-    }
-  }, 1000);
+  timerElement.textContent = `Please wait... ${countdown}s`;
 
   // Request location
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
-
+      
       // Get store name and category
-      const storeName = document.getElementById('storeName').value.trim().replace(/\s+/g, '');
+      const storeName = document.getElementById('storeName').value;
       const storeCategory = document.getElementById('storeCategory').value;
 
-      // Check if store name and category are filled
-      if (storeName && storeCategory) {
-        // Construct the object with store name as the key (no spaces and in quotes)
-        const locationData = `"${storeName}": { lat: ${lat}, lng: ${lng}, categories: ["${storeCategory}"] }`;
+      // Update location input
+      document.getElementById('storeLocation').value = `${storeName}: { lat: ${lat}, lng: ${lng}, categories: ["${storeCategory}"] }`;
 
-        // Update location input with the formatted data
-        document.getElementById('storeLocation').value = locationData;
-
-        // Stop the countdown and show success message
-        clearInterval(countdownInterval);
-        timerElement.textContent = 'location has been received.';
-        timerElement.style.color = 'green'; // Success color
-      } else {
-        // Stop countdown if input is incomplete
-        clearInterval(countdownInterval);
-        timerElement.textContent = 'Please fill in both store name and category.';
-        timerElement.style.color = 'red';
-        button.disabled = false; // Enable button again if fields are empty
-        return; // Exit the function early
-      }
+      // Start countdown timer after getting location
+      const countdownInterval = setInterval(function() {
+        countdown--;
+        timerElement.textContent = `Location received. ${countdown}s remaining...`;
+        
+        if (countdown <= 0) {
+          clearInterval(countdownInterval);
+          timerElement.textContent = 'Thank you! Your location has been saved.';
+        }
+      }, 1000);
     }, function(error) {
       console.error(error);
-      clearInterval(countdownInterval); // Stop countdown on error
-      timerElement.textContent = 'Location unavailable. Turn it ON.';
-      timerElement.style.color = '#B83C08'; // Error color
-      timerElement.style.fontSize = '16px';
+      timerElement.textContent = 'location unavailable. turn it ON';
+timerElement.style.color = '#B83C08';
+timerElement.style.fontSize = '16px';
       button.disabled = false; // Enable button again if there's an error
     });
   } else {
-    clearInterval(countdownInterval); // Stop countdown if geolocation is not supported
     timerElement.textContent = 'Geolocation is not supported by this browser.';
     button.disabled = false; // Enable button if geolocation is not supported
   }
 });
   </script>
-  
 </body>
 </html>
