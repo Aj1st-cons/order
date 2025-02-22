@@ -228,7 +228,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
   </script>
   
   <script>           
-      document.getElementById('contactForm').addEventListener('submit', async function (e) {
+document.getElementById('contactForm').addEventListener('submit', async function (e) {
   e.preventDefault();
 
   const submitButton = this.querySelector('button[type="submit"]');
@@ -251,7 +251,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
     const matchedAffiliate = affiliates.find(affiliate => affiliate['REF-CODE '] === refCode);
 
     if (matchedAffiliate) {
-      affiliateEmail = matchedAffiliate['Affiliate\'s email']; // Get the affiliate's email
+      affiliateEmail = matchedAffiliate['Affiliate\'s  email']; // Get the affiliate's email
 
       // Proceed with form submission
       const formData = {
@@ -263,7 +263,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
         storesAddress: document.getElementById('storesAddress').value,
         contactNumber: document.getElementById('contactNumber').value,
         reffCode: refCode,
-        affiliateEmail: affiliateEmail // Add affiliate's email to the form data
+        recipientEmail: affiliateEmail // Add affiliate's email as the recipient email
       };
 
       // Proceed with sending data to the server
