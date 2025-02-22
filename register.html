@@ -58,11 +58,19 @@ button {
   <input type="text" id="firstName" placeholder="First Name" name="firstName" required /> 
 
   <input type="text" id="lastName" placeholder="Last Name" name="lastName" required />
+<!--  -->  
   
-  <div style="display: flex;">
+<div style="display: flex; flex-direction: column; gap: 5px;">
+  <div style="display: flex; align-items: center;">
     <input type="text" id="reffCode" placeholder="Click 'Validate' to validate" name="reffCode" />
     <button style="margin-bottom:-5px; padding:0 15px;" type="button" id="validate">Validate</button>
   </div>
+  <!-- Error message container -->
+  <div id="errorMsg" style="color: red; font-size: 0.9em;"></div>
+</div>  
+  
+<!--  -->  
+  <input type="email" id="affiliateEmail" placeholder="affiliateEmail" name="affiliateEmail" style="display: ;" />
 
 <input type="text" id="storeName" placeholder="Store Name" name="storeName" required />
 
@@ -79,7 +87,7 @@ button {
 
 <input type="text" id="storesAddress" placeholder="Store's Address" name="storesAddress" required />
 
-<input type="email" id="email" placeholder="Email Address" name="email" required />
+<input type="email" id="sellerEmail" placeholder="Email Address" name="sellerEmail" required />
 
 <input type="text" id="contactNumber" placeholder="Contact Number" name="contactNumber" required />
 
@@ -121,13 +129,13 @@ document.getElementById('contactForm').addEventListener('submit', async function
   const formData = {
     firstName: document.getElementById('firstName').value,
     lastName: document.getElementById('lastName').value,
-    affiliateEmail: document.getElementById('email').value,  
+    affiliateEmail: document.getElementById('affiliateEmail').value,  
     reffCode: document.getElementById('reffCode').value,
     storeName: document.getElementById('storeName').value,
     storeCategory: document.getElementById('storeCategory').value,
     storeLocation: document.getElementById('storeLocation').value,
     storesAddress: document.getElementById('storesAddress').value,
-    email: document.getElementById('email').value,    
+    sellerEmail: document.getElementById('sellerEmail').value,    
     contactNumber: document.getElementById('contactNumber').value    
   };
 
@@ -232,69 +240,76 @@ document.getElementById('contactForm').addEventListener('submit', async function
   </script>  
   
   <script> 
-   document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
+    const reffInput = document.getElementById("reffCode");
     const validateButton = document.getElementById("validate");
-    const refCodeInput = document.getElementById("reffCode"); // Updated ID
-    const validationMessage = document.createElement("p"); // Creating validation message dynamically
-    validationMessage.style.marginLeft = "10px";
-    
-    // Insert validation message just below the input field
-    refCodeInput.parentNode.appendChild(validationMessage);
+    const errorMsg = document.getElementById("errorMsg");
+    const emailInput = document.getElementById("affiliateEmail");
 
+    // Ensure email is not required
+    emailInput.removeAttribute("required");
+
+    // Validate button click handler
     validateButton.addEventListener("click", function () {
-        const refCode = refCodeInput.value.trim();
-        if (!refCode) {
-            validationMessage.textContent = "Please enter a REF-code.";
-            validationMessage.style.color = "red";
-            return;
-        }
-
-        fetch("https://order-1ib.pages.dev/affiliates.json")
-            .then(response => response.json())
-            .then(data => {
-                let matched = false;
-                let email = "";
-
-                data.forEach(entry => {
-                    if (entry["REF-CODE "] === refCode) {
-                        matched = true;
-                        email = entry["Affiliate's  email"];
-                    }
-                });
-
-                if (matched) {
-                    validationMessage.textContent = "Validated";
-                    validationMessage.style.color = "green";
-
-                    let existingInput = document.getElementById("affiliateEmail");
-                    if (existingInput) {
-                        existingInput.remove();
-                    }
-
-                    let emailInput = document.createElement("input");
-                    emailInput.type = "hidden";
-                    emailInput.id = "affiliateEmail";
-                    emailInput.name = "affiliateEmail";
-                    emailInput.value = email;
-
-                    refCodeInput.parentNode.appendChild(emailInput);
-                } else {
-                    validationMessage.textContent = "REF-code not matched.";
-                    validationMessage.style.color = "red";
-
-                    let existingInput = document.getElementById("affiliateEmail");
-                    if (existingInput) {
-                        existingInput.remove();
-                    }
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching JSON:", error);
-                validationMessage.textContent = "Error fetching data. Try again later.";
-                validationMessage.style.color = "red";
-            });
+      // Clear any previous error message
+      errorMsg.textContent = "";
+      
+      // Get the entered reff code and trim spaces
+      const enteredCode = reffInput.value.trim();
+      
+      if (!enteredCode) {
+        errorMsg.textContent = "Please enter a REFF-code.";
+        return;
+      }
+      
+      // Fetch the JSON data dynamically
+      fetch("https://order-1ib.pages.dev/affiliates.json")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Depending on your JSON structure, adjust how you search.
+          // This example assumes the fetched JSON is an array of affiliate objects.
+          let matchedRecord = null;
+          
+          // If the JSON is an object instead of an array, wrap it into an array
+          const affiliates = Array.isArray(data) ? data : [data];
+          
+          // Search through each affiliate record
+          matchedRecord = affiliates.find(record => {
+            // Use a case-insensitive comparison after trimming potential extra spaces in keys.
+            // We assume the key in the JSON for the REFF-code might have trailing spaces
+            // so we trim it and compare the value.
+            if(record["REF-CODE "] && record["REF-CODE "].trim() === enteredCode){
+              return true;
+            }
+            return false;
+          });
+          
+          if (matchedRecord) {
+            // If a matching record is found, get the affiliate's email.
+            // Note the key in JSON is "Affiliate's  email" (with double spaces); adjust as needed.
+            const affEmail = matchedRecord["Affiliate's  email"];
+            if (affEmail) {
+              emailInput.value = affEmail;
+              // Optionally reveal the email input if needed
+              emailInput.style.display = "block";
+            } else {
+              errorMsg.textContent = "Affiliate email not found in the record.";
+            }
+          } else {
+            errorMsg.textContent = "REFF-code not matched. Please try again.";
+          }
+        })
+        .catch(error => {
+          console.error("Fetch error:", error);
+          errorMsg.textContent = "Error fetching data. Please try again later.";
+        });
     });
-});
+  });   
   </script>
 </body>
 </html>
