@@ -176,13 +176,16 @@ document.getElementById('contactForm').addEventListener('submit', async function
       const lng = position.coords.longitude;
       
       // Get store name and category
-      const storeName = document.getElementById('storeName').value;
+      const storeName = document.getElementById('storeName').value.trim().replace(/\s+/g, '');
       const storeCategory = document.getElementById('storeCategory').value;
 
       // Check if store name and category are filled
       if (storeName && storeCategory) {
-        // Update location input
-        document.getElementById('storeLocation').value = `${storeName}: { lat: ${lat}, lng: ${lng}, categories: ["${storeCategory}"] }`;
+        // Construct the object with store name as the key (no spaces and in quotes)
+        const locationData = `"${storeName}": { lat: ${lat}, lng: ${lng}, categories: ["${storeCategory}"] }`;
+
+        // Update location input with the formatted data
+        document.getElementById('storeLocation').value = locationData;
       } else {
         timerElement.textContent = 'Please fill in both store name and category.';
         timerElement.style.color = 'red';
