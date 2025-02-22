@@ -161,8 +161,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
   }
 });
   </script>
-  <script>
-      document.getElementById('getLocationButton').addEventListener('click', function() {
+  <script>      document.getElementById('getLocationButton').addEventListener('click', function() {
   // Disable button while waiting for location
   const button = document.getElementById('getLocationButton');
   button.disabled = true;
@@ -180,8 +179,17 @@ document.getElementById('contactForm').addEventListener('submit', async function
       const storeName = document.getElementById('storeName').value;
       const storeCategory = document.getElementById('storeCategory').value;
 
-      // Update location input
-      document.getElementById('storeLocation').value = `${storeName}: { lat: ${lat}, lng: ${lng}, categories: ["${storeCategory}"] }`;
+      // Check if store name and category are filled
+      if (storeName && storeCategory) {
+        // Update location input
+        document.getElementById('storeLocation').value = `${storeName}: { lat: ${lat}, lng: ${lng}, categories: ["${storeCategory}"] }`;
+      } else {
+        timerElement.textContent = 'Please fill in both store name and category.';
+        timerElement.style.color = 'red';
+        timerElement.style.fontSize = '16px';
+        button.disabled = false; // Enable button again if fields are empty
+        return; // Exit the function early
+      }
 
       // Start countdown timer after getting location
       const countdownInterval = setInterval(function() {
@@ -195,9 +203,9 @@ document.getElementById('contactForm').addEventListener('submit', async function
       }, 1000);
     }, function(error) {
       console.error(error);
-      timerElement.textContent = 'location unavailable. turn it ON';
-timerElement.style.color = '#B83C08';
-timerElement.style.fontSize = '16px';
+      timerElement.textContent = 'Location unavailable. Turn it ON.';
+      timerElement.style.color = '#B83C08';
+      timerElement.style.fontSize = '16px';
       button.disabled = false; // Enable button again if there's an error
     });
   } else {
