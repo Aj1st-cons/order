@@ -160,50 +160,6 @@ document.getElementById('contactForm').addEventListener('submit', async function
     submitButton.disabled = false;
   }
 });
-  </script>
-  <script>      document.getElementById('getLocationButton').addEventListener('click', function() {
-  // Disable button while waiting for location
-  const button = document.getElementById('getLocationButton');
-  button.disabled = true;
-  let countdown = 30;
-  const timerElement = document.getElementById('timer');
-  timerElement.textContent = `Please wait... ${countdown}s`;
-
-  // Request location
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-      
-      // Get store name and category
-      const storeName = document.getElementById('storeName').value;
-      const storeCategory = document.getElementById('storeCategory').value;
-
-      // Update location input
-      document.getElementById('storeLocation').value = `${storeName}: { lat: ${lat}, lng: ${lng}, categories: ["${storeCategory}"] }`;
-
-      // Start countdown timer after getting location
-      const countdownInterval = setInterval(function() {
-        countdown--;
-        timerElement.textContent = `Location received. ${countdown}s remaining...`;
-        
-        if (countdown <= 0) {
-          clearInterval(countdownInterval);
-          timerElement.textContent = 'Thank you! Your location has been saved.';
-        }
-      }, 1000);
-    }, function(error) {
-      console.error(error);
-      timerElement.textContent = 'location unavailable. turn it ON';
-timerElement.style.color = '#B83C08';
-timerElement.style.fontSize = '16px';
-      button.disabled = false; // Enable button again if there's an error
-    });
-  } else {
-    timerElement.textContent = 'Geolocation is not supported by this browser.';
-    button.disabled = false; // Enable button if geolocation is not supported
-  }
-});
-  </script>
+  </script>  
 </body>
 </html>
