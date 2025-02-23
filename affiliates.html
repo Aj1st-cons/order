@@ -115,7 +115,7 @@
         }
     </style>
 
-    <h2>Affiliates Dashboard test-1</h2>
+    <h2>Affiliates Dashboard</h2>
 
     <!-- Input fields for Refcode and Email -->
     <input class="input-field" type="text" id="refcode" placeholder="Enter Refcode">
@@ -253,11 +253,13 @@
         refCodeModal.style.display = "none";
     });
 
+
 // Create Account Button Event Listener
 createAccountButton.addEventListener("click", async function () {
     const name = document.getElementById("name").value;
     const newEmail = document.getElementById("newEmail").value;
-    const socialMedia = Array.from(document.getElementById("socialMedia").selectedOptions).map(option => option.value);
+    const socialMedia = Array.from(document.getElementById("socialMedia").selectedOptions)
+                               .map(option => option.value);
     const platformId = document.getElementById("platformId").value;
     const contactNumber = document.getElementById("contactNumber").value;
 
@@ -292,14 +294,16 @@ createAccountButton.addEventListener("click", async function () {
         let countdown = 30;
         const timerInterval = setInterval(() => {
             countdown--;
-            document.getElementById("timer").textContent = countdown;
+            const timerElement = document.getElementById("timer");
+            if (timerElement) {
+                timerElement.textContent = countdown;
+            }
             if (countdown <= 0) {
                 clearInterval(timerInterval);
-                // Remove the popup and show error message if still visible
                 if(document.body.contains(sendingPopup)) {
                     document.body.removeChild(sendingPopup);
-                    document.getElementById('responseMessage').textContent = 'Submission failed. Please try again.';
                 }
+                document.getElementById('responseMessage').textContent = 'Submission failed. Please try again.';
             }
         }, 1000);
 
@@ -321,7 +325,7 @@ createAccountButton.addEventListener("click", async function () {
                     body: JSON.stringify(formData)
                 });
 
-                // If the response is received before timer runs out, clear the timer and remove popup
+                // Clear timer and remove popup if it's still visible
                 clearInterval(timerInterval);
                 if(document.body.contains(sendingPopup)) {
                     document.body.removeChild(sendingPopup);
@@ -343,6 +347,7 @@ createAccountButton.addEventListener("click", async function () {
         }, 0);
     }
 });
+
 
     // Copy Ref-Code Button Event Listener
     copyRefCodeButton.addEventListener("click", function () {
