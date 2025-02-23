@@ -300,7 +300,7 @@ createAccountButton.addEventListener("click", async function () {
             }
             if (countdown <= 0) {
                 clearInterval(timerInterval);
-                if(document.body.contains(sendingPopup)) {
+                if (document.body.contains(sendingPopup)) {
                     document.body.removeChild(sendingPopup);
                 }
                 document.getElementById('responseMessage').textContent = 'Submission failed. Please try again.';
@@ -324,24 +324,39 @@ createAccountButton.addEventListener("click", async function () {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
+                
+                // Parse response JSON for further details (if any)
+                const result = await response.json();
+                console.log("Response from backend:", result);
 
                 // Clear timer and remove popup if it's still visible
                 clearInterval(timerInterval);
-                if(document.body.contains(sendingPopup)) {
+                if (document.body.contains(sendingPopup)) {
                     document.body.removeChild(sendingPopup);
                 }
-                
-                if (response.ok) {
-                    document.getElementById('responseMessage').textContent = 'Submitted. Thank you!';
-                    document.getElementById('contactForm').reset();
+
+                // Check for a status code of 200 or response.ok
+                if (response.status === 200 || response.ok) {
+                    document.getElementById('responseMessage').innerHTML = `
+  <div style="text-align:center;">
+    <span style="font-weight:bold; color:#009500;">Thank you</span><br>
+    <span style="font-style:italic; color:#3A3B3C;">your details have been submitted successfully!</span>
+  </div>
+`;
+                    // Optionally reset the form if it exists
+                    const contactForm = document.getElementById('contactForm');
+                    if (contactForm) {
+                        contactForm.reset();
+                    }
                 } else {
                     document.getElementById('responseMessage').textContent = 'Submission failed. Please try again.';
                 }
             } catch (error) {
                 clearInterval(timerInterval);
-                if(document.body.contains(sendingPopup)) {
+                if (document.body.contains(sendingPopup)) {
                     document.body.removeChild(sendingPopup);
                 }
+                console.error("Error sending email:", error);
                 document.getElementById('responseMessage').textContent = 'An error occurred. Please try again.';
             }
         }, 0);
