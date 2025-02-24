@@ -3,5 +3,6 @@ let vendors = {
 "gh": { lat: 24.400, lng: 54.588, categories: ["Cafeteria"] },
 "jithu": { lat: 24.375, lng: 54.586, categories: ["Salon", "Grocery"] },
 "b": { lat: 24.410, lng: 54.582, categories: ["Cafeteria", "Grocery"] },    
-"c": { lat: 24.373, lng: 54.580, categories: ["Salon"] }
+"c": { lat: 24.373, lng: 54.580, categories: ["Salon"] },
+"r": { lat: 24.255, lng: 54.627, categories: ["Grocery"] }
 };
