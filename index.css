@@ -97,6 +97,20 @@
             padding: 10px; 
             box-sizing: border-box; 
          }
+         #errorPopup button {
+    background-color: #009500;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#errorPopup button:hover {
+    background-color: #0056b3;
+}
         #locationPopup, #cityPopup, #locationErrorPopup {
             position: fixed;
             top: 60px;
