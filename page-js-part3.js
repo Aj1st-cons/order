@@ -166,7 +166,7 @@ function showLocationServicesPopup() {
 
     // Error message with bold and red color
     let messageText = document.createElement("p");
-    messageText.innerHTML = "<strong style='color: red;'>Unable to get your location</strong><br><span style='font-size:12px;'>Please check your location services in device settings.</span>";
+    messageText.innerHTML = "<strong style='color: red;'>Unable to get your location</strong><br><span style='font-size:12px; line-height:0.5;'>Please check your location services in device settings.</span>";
     
     let okButton = document.createElement("button");
     okButton.textContent = "OK";
@@ -368,7 +368,7 @@ function showLocationServicesPopup() {
 
     // Error message with bold and red color
     let messageText = document.createElement("p");
-    messageText.innerHTML = "<strong>Unable to get your location</strong><br><span style='font-size:12px; line-height:0.8;'>Please check your location services in device settings.</span>";
+    messageText.innerHTML = "<strong>Unable to get your location</strong><br><span style='font-size:12px; line-height:0.5;'>Please check your location services in device settings.</span>";
     
     let okButton = document.createElement("button");
     okButton.textContent = "OK";
