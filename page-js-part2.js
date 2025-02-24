@@ -78,7 +78,7 @@ function getUserLocation() {
                 }
             }
 
-            replaceableText.innerText = closestCity && minDistance <= 50 ? closestCity : "Current Location";
+            replaceableText.innerText = closestCity && minDistance <= 1 ? closestCity : "Current Location";
         } else {
             replaceableText.innerText = location.name || "Saved Location";
         }
