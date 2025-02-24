@@ -256,12 +256,14 @@
             border-radius: 8px;
         }
         .cardx p {
-            margin-top: -10px;
-            line-height: 0.8;
-            align-items:center;
-            color: #52595d;
-            font-weight: bold;
-            font-size: 13px;           
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    margin: 0;
+    color: #52595d;
+    font-weight: bold;
+    font-size: 13px;
         }
                            
         .item-card {
