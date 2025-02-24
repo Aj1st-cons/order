@@ -259,11 +259,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px;
+    height: 40px;
     margin: 0;
+    margin-top: -20px;
+    line-height: 0.8;
     color: #52595d;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 11px;
         }
                            
         .item-card {
