@@ -241,13 +241,7 @@
             cursor: pointer;
             width: 100px;
             height: 120px;
-            transition: transform 0.2s;            
-        }
-        .cardx:last-child {
-            margin-bottom: 20px;
-        }
-        .cardx:first-child {
-            margin-top: 40px;
+            transition: transform 0.2s; 
         }
         .cardx:hover {
             transform: scale(1.05);    
