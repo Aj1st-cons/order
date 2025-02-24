@@ -24,8 +24,7 @@ let locations = {
     "Abu Dhabi": { 
 "City C1": { lat: 27.123, lng: 57.123 }, 
 "City C2": { lat: 27.223, lng: 57.223 }, 
-"City C3": { lat: 27.323, lng: 57.323 } 
-    },
+"China Camp": { lat: 24.255, lng: 54.627 } 
     "Ajman": { 
 "City C1": { lat: 27.123, lng: 57.123 }, 
 "City C2": { lat: 27.223, lng: 57.223 }, 
