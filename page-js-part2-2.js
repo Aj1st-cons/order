@@ -1,11 +1,50 @@
-function getSavedLocation() {
-    const savedLocation = JSON.parse(localStorage.getItem("userLocation"));
+    function getUserLocation() {
+    let savedLocation = getSavedLocation();
+
+    // Display saved location if it exists.
     if (savedLocation) {
-        return savedLocation;
+        updateReplaceableText(savedLocation);
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                // Only update with device location if there's no saved location,
+                // or if the saved location is already a device location.
+                if (!savedLocation || savedLocation.type === "device") {
+                    let userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        timestamp: Date.now(),
+                        type: "device"
+                    };
+                    saveLocation(userLocation);
+                    updateReplaceableText(userLocation);
+                }
+            },
+            () => {
+                if (!savedLocation) {
+                    showLocationPopup();
+                }
+            },
+            { timeout: 10000 }
+        );
+    } else if (!savedLocation) {
+        showLocationPopup();
+    }
+}
+
+function saveLocation(location) {
+    localStorage.setItem("userLocation", JSON.stringify(location));
+}
+
+function getSavedLocation() {
+    let savedLocation = localStorage.getItem("userLocation");
+    if (savedLocation) {
+        return JSON.parse(savedLocation);
     }
     return null;
 }
-
 
 function updateReplaceableText(location) {
     let replaceableText = document.querySelector(".replaceable-text");
@@ -29,8 +68,8 @@ function updateReplaceableText(location) {
             }
         }
 
-        // Using 1km threshold for displaying the closest city
-        replaceableText.innerText = (closestCity && minDistance <= 1) ? closestCity : "Current Location";
+        // Use a 1 km threshold for displaying the closest city.
+        replaceableText.innerText = closestCity && minDistance <= 1 ? closestCity : "Current Location";
     } else {
         replaceableText.innerText = location.name || "Saved Location";
     }
@@ -157,4 +196,4 @@ function updateReplaceableText(location) {
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   
     // Initialize on page load
     getUserLocation();
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx      
