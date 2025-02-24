@@ -44,7 +44,7 @@
                 const locationPrompt = document.getElementById("locationPromptPopup");
                 locationPrompt.style.display = "block";
                 setTimeout(() => locationPrompt.style.display = "none", 3000);
-            }, 3000);
+            }, 6000);
         }
     });
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx          
