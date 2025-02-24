@@ -91,7 +91,7 @@ function showLocationServicesPopup() {
     let popupBox = document.createElement("div");
     popupBox.id = "popup-box";
     popupBox.innerHTML = `
-        <p><strong style="color: red;">Error</strong><br><br>Unable to get your location. Please check your location services in device settings.</p>
+        <p><strong>Unable to get your location</strong><br><span style="font-size:10px;">Please check your location services in device settings.</span></p>
         <button id="popup-ok">OK</button>
     `;
     popupOverlay.appendChild(popupBox);
