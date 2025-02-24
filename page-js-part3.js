@@ -166,7 +166,7 @@ function showLocationServicesPopup() {
 
     // Error message with bold and red color
     let messageText = document.createElement("p");
-    messageText.innerHTML = "<strong style='color: red;'>Unable to get your location</strong><br>Please check your location services in device settings.";
+    messageText.innerHTML = "<strong style='color: red;'>Unable to get your location</strong><br><span style='font-size:10px;'>Please check your location services in device settings.</span>";
     
     let okButton = document.createElement("button");
     okButton.textContent = "OK";
