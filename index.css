@@ -101,10 +101,11 @@
     background-color: #009500;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
+    padding: 5px 5px;
+    font-size: 10px;
+    border-radius: 2px;
     cursor: pointer;
+    margin-top: -30px;             
     transition: background-color 0.3s ease;
 }
 
