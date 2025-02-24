@@ -246,6 +246,9 @@
         .cardx:last-child {
             margin-bottom: 20px;
         }
+        .cardx:first-child {
+            margin-top: 40px;
+        }
         .cardx:hover {
             transform: scale(1.05);    
         }
