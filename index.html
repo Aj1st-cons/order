@@ -3,623 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Orders Made Easy with Order App</title>
-<!-- xxxxxxxxxxxxxxxxxxxxxx -->
-<style>
-   /* Countdown Timer & Spinner Styles */
-#countdown-wrapper {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    border-radius: 5px;
-    z-index: 9999;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid white;
-    border-top: 4px solid #009500;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 10px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Popup Styles */
-#popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 9999;
-}
-
-#popup-box {
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    height: 250px;
-    background-color: white;
-    border: 2px solid #009500;
-    border-radius: 5px;
-    box-shadow: 0 0 30px 30px rgba(0, 0, 0, 0.3);
-    padding: 10px;
-    box-sizing: border-box;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-#popup-box p {
-    margin: 0;
-}
-
-#popup-ok {
-    margin-top: 15px;
-    padding: 5px 15px;
-    border: none;
-    background-color: #009500;
-    color: white;
-    border-radius: 3px;
-    cursor: pointer;
-}
-</style>
-<link rel="stylesheet" href="https://order-1ib.pages.dev/index.css">     
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
-<link href="https://fonts.googleapis.com/css2?family=Lilita+One&amp;display=swap" rel="stylesheet">       
+    <title>Submit User Details</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+  background: #009500;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 20px; 
+  white-space: nowrap;
+  width: auto;
+  display: block;
+  margin: 10px auto;
+  font-size: 16px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .success {
+            color: green;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
-    <body onload="getUserLocation()">
+<body>
+    <h1>Submit Your Details</h1>
+    <input type="text" id="firstName" placeholder="First Name"><br>
+    <input type="text" id="lastName" placeholder="Last Name"><br>
 
-        <div class="header">
-    <a href="https://order-app-ae.myshopify.com" style="margin-right: 10px;">
-        <h1 style="margin: 0;">Order App</h1>
-    </a>    
-    <div class="replaceable-text" onclick="showLocationPopup()" style="margin-right: 10px; margin-top:5px; cursor: pointer;">
-    Change Location
-   </div>
-   <div class="icon-container" onclick="showLocationPopup()" style="cursor: pointer; margin-top:5px;">
-    <i class="fa-solid fa-rotate" style="color: #009500;"></i>
-   </div>
-<div style="display: flex; background: #fff; gap: 20px; position: fixed; overflow-y: hidden; width: 100%; height: 50px; padding: 5px; justify-content: center; margin-top: 94px; z-index: 10;">
-<div class="cardz" onclick="closePopup()">        
-    <p>select items</p>
-    </div>    
-<div class="cardz" style="background:#009500;" onclick="showStores('stores')">
-    <p style="color:white;">Stores Nearby</p>
-</div>
-</div>
+    <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="display: flex; align-items: center;">
+            <input type="text" id="reffCode" placeholder="REFF-Code click to validate" name="refCode">
+            <button style="margin-bottom:-5px; padding:10px 15px;" type="button" id="validate">Validate</button>
+        </div>
+        <!-- Validation message container -->
+        <div id="reffCodeMsg" class="error"></div>
     </div>
-          <!-- Welcome Screen -->
-<div id="welcome" class="visible">    
-        <h1>
-            <span>O</span><span>r</span><span>d</span><span>e</span><span>r</span>
-            <span class="space"></span>
-            <span>A</span><span>p</span><span>p</span>
-        </h1>
-    </div>    
-<!-- xxxxxxxxxxxxxxxxxxxx --> 
 
-<!-- xxxxxxxxxxxxxxxxxxxx -->                    
-       <div id="categories" class="item-grid" style="margin-top: 60px; margin-bottom: 50px;">
-                  <!--  -->                                                     
-<div class="cardx" onclick="showItems('vegetables')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072235.webp?v=1738386080" alt="Vegetables">
-        <p>Vegetables</p>
-</div>
+    <input type="text" id="storeName" placeholder="Store Name"><br>
+    <input type="text" id="category" placeholder="Store Category"><br>
+    <input type="text" id="address" placeholder="Store Address"><br>
     
-<div class="cardx" onclick="showItems('fruits')">
-       <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072237.webp?v=1738385978" alt="Fruits">
-       <p>Fruits</p>
-</div>
+<!--  -->
+  <div style="display: flex; flex-direction: column; gap: 5px;">
+  <div style="display: flex; align-items: center;">
+    <input type="text" id="storeLocation" placeholder="Click 'Get' to get location" name="storeLocation"/>
+    <button style="margin-bottom:-5px; padding:10px 15px;" type="button" id="getLocationButton">Get</button>
+  </div></div>
+
+  <div id="timer" class="countdown"></div>
+<!--  -->
     
-<div class="cardx" onclick="showItems('meat')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072170.webp?v=1738385944" alt="Meat">
-        <p>Meat & Chicken</p>
-</div>  
+    <input type="email" id="email" placeholder="Email"><br>    
+    <input type="number" id="contact" placeholder="Contact Number"><br>
+    
+    <p id="error-message" class="error"></p>
+    
+    <button onclick="submitUser()">Submit</button>
+    
+    <div id="successMessage" style="margin-top:20px; margin-bottom:50px;"></div>
 
-<div class="cardx" onclick="showItems('cafeteria')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072168.webp?v=1738385898" alt="Cafeteria">
-        <p>Cafeteria</p>
-    </div>
+    <script>
+    const socket = io("https://dust-fantasy-pail.glitch.me"); // Connect to your server
+    let isReffCodeValid = false;
+    let isLocationRetrieved = false; // Flag to track location retrieval
 
-<div class="cardx" onclick="showItems('restaurants')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072167.webp?v=1738386042" alt="Restaurants">
-        <p>Restaurants</p>
-    </div>
-
-<div class="cardx" onclick="showItems('bakery')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072169.webp?v=1738385927" alt="Bakery">
-        <p>Bakery & Spreads</p>
-    </div>
-
-<div class="cardx" onclick="showItems('oils')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072175.webp?v=1738385868" alt="Oils">
-        <p>Oils & Season</p>
-    </div>
-
-<div class="cardx" onclick="showItems('seafood')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072243.webp?v=1738385970" alt="Seafood">
-        <p>Seafood</p>
-    </div>
-
-<div class="cardx" onclick="showItems('spices')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072183.webp?v=1738386023" alt="Spices">
-        <p>Spices</p>
-    </div>
-
-<div class="cardx" onclick="showItems('beverages')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072229.webp?v=1738385955" alt="Beverages">
-        <p>Beverages</p>
-    </div>
-
-<div class="cardx" onclick="showItems('beauty')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072220.webp?v=1738385848" alt="Beauty">
-        <p>Beauty</p>
-    </div>
-
-<div class="cardx" onclick="showItems('eggs')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072226.webp?v=1738385841" alt="Eggs">
-        <p>Eggs & Dairy</p>
-    </div>
-
-<div class="cardx" onclick="showItems('ready to cook')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072181.webp?v=1738386054" alt="Ready to cook">
-        <p>Ready to cook</p>
-    </div>
-
-<div class="cardx" onclick="showItems('snacks')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072182.webp?v=1738385890" alt="Snacks">
-        <p>Snacks & Sweets</p>
-    </div>
-
-<div class="cardx" onclick="showItems('rice & grains')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072172.webp?v=1738385935" alt="Rice & Grains">
-        <p>Rice & Grains</p>
-    </div>
-
-<div class="cardx" onclick="showItems('delicatessen')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072171.webp?v=1738386062" alt="Delicatessen">
-        <p>Delicatessen</p>
-    </div>
-
-<div class="cardx" onclick="showItems('nuts')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072255.webp?v=1738386004" alt="Nuts">
-        <p>Nuts</p>
-    </div>
-
-<div class="cardx" onclick="showItems('frozen')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072174.webp?v=1738386033" alt="Frozen">
-        <p>Frozen & Can</p>
-    </div>
-
-<div class="cardx" onclick="showItems('tea')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072177.webp?v=1738385962" alt="Tea & coffee">
-        <p>Tea & coffee</p>
-    </div>
-
-<div class="cardx" onclick="showItems('babies')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072254.webp?v=1738385879" alt="Babies">
-        <p>Babies</p>
-    </div>
-
-<div class="cardx" onclick="showItems('personal')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000072250.webp?v=1738385859" alt="Personal care">
-        <p>Personal care</p>
-</div>           
-           
-<div class="cardx" onclick="showItems('home')">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000075595.webp?v=1739037778" alt="Home">
-        <p>Home</p>
-</div>                             
-                                                                                                                             
-       </div> 
-<!-- xxxxxxxxxxxxxxxxxxxxxx -->       
-    <div id="itemPopup" class="popup">        
- <div id="itemList"></div></div>                        
-<!-- xxxxxxxxxxxxxxxxxxxxxx -->  
-    <div id="storesPopup" class="popup">        
- <div id="storesList"></div></div>                              
-<!-- xxxxxxxxxxxxxxxxxxxxxx -->                
-<div id="locationPopup" class="popup2">  
-    <div class="popup-footer">
-        <span></span>
-        <button onclick="closePopup()">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>      
-    <div id="locationsList" class="popup-content"></div></div>
-                   <!--  -->
-<div id="cityPopup" class="popup2">  
-    <div class="popup-footer">
-        <button class="back-btn" onclick="goBackToLocations()">
-       <i class="fas fa-arrow-left"></i> 
-        </button>
-        <button onclick="closePopup()">
-       <i class="fas fa-times"></i>
-        </button>
-    </div>     
-    <div id="cityList" class="popup-content"></div></div>
-                   <!--  -->    
-    <div id="errorPopup" class="popup2">
-        <h3>Item Not Available</h3>
-        <p>The selected item is not available nearby.</p>
-        <br><br>
-   <button onclick="closeErrorPopup()">OK</button>
-    </div>   
-                   <!--  -->
-    <div id="locationErrorPopup" class="popup2">
-        <br>
-        <h3>Error</h3>
-        <p>Unable to get your current location. Please turn <b>ON</b> the location</p>
-        <br><br>
-    <button onclick="closePopup()">OK</button>
-    </div>
-                   <!--  -->
-   <div id="locationPromptPopup" class="bottom-popup">
-        <p>Please turn on your location services for a better experience.</p></div>
-                   <!--  -->
-     <div id="selectLocationPopup" class="bottom-popup" style="display: none;">
-    <p>Please turn your location <b>ON</b><br><br>OR<br><br>if <b>ON</b> REFRESH the page</p>
-</div>                   
-           <!-- Edit Popup -->
-<div id="editPopup">
-    <h3>Change Saved Location?</h3>
-    <div class="input-container">
-        <input type="text" id="editNameInput" placeholder="Enter new name" maxlength="14">
-    </div>
-    <div class="popup-buttons">
-        <button id="editNoButton" onclick="handleEditNo()">No</button>
-        <button id="editYesButton" onclick="handleEditYes()">Yes</button>
-    </div>
-</div>
-          <!-- customNamePopup  -->
-<div id="saveLocationPopup">
-    <h3>Your Favourite Location</h3>
-    <div class="input-container">
-        <input type="text" id="saveLocationInput" placeholder="Home / Office" maxlength="14">
-    </div>
-    <div class="popup-buttons">
-        <button id="cancelButton" onclick="closeSaveLocationPopup()">Cancel</button>
-        <button id="saveLocationConfirm">Save</button>
-    </div>
-</div>    
-<!-- ///////////////////////// -->
-<script src="https://order-1ib.pages.dev/welcome.js">    
-</script>
-<script src="https://order-1ib.pages.dev/categories.js"></script>
-<script src="https://order-1ib.pages.dev/coordinates.js"></script>
-<script src="https://order-1ib.pages.dev/let-vendors.js"></script>
-<script src="https://order-1ib.pages.dev/page.js">
-</script>
-<script src="https://order-1ib.pages.dev/page-js-part2.js"></script>
-<script>
-    //when the back button is pressed
-window.addEventListener('popstate', function (e) {
-    const popup = document.getElementById("itemPopup");
-
-    // Check if the popup is open
-    if (popup.style.display === "block") {
-        // Close the popup
-        popup.style.display = "none";
-        
-        // Prevent the default behavior of going back
-        history.pushState(null, null, location.href);
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
     }
-});
 
-// Function to open the popup and update the browser history state
-function showItems(category) {
-    fetch(categoryUrls[category])
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.text();
-        })
-        .then(data => {
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(data, "text/html");
-            let items = [];
+    document.getElementById('validate').addEventListener('click', function() {
+        const reffCode = document.getElementById('reffCode').value.trim();
+        const reffCodeMsg = document.getElementById('reffCodeMsg');
 
-            doc.querySelectorAll(".item-card").forEach(card => {
-                let img = card.querySelector("img")?.src;
-                let name = card.querySelector("p")?.textContent;
-                if (img && name) items.push({ name, image: img });
+        if (!reffCode) {
+            reffCodeMsg.textContent = "REFF-Code is required.";
+            reffCodeMsg.className = "error";
+            isReffCodeValid = false;
+            return;
+        }
+
+        fetch('https://dust-fantasy-pail.glitch.me/data')
+            .then(response => response.json())
+            .then(data => {
+                const matched = data.some(row => row.reffCode === reffCode);
+                if (matched) {
+                    reffCodeMsg.textContent = "REFF-Code matched!";
+                    reffCodeMsg.className = "success";
+                    isReffCodeValid = true;
+                } else {
+                    reffCodeMsg.textContent = "REFF-Code not matched.";
+                    reffCodeMsg.className = "error";
+                    isReffCodeValid = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                reffCodeMsg.textContent = "Error validating REFF-Code.";
+                reffCodeMsg.className = "error";
+                isReffCodeValid = false;
             });
+    });
 
-            let itemList = `<div class="item-grid">`;
-            items.forEach(item => {
-                itemList += `
-                    <div class="item-card" onclick="searchItem('${item.name}')">
-                        <img src="${item.image}" alt="${item.name}" loading="lazy">
-                        <p>${item.name}</p>
-                    </div>
-                `;
-            });
-            itemList += `</div>`;
-            document.getElementById("itemList").innerHTML = itemList;
-            document.getElementById("itemPopup").style.display = "block";
+    function submitUser() {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const reffCode = document.getElementById('reffCode').value.trim();
+        const storeName = document.getElementById('storeName').value.trim();
+        const category = document.getElementById('category').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const location = document.getElementById('storeLocation').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const contact = document.getElementById('contact').value.trim();
+        const errorMessage = document.getElementById('error-message');
 
-            // Push state to the history to avoid going back to previous page
-            history.pushState(null, null, location.href);
-        })
-        .catch(error => {
-            console.error("Error loading items:", error);
-            document.getElementById("errorPopup").style.display = "block";
-        });
-}
-</script>
-<!-- ///////////////////////// -->    
-         <!-- FOOTER -->
-<footer class="footer">  
-    <a href="https://order-app-ae.myshopify.com/cart" class="footer-btn">
-        <i class="fas fa-shopping-cart"></i>
-    </a>
-    <button class="footer-btn home-btn">
-        <img src="https://cdn.shopify.com/s/files/1/0664/3751/3414/files/1000074587.webp?v=1738560869" alt="Home" style="width: 80px; height: auto; margin-bottom: 0px; margin-left: -7px;">
-    </button>            
-    <a href="https://shopify.com/66437513414/account" class="footer-btn">
-        <i class="fas fa-user"></i>
-    </a>
-</footer>
-<!-- ///////////////////////// -->
-<script>
-function useCurrentLocation() {
-    if (navigator.geolocation) {
-        closeLocationPopup(); 
-        disableClicks(); 
-        showCountdownTimer();
+        if (!firstName || !lastName || !reffCode || !storeName || !category || !address || !location || !email || !contact) {
+            errorMessage.textContent = "All fields are required.";
+            return;
+        }
 
+        if (!validateEmail(email)) {
+            errorMessage.textContent = "Invalid email format.";
+            return;
+        }
+
+        if (!isReffCodeValid) {
+            errorMessage.textContent = "Please validate the REFF-Code.";
+            return;
+        }
+
+        if (!isLocationRetrieved) {
+            errorMessage.textContent = "Location not retrieved.";
+            return;
+        }
+
+        errorMessage.textContent = ""; // Clear error message if all validations pass
+
+        const userData = { firstName, lastName, reffCode, storeName, category, address, storeLocation: location, email, contact };
+
+        socket.emit('submitUser', userData); // Send data to server
+
+        // Clear form after submission
+        document.querySelectorAll("input").forEach(input => input.value = "");
+
+        // Show success message
+        const successMessage = document.createElement('div');
+        successMessage.textContent = "Thank you. Your details have been submitted.";
+        successMessage.style.color = "#009500"; // Green color
+        successMessage.style.fontWeight = "bold"; // Make the text bold
+
+        const messageContainer = document.getElementById('successMessage');
+        messageContainer.innerHTML = ''; // Clear previous messages
+        messageContainer.appendChild(successMessage);
+
+        isLocationRetrieved = false; // Reset location flag for next submission
+    }
+
+    //----------------------------------
+
+    // Location button handler
+    document.getElementById('getLocationButton').addEventListener('click', function () {
+        const button = document.getElementById('getLocationButton');
+        button.disabled = true;
         let countdown = 30;
-        let countdownInterval = setInterval(() => {
-            updateCountdown(countdown);
+        const timerElement = document.getElementById('timer');
+        isLocationRetrieved = false; // Reset location flag
+
+        // Start countdown timer
+        const countdownInterval = setInterval(function () {
             countdown--;
-            if (countdown < 0) {
+            timerElement.textContent = `Please wait... ${countdown}s remaining`;
+
+            if (countdown <= 0) {
                 clearInterval(countdownInterval);
-                hideCountdownTimer();
-                enableClicks(); 
-                showLocationServicesPopup();
+                timerElement.textContent = 'Time out! Location not received.';
+                timerElement.style.color = '#B83C08';
+                button.disabled = false;
             }
         }, 1000);
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                clearInterval(countdownInterval); 
-                hideCountdownTimer(); 
-                enableClicks();
-                
-                let userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    timestamp: Date.now(),
-                    type: "device"
-                };
-                saveLocation(userLocation);
-                updateReplaceableText(userLocation);
-            },
-            () => {
-                clearInterval(countdownInterval); 
-                hideCountdownTimer();
-                enableClicks(); 
-                showLocationError();
-            }
-        );
-    } else {
-        showLocationError();
-    }
-}
+        // Request location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
 
-function closeLocationPopup() {
-    let popup = document.getElementById("locationPopup");
-    if (popup) {
-        popup.remove();
-    }
-}
+                const storeName = document.getElementById('storeName').value.trim().replace(/\s+/g, '');
+                const category = document.getElementById('category').value.trim();
 
-function disableClicks() {
-    document.body.style.pointerEvents = "none";
-}
+                if (storeName && category) {
+                    const locationData = `"${storeName}": { lat: ${lat}, lng: ${lng}, categories: ["${category}"] }`;
+                    document.getElementById('storeLocation').value = locationData;
+                    isLocationRetrieved = true; // Set flag to true
 
-function enableClicks() {
-    document.body.style.pointerEvents = "";
-}
-
-function showCountdownTimer() {
-    closeLocationPopup();
-
-    let wrapper = document.createElement("div");
-    wrapper.id = "countdown-wrapper";
-    wrapper.innerHTML = `
-        <div id="loading-spinner"></div>
-        <div id="countdown-timer">Fetching location... 30s</div>
-    `;
-    document.body.appendChild(wrapper);
-}
-
-function updateCountdown(seconds) {
-    let timerDiv = document.getElementById("countdown-timer");
-    if (timerDiv) {
-        timerDiv.textContent = `Fetching location... ${seconds}s`;
-    }
-}
-
-function hideCountdownTimer() {
-    let wrapper = document.getElementById("countdown-wrapper");
-    if (wrapper) {
-        wrapper.remove();
-    }
-}
-
-function showLocationServicesPopup() {
-    let popupOverlay = document.createElement("div");
-    popupOverlay.id = "popup-overlay";
-
-    let popupBox = document.createElement("div");
-    popupBox.id = "popup-box";
-    popupBox.innerHTML = `
-        <p><strong style="color: red;">Error</strong><br><br>Unable to get your location. Please check your location services in device settings.</p>
-        <button id="popup-ok">OK</button>
-    `;
-    popupOverlay.appendChild(popupBox);
-    document.body.appendChild(popupOverlay);
-
-    document.getElementById("popup-ok").onclick = () => {
-        popupOverlay.remove();
-    };
-}    
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-function saveDeviceLocation() {
-    if (navigator.geolocation) {
-        closeLocationPopup(); 
-        disableClicks(); 
-        showCountdownTimer();
-
-        let countdown = 30;
-        let countdownInterval = setInterval(() => {
-            updateCountdown(countdown);
-            countdown--;
-            if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    timerElement.textContent = 'Thank you! Your location has been saved.';
+                    timerElement.style.color = 'green';
+                } else {
+                    clearInterval(countdownInterval);
+                    timerElement.textContent = 'Please fill in both store name and category.';
+                    timerElement.style.color = 'red';
+                    button.disabled = false;
+                }
+            }, function (error) {
+                console.error(error);
                 clearInterval(countdownInterval);
-                hideCountdownTimer();
-                enableClicks(); 
-                showLocationServicesPopup();
-            }
-        }, 1000);
- 
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                setTimeout(() => {
-                    clearInterval(countdownInterval); 
-                    hideCountdownTimer(); 
-                    enableClicks();                    
-                    closeLocationPopup(); 
-                    openSaveLocationPopup(); 
-
-                    document.getElementById("saveLocationConfirm").onclick = function () {
-                        const customName = document.getElementById("saveLocationInput").value.trim();
-                        if (customName) {
-                            const savedLocation = {
-                                name: customName,
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude,
-                                type: "saved"
-                            };
-                            localStorage.setItem("savedLocation", JSON.stringify(savedLocation));
-                            updateReplaceableText(savedLocation);
-                            closeSaveLocationPopup();
-                            setTimeout(() => location.reload(), 500);
-                        } else {
-                            alert("Please enter a name for this location.");
-                        }
-                    };
-                }, 1000); 
-            },                                                                                   
-            (error) => {
-                hideCountdownTimer();
-                enableClicks(); 
-                showLocationError();
-            }
-        );
-    } else {
-        showLocationError();
-    }
-}
-            
-function disableClicks() {
-    document.body.style.pointerEvents = "none";
-}
-
-function enableClicks() {
-    document.body.style.pointerEvents = "";
-}
-
-function showCountdownTimer() {
-    closeLocationPopup();
-
-    let wrapper = document.createElement("div");
-    wrapper.id = "countdown-wrapper";
-    wrapper.innerHTML = `
-        <div id="loading-spinner"></div>
-        <div id="countdown-timer">Fetching location... 30s</div>
-    `;
-    document.body.appendChild(wrapper);
-}
-
-function updateCountdown(seconds) {
-    let timerDiv = document.getElementById("countdown-timer");
-    if (timerDiv) {
-        timerDiv.textContent = `Fetching location... ${seconds}s`;
-    }
-}
-
-function hideCountdownTimer() {
-    let wrapper = document.getElementById("countdown-wrapper");
-    if (wrapper) {
-        wrapper.remove();
-    }
-}
-
-function showLocationServicesPopup() {
-    let popupOverlay = document.createElement("div");
-    popupOverlay.id = "popup-overlay";
-
-    let popupBox = document.createElement("div");
-    popupBox.id = "popup-box";
-    popupBox.innerHTML = `
-        <p><strong style='color: red;'>Error</strong><br><br>Unable to get your location. Please check your location services in device settings.</p>
-        <button id="popup-ok">OK</button>
-    `;
-
-    popupOverlay.appendChild(popupBox);
-    document.body.appendChild(popupOverlay);
-
-    document.getElementById("popup-ok").onclick = () => {
-        popupOverlay.remove();
-    };
-}
-
-function closeLocationPopup() {
-    const locationPopup = document.getElementById("locationPopup");
-    if (locationPopup) locationPopup.style.display = "none";
-}
-
-function openSaveLocationPopup() {
-    const saveLocationPopup = document.getElementById("saveLocationPopup");
-    if (saveLocationPopup) saveLocationPopup.style.display = "block";
-}
-
-function closeSaveLocationPopup() {
-    const saveLocationPopup = document.getElementById("saveLocationPopup");
-    if (saveLocationPopup) saveLocationPopup.style.display = "none";
-}
-          
-function useSavedLocation() {
-    const savedLocation = JSON.parse(localStorage.getItem("savedLocation"));
-    if (savedLocation) {
-        updateReplaceableText(savedLocation);
-        saveLocation(savedLocation);
-        closePopup();
-    }
-} 
+                timerElement.textContent = 'Location unavailable. Turn it ON.';
+                timerElement.style.color = '#B83C08';
+                button.disabled = false;
+            });
+        } else {
+            clearInterval(countdownInterval);
+            timerElement.textContent = 'Geolocation is not supported by this browser.';
+            button.disabled = false;
+        }
+    });
 </script>
+</body>
+</html>
