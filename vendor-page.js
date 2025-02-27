@@ -1,18 +1,3 @@
-//open vendorForm
-        
-document.addEventListener("DOMContentLoaded", function () {
-  const addShopButton = document.getElementById("addShopBtn");
-  const loginContainer = document.getElementById("loginContainer");
-  const vendorForm = document.getElementById("vendorForm");
-
-  addShopButton.addEventListener("click", function () {
-    // Hide the login container
-    loginContainer.style.display = "none";
-    // Show the contact form
-    vendorForm.style.display = "block";
-  });
-});                
-
 //---------------------------------------
 
 document.getElementById("validate").addEventListener("click", function () {
