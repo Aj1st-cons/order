@@ -105,9 +105,33 @@
     </form>
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <div id="vendorDashboard" style="display:none;">
-        <p>Hi !</p>
-    
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        .section { margin-bottom: 15px; }
+        .section h3 { margin-bottom: 5px; }
+    </style>
+        
+    <button id="logoutBtn">Logout</button> <!-- Add this line -->
+                     
+    <br><br>
+    <p>Hi: <span id="dashboard-firstName">...</span></p> <!-- Updated ID -->
+    <br><br>
+    <p>Store Name: <span id="dashboard-storeName">Loading...</span></p> <!-- Updated ID -->
+    <p>Address: <span id="dashboard-storesAddress">Loading...</span></p> <!-- Updated ID -->
+    <p>Contact Number: <span id="dashboard-contact">Loading...</span></p> <!-- Updated ID -->
+    <br><br><br><br>
+
+    <div class="section">
+        <h3>Payment Details</h3>
+        <p>Total Sales done: <span id="dashboard-totalSales">Loading...</span></p> <!-- Updated ID -->
+        <p>Total payment done: <span id="dashboard-totalPayment">Loading...</span></p> <!-- Updated ID -->
+        <p>Date of last payment: <span id="dashboard-lastPaymentDate">Loading...</span></p> <!-- Updated ID -->
+        <p>Last Paid Amount: <span id="dashboard-lastPaidAmount">Loading...</span></p> <!-- Updated ID -->
+        <p>Next payment Date: <span id="dashboard-nextPaymentDate">Loading...</span></p> <!-- Updated ID -->
+        <p>Amount to be paid: <span id="dashboard-amountToBePaid">Loading...</span></p> <!-- Updated ID -->
     </div>
+</div>
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <script>  
         //open vendorForm
@@ -262,60 +286,63 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Submit Form
     function submitUser() {
-        const isValid = [
-            validateInput("firstName", "firstNameError", "First Name is required."),
-            validateInput("lastName", "lastNameError", "Last Name is required."),
-            validateInput("storeName", "storeNameError", "Store Name is required."),
-            validateInput("storeCategory", "storeCategoryError", "Store Category is required."),
-            validateInput("storeAddress", "storeAddressError", "Store Address is required."),
-            validateEmail(), 
-            validateContact(),                      
-            validateInput("vendorCode", "vendorCodeError", "Vendor Code is required.")
-        ];
+    const isValid = [
+        validateInput("firstName", "firstNameError", "First Name is required."),
+        validateInput("lastName", "lastNameError", "Last Name is required."),
+        validateInput("storeName", "storeNameError", "Store Name is required."),
+        validateInput("storeCategory", "storeCategoryError", "Store Category is required."),
+        validateInput("storeAddress", "storeAddressError", "Store Address is required."),
+        validateEmail(), 
+        validateContact(),                      
+        validateInput("vendorCode", "vendorCodeError", "Vendor Code is required.")
+    ];
 
-        const message = document.getElementById("message");
+    const message = document.getElementById("message");
 
-        if (isValid.includes(false)) {
-            message.innerHTML = "<span style='color: red;'>Please correct the errors above.</span>";
-            return;
-        }
-
-        if (!refCodeValidated) {
-            document.getElementById("refCodeError").innerText = "Referrer Code must be validated.";
-            return;
-        }
-
-        if (!locationReceived) {
-            document.getElementById("locationError").innerText = "Location must be received.";
-            return;
-        }
-
-        const userData = {
-            firstName: document.getElementById("firstName").value.trim(),
-            lastName: document.getElementById("lastName").value.trim(),
-            refCode: document.getElementById("refCode").value.trim(),
-            storeName: document.getElementById("storeName").value.trim(),
-            storeCategory: document.getElementById("storeCategory").value.trim(),
-            storeAddress: document.getElementById("storeAddress").value.trim(),
-            location: document.getElementById("location").value.trim(),
-            email: document.getElementById("email").value.trim(),
-            contact: document.getElementById("contact").value.trim(),
-            vendorCode: document.getElementById("vendorCode").value.trim()
-        };
-
-        socket.emit("submitUser", userData);
-
-        document.getElementById("vendorForm").reset();
-        refCodeValidated = false;
-        locationReceived = false;
-        document.getElementById("reffCodeMsg").innerText = "";
-        document.getElementById("locationError").innerText = "";
-
-        message.innerHTML = "<span style='color: green;'>User details submitted successfully!</span>";
+    if (isValid.includes(false)) {
+        message.innerHTML = "<span style='color: red;'>Please correct the errors above.</span>";
+        return;
     }
 
-    document.querySelector("button[onclick='submitUser()']").addEventListener("click", submitUser);
-});
+    if (!refCodeValidated) {
+        document.getElementById("refCodeError").innerText = "Referrer Code must be validated.";
+        return;
+    }
+
+    if (!locationReceived) {
+        document.getElementById("locationError").innerText = "Location must be received.";
+        return;
+    }
+
+    const userData = {
+        firstName: document.getElementById("firstName").value.trim(),
+        lastName: document.getElementById("lastName").value.trim(),
+        refCode: document.getElementById("refCode").value.trim(),
+        storeName: document.getElementById("storeName").value.trim(),
+        storeCategory: document.getElementById("storeCategory").value.trim(),
+        storeAddress: document.getElementById("storeAddress").value.trim(),
+        location: document.getElementById("location").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        contact: document.getElementById("contact").value.trim(),
+        vendorCode: document.getElementById("vendorCode").value.trim()
+    };
+
+    socket.emit("submitUser", userData);
+
+    document.getElementById("vendorForm").reset();
+    refCodeValidated = false;
+    locationReceived = false;
+    document.getElementById("reffCodeMsg").innerText = "";
+    document.getElementById("locationError").innerText = "";
+
+    message.innerHTML = "<span style='color: green;'>User details submitted successfully!</span>";
+
+    // Call success popup function
+    showSuccessPopup();
+}
+
+document.querySelector("button[onclick='submitUser()']").addEventListener("click", submitUser);
+})
 
 //---------------------------------------
 
@@ -400,6 +427,180 @@ document.addEventListener("DOMContentLoaded", function () {
         vendorDashboard.style.display = "block";
     }
 });
+
+//---------------------------------------
+
+document.addEventListener("DOMContentLoaded", function () {
+    let jsonData = [];
+
+    // Fetch data on page load
+    fetch("https://dust-fantasy-pail.glitch.me/data")
+        .then(response => response.json())
+        .then(data => {
+            if (!Array.isArray(data)) {
+                console.error("Fetched data is not an array.");
+                return;
+            }
+            jsonData = data; // Store the fetched data
+
+            // Check localStorage for saved values
+            const savedUserId = localStorage.getItem("userId");
+            const savedVendorCode = localStorage.getItem("vendorCode");
+
+            if (savedUserId && savedVendorCode) {
+                // Automatically populate and show details if a valid match is found
+                const matchedRow = jsonData.find(row => row.email === savedUserId && row.vendorCode === savedVendorCode);
+                if (matchedRow) {
+                    updateDetails(matchedRow);
+                }
+            }
+        })
+        .catch(error => console.error("Error fetching data:", error));
+
+    // Handle login button click
+    document.getElementById("loginBtn").addEventListener("click", function () {
+        const userId = document.getElementById("userId").value.trim();
+        const vendorCode = document.getElementById("vendorsCode").value.trim();
+
+        const userIdError = document.getElementById("userIdError");
+        const vendorCodeError = document.getElementById("vendorsCodeError");
+
+        // Clear previous error messages
+        userIdError.textContent = "";
+        vendorCodeError.textContent = "";
+
+        // Validate inputs
+        if (!userId) {
+            userIdError.textContent = "Please enter a User ID.";
+            return;
+        }
+        if (!vendorCode) {
+            vendorCodeError.textContent = "Please enter a Vendor Code.";
+            return;
+        }
+
+        // Save values to localStorage for persistence across page refresh
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("vendorCode", vendorCode);
+
+        // Find the matching row
+        const matchedRow = jsonData.find(row => row.email === userId && row.vendorCode === vendorCode);
+
+        if (matchedRow) {
+            // Replace text content with the matched data
+            updateDetails(matchedRow);
+            showDashboard(); // Show the dashboard after updating details
+        } else {
+            userIdError.textContent = "Invalid User ID or Vendor Code.";
+        }
+    });
+
+    // Function to update the details on the page
+    function updateDetails(matchedRow) {
+    // Update dashboard fields with matched data
+    document.getElementById("dashboard-firstName").textContent = matchedRow.firstName || "N/A";
+    document.getElementById("dashboard-storeName").textContent = matchedRow.storeName || "N/A";
+    document.getElementById("dashboard-storesAddress").textContent = matchedRow.storeAddress || "N/A";
+    document.getElementById("dashboard-contact").textContent = matchedRow.contact || "N/A";
+
+    // Payment Details (default to "N/A" if missing)
+    document.getElementById("dashboard-totalSales").textContent = matchedRow.totalSales || "N/A";
+    document.getElementById("dashboard-totalPayment").textContent = matchedRow.totalPayment || "N/A";
+    document.getElementById("dashboard-lastPaymentDate").textContent = matchedRow.lastPaymentDate || "N/A";
+    document.getElementById("dashboard-lastPaidAmount").textContent = matchedRow.lastPaidAmount || "N/A";
+    document.getElementById("dashboard-nextPaymentDate").textContent = matchedRow.nextPaymentDate || "N/A";
+    document.getElementById("dashboard-amountToBePaid").textContent = matchedRow.amountToBePaid || "N/A";
+}
+    // Function to show the vendor dashboard
+    function showDashboard() {
+        // Hide inputs and button
+        document.getElementById("userId").style.display = "none";
+        document.getElementById("vendorsCode").style.display = "none";
+        document.getElementById("loginBtn").style.display = "none";
+        document.getElementById("addShopBtn").style.display = "none";
+        document.getElementById("userIdError").textContent = "";
+        document.getElementById("vendorsCodeError").textContent = "";
+
+        // Show the vendor dashboard
+        document.getElementById("vendorDashboard").style.display = "block";
+    }
+});
+//---------------------------------------
+document.addEventListener("DOMContentLoaded", function () {
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    logoutBtn.addEventListener("click", function () {
+        // Clear the logged-in vendor data from localStorage
+        localStorage.removeItem("loggedInVendor");
+
+        // Hide the vendor dashboard
+        document.getElementById("vendorDashboard").style.display = "none";
+
+        // Show the login container
+        document.getElementById("loginContainer").style.display = "block";
+
+        // Clear the input fields
+        document.getElementById("userId").value = "";
+        document.getElementById("vendorsCode").value = "";
+
+        alert("You have been logged out.");
+    });
+});
+//---------------------------------------
+
+function showSuccessPopup() {
+    // Create popup container
+    const popup = document.createElement("div");
+    popup.id = "successPopup";
+    popup.style.position = "fixed";
+    popup.style.top = "0";
+    popup.style.left = "0";
+    popup.style.width = "100%";
+    popup.style.height = "100%";
+    popup.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    popup.style.display = "flex";
+    popup.style.justifyContent = "center";
+    popup.style.alignItems = "center";
+    popup.style.zIndex = "1000";
+
+    // Create popup box
+    const popupBox = document.createElement("div");
+    popupBox.style.background = "#fff";
+    popupBox.style.padding = "20px";
+    popupBox.style.borderRadius = "8px";
+    popupBox.style.textAlign = "center";
+    popupBox.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.3)";
+    popupBox.style.width = "300px";
+
+    // Message content
+    const message = document.createElement("p");
+    message.innerText = "Your details have been submitted successfully.\nPlease check your email for login information.\nThank you.";
+
+    // OK button
+    const okButton = document.createElement("button");
+    okButton.innerText = "OK";
+    okButton.style.marginTop = "15px";
+    okButton.style.padding = "8px 16px";
+    okButton.style.background = "#009500";
+    okButton.style.color = "#fff";
+    okButton.style.border = "none";
+    okButton.style.borderRadius = "4px";
+    okButton.style.cursor = "pointer";
+
+    // Close popup on button click
+    okButton.addEventListener("click", function () {
+        document.body.removeChild(popup);
+        document.getElementById("vendorForm").style.display = "none"; // Hide form
+        document.getElementById("loginContainer").style.display = "block"; // Show login container
+    });
+
+    // Append elements
+    popupBox.appendChild(message);
+    popupBox.appendChild(okButton);
+    popup.appendChild(popupBox);
+    document.body.appendChild(popup);
+}
+
 //---------------------------------------
 </script>
 
