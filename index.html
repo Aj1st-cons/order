@@ -13,225 +13,356 @@
         input {
             width: 80%;
             padding: 10px;
-            margin: 10px 0;
-        }
-        button {
-  background: #009500;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 20px; 
-  white-space: nowrap;
-  width: auto;
-  display: block;
-  margin: 10px auto;
-  font-size: 16px;
+            margin: 5px 0;
         }
         .error {
             color: red;
-            font-size: 0.9em;
+            font-size: 14px;
+            margin-top: -5px;
         }
         .success {
             color: green;
-            font-size: 0.9em;
+            font-size: 14px;
+            margin-top: -5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #009500;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #message {
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>Submit Your Details</h1>
-    <input type="text" id="firstName" placeholder="First Name"><br>
-    <input type="text" id="lastName" placeholder="Last Name"><br>
+    
+    <div id="loginContainer">
+        <h1>Vendor Registration</h1>    
+        
+        <input type="text" id="userId" placeholder="User ID" name="User ID" required />
+        <div id="userIdError" class="error"></div>
+        
+        <input type="text" id="vendorsCode" placeholder="Vendor-Code" name="VendorsCode" required />
+        <div id="vendorsCodeError" class="error"></div>
+        
+        <button id="loginBtn" style="margin-bottom:50px;">Login</button><br>
+        
+        <button id="addShopBtn" style="border-radius:5px;">Add your Shop</button>
+    </div> 
 
-    <div style="display: flex; flex-direction: column; gap: 5px;">
-        <div style="display: flex; align-items: center;">
-            <input type="text" id="reffCode" placeholder="REFF-Code click to validate" name="refCode">
-            <button style="margin-bottom:-5px; padding:10px 15px;" type="button" id="validate">Validate</button>
+    <form id="vendorForm" style="display:none;">
+        <h1>Submit Your Details</h1>
+
+        <input type="text" id="firstName" placeholder="First Name">
+        <div class="error" id="firstNameError"></div>
+
+        <input type="text" id="lastName" placeholder="Last Name">
+        <div class="error" id="lastNameError"></div>
+
+        <div style="display: flex; flex-direction: column; gap: 5px; align-items: center;">
+            <div style="display: flex; align-items: center; width:87%;">
+                <input type="text" id="refCode" placeholder="REFF-Code click to validate">
+                <button type="button" id="validate" style="margin-top:0px;">Validate</button>
+            </div>
+            <div class="error" id="refCodeError"></div>
+            <div id="reffCodeMsg"></div>
+        </div>                      
+
+        <input type="text" id="storeName" placeholder="Store Name">
+        <div class="error" id="storeNameError"></div>
+
+        <input type="text" id="storeCategory" placeholder="Store Category">
+        <div class="error" id="storeCategoryError"></div>
+
+        <input type="text" id="storeAddress" placeholder="Store Address">
+        <div class="error" id="storeAddressError"></div>  
+        
+        <div style="display: flex; flex-direction: column; gap: 5px; align-items: center;">
+            <div style="display: flex; align-items: center; width:87%;">
+                <input type="text" id="location" placeholder="Click 'Get' to get location" disabled/>
+                <button type="button" id="getLocationButton" style="margin-top:0px;">Get</button>
+            </div>
         </div>
-        <!-- Validation message container -->
-        <div id="reffCodeMsg" class="error"></div>
+        <div class="error" id="locationError"></div>
+
+        <input type="email" id="email" placeholder="Email">
+        <div class="error" id="emailError"></div>
+
+        <input type="number" id="contact" placeholder="Contact Number">
+        <div class="error" id="contactError"></div>
+        <input type="text" id="vendorCode" placeholder="Vendor's Code">
+        <div class="error" id="vendorCodeError"></div>
+
+        <button type="button" onclick="submitUser()">Submit</button>
+        <div id="message"></div>
+    </form>
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+    <div style="display:non;">
+    <h2>Submitted Users</h2>
+    <table border="1" width="80%" style="margin: auto; border-collapse: collapse;">
+        <thead>
+            <tr style="background: #009500; color: white; font-weight: bold;">
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Referrer Code</th>
+                <th>Store Name</th>
+                <th>Store Category</th>
+                <th>Store Address</th>
+                <th>Location</th>
+                <th>Email</th>
+                <th>Contact</th>
+                <th>Vendor Code</th>
+            </tr>
+        </thead>
+        <tbody id="userTable"></tbody>
+    </table>
     </div>
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+    <script>  
+        //open vendorForm
+        
+document.addEventListener("DOMContentLoaded", function () {
+  const addShopButton = document.getElementById("addShopBtn");
+  const loginContainer = document.getElementById("loginContainer");
+  const vendorForm = document.getElementById("vendorForm");
 
-    <input type="text" id="storeName" placeholder="Store Name"><br>
-    <input type="text" id="category" placeholder="Store Category"><br>
-    <input type="text" id="address" placeholder="Store Address"><br>
-    
-<!--  -->
-  <div style="display: flex; flex-direction: column; gap: 5px;">
-  <div style="display: flex; align-items: center;">
-    <input type="text" id="storeLocation" placeholder="Click 'Get' to get location" name="storeLocation"/>
-    <button style="margin-bottom:-5px; padding:10px 15px;" type="button" id="getLocationButton">Get</button>
-  </div></div>
+  addShopButton.addEventListener("click", function () {
+    // Hide the login container
+    loginContainer.style.display = "none";
+    // Show the contact form
+    vendorForm.style.display = "block";
+  });
+});                
+        
+//-------------------------------------------         
+              
+document.addEventListener("DOMContentLoaded", function () {
+    const socket = io("https://dust-fantasy-pail.glitch.me");
 
-  <div id="timer" class="countdown"></div>
-<!--  -->
-    
-    <input type="email" id="email" placeholder="Email"><br>    
-    <input type="number" id="contact" placeholder="Contact Number"><br>
-    
-    <p id="error-message" class="error"></p>
-    
-    <button onclick="submitUser()">Submit</button>
-    
-    <div id="successMessage" style="margin-top:20px; margin-bottom:50px;"></div>
+    let refCodeValidated = false;
+    let locationReceived = false;
 
-    <script>
-    const socket = io("https://dust-fantasy-pail.glitch.me"); // Connect to your server
-    let isReffCodeValid = false;
-    let isLocationRetrieved = false; // Flag to track location retrieval
+    // Validate RefCode
+    document.getElementById("validate").addEventListener("click", function () {
+        const refCode = document.getElementById("refCode").value.trim();
+        const refCodeError = document.getElementById("refCodeError");
+        const reffCodeMsg = document.getElementById("reffCodeMsg");
 
-    function validateEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(String(email).toLowerCase());
-    }
-
-    document.getElementById('validate').addEventListener('click', function() {
-        const reffCode = document.getElementById('reffCode').value.trim();
-        const reffCodeMsg = document.getElementById('reffCodeMsg');
-
-        if (!reffCode) {
-            reffCodeMsg.textContent = "REFF-Code is required.";
-            reffCodeMsg.className = "error";
-            isReffCodeValid = false;
+        if (!refCode) {
+            refCodeError.innerText = "Referrer Code is required.";
+            reffCodeMsg.innerText = "";
+            refCodeValidated = false;
             return;
         }
 
-        fetch('https://dust-fantasy-pail.glitch.me/data')
+        refCodeError.innerText = ""; // Clear previous error
+
+        fetch("https://dust-fantasy-pail.glitch.me/data")
             .then(response => response.json())
             .then(data => {
-                const matched = data.some(row => row.reffCode === reffCode);
-                if (matched) {
-                    reffCodeMsg.textContent = "REFF-Code matched!";
-                    reffCodeMsg.className = "success";
-                    isReffCodeValid = true;
+                const isValid = data.some(user => user.refCode === refCode);
+                if (isValid) {
+                    reffCodeMsg.innerText = "Validated";
+                    reffCodeMsg.style.color = "green";
+                    refCodeValidated = true;
                 } else {
-                    reffCodeMsg.textContent = "REFF-Code not matched.";
-                    reffCodeMsg.className = "error";
-                    isReffCodeValid = false;
+                    reffCodeMsg.innerText = "REFF Code not matched";
+                    reffCodeMsg.style.color = "red";
+                    refCodeValidated = false;
                 }
             })
             .catch(error => {
-                console.error('Error fetching data:', error);
-                reffCodeMsg.textContent = "Error validating REFF-Code.";
-                reffCodeMsg.className = "error";
-                isReffCodeValid = false;
+                console.error("Error fetching refCode data:", error);
+                reffCodeMsg.innerText = "Error checking REFF Code.";
+                reffCodeMsg.style.color = "red";
+                refCodeValidated = false;
             });
     });
 
-    function submitUser() {
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const reffCode = document.getElementById('reffCode').value.trim();
-        const storeName = document.getElementById('storeName').value.trim();
-        const category = document.getElementById('category').value.trim();
-        const address = document.getElementById('address').value.trim();
-        const location = document.getElementById('storeLocation').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const contact = document.getElementById('contact').value.trim();
-        const errorMessage = document.getElementById('error-message');
+    // Get Location
+    document.getElementById("getLocationButton").addEventListener("click", function () {
+        const storeName = document.getElementById("storeName").value.trim();
+        const storeCategory = document.getElementById("storeCategory").value.trim();
+        const locationError = document.getElementById("locationError");
 
-        if (!firstName || !lastName || !reffCode || !storeName || !category || !address || !location || !email || !contact) {
-            errorMessage.textContent = "All fields are required.";
+        if (!storeName) {
+            locationError.innerText = "Store Name is required.";
+            return;
+        }
+        if (!storeCategory) {
+            locationError.innerText = "Store Category is required.";
             return;
         }
 
-        if (!validateEmail(email)) {
-            errorMessage.textContent = "Invalid email format.";
-            return;
+        locationError.innerText = ""; // Clear previous errors
+
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const locationData = `"${storeName}": { lat: ${lat}, lng: ${lng}, categories: ["${storeCategory}"] }`;
+                    document.getElementById("location").value = locationData;
+                    locationError.innerText = "Location received";
+                    locationError.style.color = "green";
+                    locationReceived = true;
+                },
+                function () {
+                    locationError.innerText = "Failed to get location. Please enable GPS.";
+                    locationError.style.color = "red";
+                    locationReceived = false;
+                }
+            );
+        } else {
+            locationError.innerText = "Geolocation is not supported in this browser.";
+            locationError.style.color = "red";
+            locationReceived = false;
         }
+    });
 
-        if (!isReffCodeValid) {
-            errorMessage.textContent = "Please validate the REFF-Code.";
-            return;
+    // Validate Email
+    function validateEmail() {
+        const email = document.getElementById("email").value.trim();
+        const emailError = document.getElementById("emailError");
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email) {
+            emailError.innerText = "Email is required.";
+            return false;
+        } else if (!regex.test(email)) {
+            emailError.innerText = "Invalid email format.";
+            return false;
+        } else {
+            emailError.innerText = "";
+            return true;
         }
-
-        if (!isLocationRetrieved) {
-            errorMessage.textContent = "Location not retrieved.";
-            return;
-        }
-
-        errorMessage.textContent = ""; // Clear error message if all validations pass
-
-        const userData = { firstName, lastName, reffCode, storeName, category, address, storeLocation: location, email, contact };
-
-        socket.emit('submitUser', userData); // Send data to server
-
-        // Clear form after submission
-        document.querySelectorAll("input").forEach(input => input.value = "");
-
-        // Show success message
-        const successMessage = document.createElement('div');
-        successMessage.textContent = "Thank you. Your details have been submitted.";
-        successMessage.style.color = "#009500"; // Green color
-        successMessage.style.fontWeight = "bold"; // Make the text bold
-
-        const messageContainer = document.getElementById('successMessage');
-        messageContainer.innerHTML = ''; // Clear previous messages
-        messageContainer.appendChild(successMessage);
-
-        isLocationRetrieved = false; // Reset location flag for next submission
     }
 
-    //----------------------------------
+    // Validate Contact
+    function validateContact() {
+        const contact = document.getElementById("contact").value.trim();
+        const contactError = document.getElementById("contactError");
 
-    // Location button handler
-    document.getElementById('getLocationButton').addEventListener('click', function () {
-        const button = document.getElementById('getLocationButton');
-        button.disabled = true;
-        let countdown = 30;
-        const timerElement = document.getElementById('timer');
-        isLocationRetrieved = false; // Reset location flag
-
-        // Start countdown timer
-        const countdownInterval = setInterval(function () {
-            countdown--;
-            timerElement.textContent = `Please wait... ${countdown}s remaining`;
-
-            if (countdown <= 0) {
-                clearInterval(countdownInterval);
-                timerElement.textContent = 'Time out! Location not received.';
-                timerElement.style.color = '#B83C08';
-                button.disabled = false;
-            }
-        }, 1000);
-
-        // Request location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-
-                const storeName = document.getElementById('storeName').value.trim().replace(/\s+/g, '');
-                const category = document.getElementById('category').value.trim();
-
-                if (storeName && category) {
-                    const locationData = `"${storeName}": { lat: ${lat}, lng: ${lng}, categories: ["${category}"] }`;
-                    document.getElementById('storeLocation').value = locationData;
-                    isLocationRetrieved = true; // Set flag to true
-
-                    clearInterval(countdownInterval);
-                    timerElement.textContent = 'Thank you! Your location has been saved.';
-                    timerElement.style.color = 'green';
-                } else {
-                    clearInterval(countdownInterval);
-                    timerElement.textContent = 'Please fill in both store name and category.';
-                    timerElement.style.color = 'red';
-                    button.disabled = false;
-                }
-            }, function (error) {
-                console.error(error);
-                clearInterval(countdownInterval);
-                timerElement.textContent = 'Location unavailable. Turn it ON.';
-                timerElement.style.color = '#B83C08';
-                button.disabled = false;
-            });
+        if (!contact) {
+            contactError.innerText = "Contact Number is required.";
+            return false;
+        } else if (contact.length < 8 || contact.length > 15) {
+            contactError.innerText = "Invalid contact number.";
+            return false;
         } else {
-            clearInterval(countdownInterval);
-            timerElement.textContent = 'Geolocation is not supported by this browser.';
-            button.disabled = false;
+            contactError.innerText = "";
+            return true;
         }
-    });
+    }
+
+    // Validate Input Fields
+    function validateInput(id, errorId, message) {
+        const input = document.getElementById(id).value.trim();
+        const errorElement = document.getElementById(errorId);
+
+        if (!input) {
+            errorElement.innerText = message;
+            return false;
+        } else {
+            errorElement.innerText = "";
+            return true;
+        }
+    }
+
+    // Submit Form
+    function submitUser() {
+        const isValid = [
+            validateInput("firstName", "firstNameError", "First Name is required."),
+            validateInput("lastName", "lastNameError", "Last Name is required."),
+            validateInput("storeName", "storeNameError", "Store Name is required."),
+            validateInput("storeCategory", "storeCategoryError", "Store Category is required."),
+            validateInput("storeAddress", "storeAddressError", "Store Address is required."),
+            validateEmail(), 
+            validateContact(),                      
+            validateInput("vendorCode", "vendorCodeError", "Vendor Code is required.")
+        ];
+
+        const message = document.getElementById("message");
+
+        if (isValid.includes(false)) {
+            message.innerHTML = "<span style='color: red;'>Please correct the errors above.</span>";
+            return;
+        }
+
+        if (!refCodeValidated) {
+            document.getElementById("refCodeError").innerText = "Referrer Code must be validated.";
+            return;
+        }
+
+        if (!locationReceived) {
+            document.getElementById("locationError").innerText = "Location must be received.";
+            return;
+        }
+
+        const userData = {
+            firstName: document.getElementById("firstName").value.trim(),
+            lastName: document.getElementById("lastName").value.trim(),
+            refCode: document.getElementById("refCode").value.trim(),
+            storeName: document.getElementById("storeName").value.trim(),
+            storeCategory: document.getElementById("storeCategory").value.trim(),
+            storeAddress: document.getElementById("storeAddress").value.trim(),
+            location: document.getElementById("location").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            contact: document.getElementById("contact").value.trim(),
+            vendorCode: document.getElementById("vendorCode").value.trim()
+        };
+
+        socket.emit("submitUser", userData);
+
+        document.getElementById("vendorForm").reset();
+        refCodeValidated = false;
+        locationReceived = false;
+        document.getElementById("reffCodeMsg").innerText = "";
+        document.getElementById("locationError").innerText = "";
+
+        message.innerHTML = "<span style='color: green;'>User details submitted successfully!</span>";
+    }
+
+    document.querySelector("button[onclick='submitUser()']").addEventListener("click", submitUser);
+});
+
+//---------------------------------------
+
+        function loadUsers() {
+            fetch('https://dust-fantasy-pail.glitch.me/data')
+                .then(response => response.json())
+                .then(data => {
+                    const table = document.getElementById('userTable');
+                    table.innerHTML = "";
+
+                    data.forEach(user => {
+                        let row = `<tr>
+           <td>${user.firstName}</td>
+           <td>${user.lastName}</td>
+           <td>${user.refCode}</td>
+           <td>${user.storeName}</td>
+           <td>${user.storeCategory}</td>
+           <td>${user.storeAddress}</td>
+           <td>${user.location}</td>
+           <td>${user.email}</td>
+           <td>${user.contact}</td>
+           <td>${user.vendorCode}</td>
+                        </tr>`;
+                        table.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        loadUsers();
+        socket.on('update', loadUsers);
+//---------------------------------------
 </script>
+
 </body>
 </html>
