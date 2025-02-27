@@ -15,13 +15,11 @@
             padding: 10px;
             margin: 5px 0;
         }
+        input:focus {
+            outline: 2px solid #009500;
+        }
         .error {
             color: red;
-            font-size: 14px;
-            margin-top: -5px;
-        }
-        .success {
-            color: green;
             font-size: 14px;
             margin-top: -5px;
         }
@@ -40,14 +38,15 @@
     </style>
 </head>
 <body>
+
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     
-    <div id="loginContainer">
-        <h1>Vendor Registration</h1>    
+    <div id="loginContainer">            
         
-        <input type="text" id="userId" placeholder="User ID" name="User ID" required />
+        <input type="text" id="userId" placeholder="User ID" required />
         <div id="userIdError" class="error"></div>
         
-        <input type="text" id="vendorsCode" placeholder="Vendor-Code" name="VendorsCode" required />
+        <input type="text" id="vendorsCode" placeholder="Vendor-Code" required />
         <div id="vendorsCodeError" class="error"></div>
         
         <button id="loginBtn" style="margin-bottom:50px;">Login</button><br>
@@ -55,8 +54,11 @@
         <button id="addShopBtn" style="border-radius:5px;">Add your Shop</button>
     </div> 
 
+<!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+
     <form id="vendorForm" style="display:none;">
-        <h1>Submit Your Details</h1>
+        <h1>Vendor Registration</h1>
+        <h1 style="font-size:24px;">Submit Your Details</h1>
 
         <input type="text" id="firstName" placeholder="First Name">
         <div class="error" id="firstNameError"></div>
@@ -95,32 +97,16 @@
 
         <input type="number" id="contact" placeholder="Contact Number">
         <div class="error" id="contactError"></div>
-        <input type="text" id="vendorCode" placeholder="Vendor's Code">
+        <input type="text" id="vendorCode" placeholder="Vendor's Code" style="display:none;">
         <div class="error" id="vendorCodeError"></div>
 
         <button type="button" onclick="submitUser()">Submit</button>
         <div id="message"></div>
     </form>
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
-    <div style="display:non;">
-    <h2>Submitted Users</h2>
-    <table border="1" width="80%" style="margin: auto; border-collapse: collapse;">
-        <thead>
-            <tr style="background: #009500; color: white; font-weight: bold;">
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Referrer Code</th>
-                <th>Store Name</th>
-                <th>Store Category</th>
-                <th>Store Address</th>
-                <th>Location</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Vendor Code</th>
-            </tr>
-        </thead>
-        <tbody id="userTable"></tbody>
-    </table>
+    <div id="vendorDashboard" style="display:none;">
+        <p>Hi !</p>
+    
     </div>
 <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
     <script>  
@@ -333,34 +319,87 @@ document.addEventListener("DOMContentLoaded", function () {
 
 //---------------------------------------
 
-        function loadUsers() {
-            fetch('https://dust-fantasy-pail.glitch.me/data')
-                .then(response => response.json())
-                .then(data => {
-                    const table = document.getElementById('userTable');
-                    table.innerHTML = "";
+document.getElementById("validate").addEventListener("click", function () {
+    function generateRandomCode() {
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const numbers = "0123456789";
+        let randomLetters = "";
+        let randomNumbers = "";
 
-                    data.forEach(user => {
-                        let row = `<tr>
-           <td>${user.firstName}</td>
-           <td>${user.lastName}</td>
-           <td>${user.refCode}</td>
-           <td>${user.storeName}</td>
-           <td>${user.storeCategory}</td>
-           <td>${user.storeAddress}</td>
-           <td>${user.location}</td>
-           <td>${user.email}</td>
-           <td>${user.contact}</td>
-           <td>${user.vendorCode}</td>
-                        </tr>`;
-                        table.innerHTML += row;
-                    });
-                })
-                .catch(error => console.error('Error fetching data:', error));
+        for (let i = 0; i < 3; i++) {
+            randomLetters += letters.charAt(Math.floor(Math.random() * letters.length));
+            randomNumbers += numbers.charAt(Math.floor(Math.random() * numbers.length));
         }
 
-        loadUsers();
-        socket.on('update', loadUsers);
+        return randomLetters + randomNumbers;
+    }
+
+    document.getElementById("vendorCode").value = generateRandomCode();
+});
+
+//---------------------------------------
+document.addEventListener("DOMContentLoaded", function () {
+    const userIdInput = document.getElementById("userId");
+    const vendorsCodeInput = document.getElementById("vendorsCode");
+    const loginBtn = document.getElementById("loginBtn");
+    const userIdError = document.getElementById("userIdError");
+    const vendorsCodeError = document.getElementById("vendorsCodeError");
+    const vendorDashboard = document.getElementById("vendorDashboard");
+
+    // Check if user is already logged in
+    const savedUser = JSON.parse(localStorage.getItem("loggedInVendor"));
+    if (savedUser) {
+        showDashboard();
+        return;
+    }
+
+    loginBtn.addEventListener("click", function () {
+        const enteredEmail = userIdInput.value.trim();
+        const enteredVendorCode = vendorsCodeInput.value.trim();
+
+        if (!enteredEmail || !enteredVendorCode) {
+            userIdError.textContent = enteredEmail ? "" : "User ID is required.";
+            vendorsCodeError.textContent = enteredVendorCode ? "" : "Vendor Code is required.";
+            return;
+        }
+
+        // Fetch the JSON data
+        fetch("https://dust-fantasy-pail.glitch.me/data")
+            .then(response => response.json())
+            .then(data => {
+                // Check if any vendor matches the input credentials
+                const matchedVendor = data.find(vendor => 
+                    vendor.email === enteredEmail && vendor.vendorCode === enteredVendorCode
+                );
+
+                if (matchedVendor) {
+                    // Save user details in localStorage
+                    localStorage.setItem("loggedInVendor", JSON.stringify(matchedVendor));
+                    showDashboard();
+                } else {
+                    userIdError.textContent = "Invalid credentials. Please try again.";
+                    vendorsCodeError.textContent = "";
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching vendor data:", error);
+                userIdError.textContent = "Error fetching data. Try again later.";
+            });
+    });
+
+    function showDashboard() {
+        // Hide inputs and button
+        userIdInput.style.display = "none";
+        vendorsCodeInput.style.display = "none";
+        loginBtn.style.display = "none";
+        addShopBtn.style.display = "none";
+        userIdError.textContent = "";
+        vendorsCodeError.textContent = "";
+
+        // Show the vendor dashboard
+        vendorDashboard.style.display = "block";
+    }
+});
 //---------------------------------------
 </script>
 
