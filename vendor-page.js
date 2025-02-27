@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Update dashboard fields with matched data
     document.getElementById("dashboard-firstName").textContent = matchedRow.firstName || "N/A";
     document.getElementById("dashboard-storeName").textContent = matchedRow.storeName || "N/A";
-    document.getElementById("dashboard-storesAddress").textContent = matchedRow.storeAddress || "N/A";
+    document.getElementById("dashboard-storesAddress").textContent = matchedRow.storesAddress || "N/A";
     document.getElementById("dashboard-contact").textContent = matchedRow.contact || "N/A";
 
     // Payment Details (default to "N/A" if missing)
