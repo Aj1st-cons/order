@@ -1,5 +1,3 @@
-//------------------------------------------- 
-      
 document.addEventListener("DOMContentLoaded", function () {
     const socket = io("https://dust-fantasy-pail.glitch.me");
 
@@ -135,91 +133,96 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Submit Form
     async function submitUser() {
-    const isValid = [
-        validateInput("firstName", "firstNameError", "First Name is required."),
-        validateInput("lastName", "lastNameError", "Last Name is required."),
-        validateInput("storeName", "storeNameError", "Store Name is required."),
-        validateInput("storeCategory", "storeCategoryError", "Store Category is required."),
-        validateInput("storesAddress ", "storesAddress Error", "Store Address is required."),
-        validateEmail(), 
-        validateContact(),                      
-        validateInput("vendorCode", "vendorCodeError", "Vendor Code is required.")
-    ];
+        const isValid = [
+            validateInput("firstName", "firstNameError", "First Name is required."),
+            validateInput("lastName", "lastNameError", "Last Name is required."),
+            validateInput("storeName", "storeNameError", "Store Name is required."),
+            validateInput("storeCategory", "storeCategoryError", "Store Category is required."),
+            validateInput("storesAddress ", "storesAddress Error", "Store Address is required."),
+            validateEmail(),
+            validateContact(),
+            validateInput("vendorCode", "vendorCodeError", "REFF Code must be validated.")
+        ];
 
-    const message = document.getElementById("message");
+        const message = document.getElementById("message");
+                
 
-    if (isValid.includes(false)) {
-        message.innerHTML = "<span style='color: red;'>Please correct the errors above.</span>";
-        return;
-    }
-
-    if (!refCodeValidated) {
-        document.getElementById("refCodeError").innerText = "Referrer Code must be validated.";
-        return;
-    }
-
-    if (!locationReceived) {
-        document.getElementById("locationError").innerText = "Location must be received.";
-        return;
-    }
-
-    const refCode = document.getElementById("refCode").value.trim();
-    let affiliateEmail = "";
-
-    try {
-        // Fetch JSON data for refCode validation
-        const response = await fetch('https://dust-fantasy-pail.glitch.me/data');
-        const jsonData = await response.json();
-
-        // Find affiliateEmail by matching refCode
-        const matchedData = jsonData.find(entry => entry.refCode === refCode);
-        if (matchedData) {
-            affiliateEmail = matchedData.affiliateEmail || "";
+        if (!refCodeValidated) {
+            document.getElementById("refCodeError").innerText = "Referrer Code must be validated.";
+            return;
         }
 
-        // Prepare user data for both socket and backend submission
-        const userData = {
-            firstName: document.getElementById("firstName").value.trim(),
-            lastName: document.getElementById("lastName").value.trim(),
-            refCode: refCode,
-            storeName: document.getElementById("storeName").value.trim(),
-            storeCategory: document.getElementById("storeCategory").value.trim(),
-            storesAddress : document.getElementById("storesAddress").value.trim(),
-            location: document.getElementById("location").value.trim(),
-            email: document.getElementById("email").value.trim(),
-            contact: document.getElementById("contact").value.trim(),
-            vendorCode: document.getElementById("vendorCode").value.trim(),
-            affiliateEmail: affiliateEmail
-        };
-
-        // Send data to socket
-        socket.emit("submitUser", userData);
-
-        // Send data to backend
-        const sendResponse = await fetch('https://bronzed-carpal-zone.glitch.me/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData)
-        });
-
-        // Reset form and display message
-        document.getElementById("vendorForm").reset();
-        refCodeValidated = false;
-        locationReceived = false;
-        document.getElementById("reffCodeMsg").innerText = "";
-        document.getElementById("locationError").innerText = "";
-
-        if (sendResponse.ok) {
-            message.innerHTML = "<span style='color: green;'>User details submitted successfully!</span>";
-            showSuccessPopup();
-        } else {
-            message.innerHTML = "<span style='color: red;'>Submission failed. Please try again.</span>";
+        if (!locationReceived) {
+            document.getElementById("locationError").innerText = "Location must be received.";
+            return;
         }
-    } catch (error) {
-        message.innerHTML = "<span style='color: red;'>An error occurred. Please try again.</span>";
-    }
-}
 
-// Attach event listener to the submit button
-document.querySelector("button[onclick='submitUser()']").addEventListener("click", submitUser);
+        const refCode = document.getElementById("refCode").value.trim();
+        let affiliateEmail = "";
+
+        // Disable the submit button and change its text
+        const submitButton = document.querySelector("button[onclick='submitUser()']");
+        submitButton.disabled = true;
+        submitButton.innerText = "Submitting...";
+
+        try {
+            // Fetch JSON data for refCode validation
+            const response = await fetch('https://dust-fantasy-pail.glitch.me/data');
+            const jsonData = await response.json();
+
+            // Find affiliateEmail by matching refCode
+            const matchedData = jsonData.find(entry => entry.refCode === refCode);
+            if (matchedData) {
+                affiliateEmail = matchedData.affiliateEmail || "";
+            }
+
+            // Prepare user data for both socket and backend submission
+            const userData = {
+                firstName: document.getElementById("firstName").value.trim(),
+                lastName: document.getElementById("lastName").value.trim(),
+                refCode: refCode,
+                storeName: document.getElementById("storeName").value.trim(),
+                storeCategory: document.getElementById("storeCategory").value.trim(),
+                storesAddress : document.getElementById("storesAddress ").value.trim(),
+                location: document.getElementById("location").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                contact: document.getElementById("contact").value.trim(),
+                vendorCode: document.getElementById("vendorCode").value.trim(),
+                affiliateEmail: affiliateEmail
+            };
+
+            // Send data to socket
+            socket.emit("submitUser", userData);
+
+            // Send data to backend
+            const sendResponse = await fetch('https://bronzed-carpal-zone.glitch.me/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            });
+
+            // Reset form and display message
+            document.getElementById("vendorForm").reset();
+            refCodeValidated = false;
+            locationReceived = false;
+            document.getElementById("reffCodeMsg").innerText = "";
+            document.getElementById("locationError").innerText = "";
+
+            if (sendResponse.ok) {
+                message.innerHTML = "<span style='color: green;'>User details submitted successfully!</span>";
+                showSuccessPopup();
+            } else {
+                message.innerHTML = "<span style='color: red;'>Submission failed. Please try again.</span>";
+            }
+        } catch (error) {
+            message.innerHTML = "<span style='color: red;'>An error occurred. Please try again.</span>";
+        } finally {
+            // Re-enable the submit button and reset its text
+            submitButton.disabled = false;
+            submitButton.innerText = "Submit";
+        }
+    }
+
+    // Attach event listener to the submit button
+    document.querySelector("button[onclick='submitUser()']").addEventListener("click", submitUser);
 });
