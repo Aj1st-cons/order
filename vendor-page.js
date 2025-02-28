@@ -213,7 +213,8 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("userId").value = "";
         document.getElementById("vendorsCode").value = "";
 
-        alert("You have been logged out.");
+        // Refresh the page
+        location.reload();
     });
 });
 //---------------------------------------
