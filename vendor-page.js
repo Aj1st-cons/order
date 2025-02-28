@@ -218,58 +218,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 //---------------------------------------
-
 function showSuccessPopup() {
-    // Create popup container
-    const popup = document.createElement("div");
-    popup.id = "successPopup";
-    popup.style.position = "fixed";
-    popup.style.top = "0";
-    popup.style.left = "0";
-    popup.style.width = "100%";
-    popup.style.height = "100%";
-    popup.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
-    popup.style.display = "flex";
-    popup.style.justifyContent = "center";
-    popup.style.alignItems = "center";
-    popup.style.zIndex = "1000";
+    const popup = document.getElementById("successPopup");
+    popup.style.display = "flex"; // Show the popup
 
-    // Create popup box
-    const popupBox = document.createElement("div");
-    popupBox.style.background = "#fff";
-    popupBox.style.padding = "20px";
-    popupBox.style.borderRadius = "8px";
-    popupBox.style.textAlign = "center";
-    popupBox.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.3)";
-    popupBox.style.width = "300px";
-
-    // Message content
-    const message = document.createElement("p");
-    message.innerText = "Your details have been submitted successfully.\nPlease check your email for login information.\nThank you.";
-
-    // OK button
-    const okButton = document.createElement("button");
-    okButton.innerText = "OK";
-    okButton.style.marginTop = "15px";
-    okButton.style.padding = "8px 16px";
-    okButton.style.background = "#009500";
-    okButton.style.color = "#fff";
-    okButton.style.border = "none";
-    okButton.style.borderRadius = "4px";
-    okButton.style.cursor = "pointer";
-
-    // Close popup on button click
-    okButton.addEventListener("click", function () {
-        document.body.removeChild(popup);
+    document.getElementById("okButton").addEventListener("click", function () {
+        popup.style.display = "none"; // Hide popup
         document.getElementById("vendorForm").style.display = "none"; // Hide form
         document.getElementById("loginContainer").style.display = "block"; // Show login container
     });
-
-    // Append elements
-    popupBox.appendChild(message);
-    popupBox.appendChild(okButton);
-    popup.appendChild(popupBox);
-    document.body.appendChild(popup);
 }
-
 //---------------------------------------
