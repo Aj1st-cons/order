@@ -90,7 +90,8 @@ document.addEventListener("DOMContentLoaded", function () {
         loginBtn.style.display = "none";
         addShopBtn.style.display = "none";
         userIdError.textContent = "";
-        vendorsCodeError.textContent = "";
+        vendorsCodeError.textContent = "";        document.querySelector("p").style.display = "none";
+document.querySelector("h1").style.display = "none";        
 
         // Show the vendor dashboard
         vendorDashboard.style.display = "block";
