@@ -1,223 +1,206 @@
- //open vendorForm
-        
-document.addEventListener("DOMContentLoaded", function () {
-  const addShopButton = document.getElementById("addShopBtn");
-  const loginContainer = document.getElementById("loginContainer");
-  const vendorForm = document.getElementById("vendorForm");
-
-  addShopButton.addEventListener("click", function () {
-    // Hide the login container
-    loginContainer.style.display = "none";
-    // Show the contact form
-    vendorForm.style.display = "block";
-  });
-});
-
-//---------------------------------------
-
-document.getElementById("validate").addEventListener("click", function () {
-    function generateRandomCode() {
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const numbers = "0123456789";
-        let randomLetters = "";
-        let randomNumbers = "";
-
-        for (let i = 0; i < 3; i++) {
-            randomLetters += letters.charAt(Math.floor(Math.random() * letters.length));
-            randomNumbers += numbers.charAt(Math.floor(Math.random() * numbers.length));
-        }
-
-        return randomLetters + randomNumbers;
-    }
-
-    document.getElementById("refCode").value = generateRandomCode();
-});
-
-//---------------------------------------
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {  
+    const addShopButton = document.getElementById("addShopBtn");  
+    const loginContainer = document.getElementById("loginContainer");
+    const vendorForm = document.getElementById("vendorForm");
     const userIdInput = document.getElementById("userId");
     const vendorsCodeInput = document.getElementById("vendorsCode");
     const loginBtn = document.getElementById("loginBtn");
     const userIdError = document.getElementById("userIdError");
     const vendorsCodeError = document.getElementById("vendorsCodeError");
     const vendorDashboard = document.getElementById("vendorDashboard");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const dashboardAffiliateName = document.getElementById("dashboard-affiliateName");
+    const paymentTableHead = document.getElementById("paymentTableHead");
+    const paymentTableBody = document.getElementById("paymentTableBody");
+    const closeVendorForm = document.getElementById("closeVendorForm");
 
-    // Check if user is already logged in
+    let jsonData = [];
+    
+    // Event listener for opening the vendor form
+    addShopButton.addEventListener("click", function () {
+        loginContainer.style.display = "none";
+        vendorForm.style.display = "block";
+    });
+
+    // Event listener for closing the vendor form
+    closeVendorForm.addEventListener("click", function () {
+        vendorForm.style.display = "none";
+        loginContainer.style.display = "block";
+    });
+
+    // Check if user is already logged in        
     const savedUser = JSON.parse(localStorage.getItem("loggedInVendor"));
     if (savedUser) {
-        showDashboard();
-        return;
+        showDashboard(savedUser);
     }
 
-    loginBtn.addEventListener("click", function () {
+    // Login button event listener
+    loginBtn?.addEventListener("click", function () {
         const enteredEmail = userIdInput.value.trim();
         const enteredVendorCode = vendorsCodeInput.value.trim();
 
+        // Validate input fields
         if (!enteredEmail || !enteredVendorCode) {
             userIdError.textContent = enteredEmail ? "" : "User ID is required.";
-            vendorsCodeError.textContent = enteredVendorCode ? "" : "Vendor Code is required.";
+            vendorsCodeError.textContent = enteredVendorCode ? "" : "REFF-Code is required.";
             return;
         }
 
-        // Fetch the JSON data
+        // Fetch JSON data
         fetch("https://dust-fantasy-pail.glitch.me/data")
-            .then(response => response.json())
-            .then(data => {
-                // Check if any vendor matches the input credentials
-                const matchedVendor = data.find(vendor => 
-                    vendor.affiliateEmail === enteredEmail && vendor.refCode === enteredVendorCode
+            .then((response) => response.json())
+            .then((data) => {
+                if (!Array.isArray(data)) {
+                    console.error("Error: JSON data is not an array.");
+                    userIdError.textContent = "Data error. Try again later.";
+                    return;
+                }
+                jsonData = data;
+
+                // Filter vendors with valid properties before accessing them
+                const matchedVendors = data.filter(
+                    (vendor) =>
+                        vendor.affiliateEmail && vendor.refCode && // Ensure both exist
+                        vendor.affiliateEmail.trim().toLowerCase() === enteredEmail.toLowerCase() &&
+                        vendor.refCode.trim() === enteredVendorCode
                 );
 
-                if (matchedVendor) {
-                    // Save user details in localStorage
-                    localStorage.setItem("loggedInVendor", JSON.stringify(matchedVendor));
-                    showDashboard();
+                if (matchedVendors.length > 0) {
+                    const validVendor = matchedVendors.find(
+                        (vendor) => vendor.affiliateName && vendor.affiliateName !== "N/A"
+                    ) || matchedVendors[0];
+
+                    // Save vendor details in localStorage
+                    localStorage.setItem("loggedInVendor", JSON.stringify(validVendor));
+                    showDashboard(validVendor);
                 } else {
                     userIdError.textContent = "Invalid credentials. Please try again.";
                     vendorsCodeError.textContent = "";
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error("Error fetching vendor data:", error);
                 userIdError.textContent = "Error fetching data. Try again later.";
             });
     });
 
-    function showDashboard() {
-        // Hide inputs and button
-        userIdInput.style.display = "none";
-        vendorsCodeInput.style.display = "none";
-        loginBtn.style.display = "none";
-        addShopBtn.style.display = "none";
-        userIdError.textContent = "";
-        vendorsCodeError.textContent = "";        document.querySelector("p").style.display = "none";
-document.querySelector("h1").style.display = "none";        
-
-        // Show the vendor dashboard
-        vendorDashboard.style.display = "block";
-    }
-});
-
-//---------------------------------------
-
-document.addEventListener("DOMContentLoaded", function () {
-    let jsonData = [];
-
-    // Fetch data on page load
-    fetch("https://dust-fantasy-pail.glitch.me/data")
-        .then(response => response.json())
-        .then(data => {
-            if (!Array.isArray(data)) {
-                console.error("Fetched data is not an array.");
-                return;
-            }
-            jsonData = data; // Store the fetched data
-
-            // Check localStorage for saved values
-            const savedUserId = localStorage.getItem("userId");
-            const savedVendorCode = localStorage.getItem("vendorCode");
-
-            if (savedUserId && savedVendorCode) {
-                // Automatically populate and show details if a valid match is found
-                const matchedRow = jsonData.find(row => row.affiliateEmail === savedUserId && row.refCode === savedVendorCode);
-                if (matchedRow) {
-                    updateDetails(matchedRow);
-                }
-            }
-        })
-        .catch(error => console.error("Error fetching data:", error));
-
-    // Handle login button click
-    document.getElementById("loginBtn").addEventListener("click", function () {
-        const userId = document.getElementById("userId").value.trim();
-        const vendorCode = document.getElementById("vendorsCode").value.trim();
-
-        const userIdError = document.getElementById("userIdError");
-        const vendorCodeError = document.getElementById("vendorsCodeError");
-
-        // Clear previous error messages
-        userIdError.textContent = "";
-        vendorCodeError.textContent = "";
-
-        // Validate inputs
-        if (!userId) {
-            userIdError.textContent = "Please enter a User ID.";
-            return;
-        }
-        if (!vendorCode) {
-            vendorCodeError.textContent = "Please enter a REFF-Code.";
-            return;
-        }
-
-        // Save values to localStorage for persistence across page refresh
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("vendorCode", vendorCode);
-
-        // Find the matching row
-        const matchedRow = jsonData.find(row => row.affiliateEmail === userId && row.refCode === vendorCode);
-
-        if (matchedRow) {
-            // Replace text content with the matched data
-            updateDetails(matchedRow);
-            showDashboard(); // Show the dashboard after updating details
+    // Function to show dashboard with vendor details
+    function showDashboard(vendor) {
+        if (vendor && vendor.affiliateName && vendor.affiliateName !== "N/A") {
+            dashboardAffiliateName.textContent = ` ${vendor.affiliateName},`;
         } else {
-            userIdError.textContent = "Invalid User ID or Vendor Code.";
+            dashboardAffiliateName.textContent = " User,";
         }
-    });
 
-    // Function to update the details on the page
-    function updateDetails(matchedRow) {
-    // Update dashboard fields with matched data
-    document.getElementById("dashboard-firstName").textContent = matchedRow.firstName || "N/A";
-    document.getElementById("dashboard-storeName").textContent = matchedRow.storeName || "N/A";
-    document.getElementById("dashboard-storesAddress").textContent = matchedRow.storesAddress || "N/A";
-    document.getElementById("dashboard-contact").textContent = matchedRow.contact || "N/A";
+        // Hide login and show dashboard
+        loginContainer.style.display = "none";
+        vendorDashboard.style.display = "block";
+        vendorForm.style.display = "none";
 
-    // Payment Details (default to "N/A" if missing)
-    document.getElementById("dashboard-totalSales").textContent = matchedRow.totalSales || "N/A";
-    document.getElementById("dashboard-totalPayment").textContent = matchedRow.totalPayment || "N/A";
-    document.getElementById("dashboard-lastPaymentDate").textContent = matchedRow.lastPaymentDate || "N/A";
-    document.getElementById("dashboard-lastPaidAmount").textContent = matchedRow.lastPaidAmount || "N/A";
-    document.getElementById("dashboard-nextPaymentDate").textContent = matchedRow.nextPaymentDate || "N/A";
-    document.getElementById("dashboard-amountToBePaid").textContent = matchedRow.amountToBePaid || "N/A";
-}
-    // Function to show the vendor dashboard
-    function showDashboard() {
-        // Hide inputs and button
-        document.getElementById("userId").style.display = "none";
-        document.getElementById("vendorsCode").style.display = "none";
-        document.getElementById("loginBtn").style.display = "none";
-        document.getElementById("addShopBtn").style.display = "none";
-        document.getElementById("userIdError").textContent = "";
-        document.getElementById("vendorsCodeError").textContent = "";
-
-        // Show the vendor dashboard
-        document.getElementById("vendorDashboard").style.display = "block";
+        // Update payment details table
+        updateDetails(vendor);
     }
-});
-//---------------------------------------
-document.addEventListener("DOMContentLoaded", function () {
-    const logoutBtn = document.getElementById("logoutBtn");
 
-    logoutBtn.addEventListener("click", function () {
-        // Clear the logged-in vendor data from localStorage
+    // Function to update payment details
+    function updateDetails(matchedRow) {
+        // Clear existing headers and rows
+        paymentTableHead.innerHTML = "";
+        paymentTableBody.innerHTML = "";
+
+        // Fetch JSON data again
+        fetch("https://dust-fantasy-pail.glitch.me/data")
+            .then(response => response.json())
+            .then(data => {
+                if (!Array.isArray(data)) {
+                    console.error("Fetched data is not an array.");
+                    return;
+                }
+
+                // Filter rows based on matched user's email and refCode
+                const filteredRows = data.filter(row =>
+                    row.affiliateEmail === matchedRow.affiliateEmail && row.refCode === matchedRow.refCode
+                );
+
+                if (filteredRows.length === 0) {
+                    const noDataRow = document.createElement("tr");
+                    noDataRow.innerHTML = `<td colspan="100%" style="text-align: center;">No payment details found.</td>`;
+                    paymentTableBody.appendChild(noDataRow);
+                    return;
+                }
+
+                // Dynamically generate table headers
+                const headers = Object.keys(filteredRows[0]);
+                const headerRow = document.createElement("tr");
+                headers.forEach(header => {
+                    const th = document.createElement("th");
+                    th.textContent = header.replace(/([A-Z])/g, " $1").trim(); // Format camelCase to readable text
+                    headerRow.appendChild(th);
+                });
+                paymentTableHead.appendChild(headerRow);
+
+                // Add filtered rows to the table body
+                filteredRows.forEach(row => {
+                    const rowElement = document.createElement("tr");
+                    headers.forEach(header => {
+                        const td = document.createElement("td");
+                        td.textContent = row[header] || "N/A"; // Display "N/A" if value is missing
+                        rowElement.appendChild(td);
+                    });
+                    paymentTableBody.appendChild(rowElement);
+                });
+            })
+            .catch(error => console.error("Error fetching data:", error));
+    }
+
+    // Logout functionality
+    logoutBtn?.addEventListener("click", function () {
         localStorage.removeItem("loggedInVendor");
-
-        // Hide the vendor dashboard
-        document.getElementById("vendorDashboard").style.display = "none";
-
-        // Show the login container
-        document.getElementById("loginContainer").style.display = "block";
-
-        // Clear the input fields
-        document.getElementById("userId").value = "";
-        document.getElementById("vendorsCode").value = "";
-
-        // Refresh the page
+        vendorDashboard.style.display = "none";
+        loginContainer.style.display = "block";
+        userIdInput.value = "";
+        vendorsCodeInput.value = "";
         location.reload();
     });
 });
-//---------------------------------------
+//----------------------------------------
+
+// Generate Random Code
+function generateRandomCode() {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    let randomLetters = "";
+    let randomNumbers = "";
+
+    for (let i = 0; i < 3; i++) {
+        randomLetters += letters.charAt(Math.floor(Math.random() * letters.length));
+        randomNumbers += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    }
+
+    return randomLetters + randomNumbers;
+}
+
+//----------------------------------------
+
+// Validate Email
+function validateEmail() {
+    const affiliateEmail = document.getElementById("affiliateEmail").value.trim();
+    const affiliateEmailError = document.getElementById("affiliateEmailError");
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!affiliateEmail) {
+        affiliateEmailError.innerText = "Email is required.";
+        return false;
+    } else if (!regex.test(affiliateEmail)) {
+        affiliateEmailError.innerText = "Invalid email format.";
+        return false;
+    } else {
+        affiliateEmailError.innerText = "";
+        return true;
+    }
+}
+
+//----------------------------------------
+
 function showSuccessPopup() {
     const popup = document.getElementById("successPopup");
     popup.style.display = "flex"; // Show the popup
@@ -228,3 +211,78 @@ function showSuccessPopup() {
         document.getElementById("loginContainer").style.display = "block"; // Show login container
     });
 }
+
+//----------------------------------------
+
+// Submit Form
+async function submitUser() {
+    // Run email validation
+    const isValid = validateEmail();
+
+    if (!isValid) {
+        return; // Stop submission if validation fails
+    }
+
+    const message = document.getElementById("message");
+
+    // Generate and fill refCode input
+    const refCode = generateRandomCode();
+    //Remove this since the field is hidden document.getElementById("refCode").value = refCode;
+
+    // Disable the submit button and change its text
+    const submitButton = document.querySelector("button[type='button']");
+    submitButton.disabled = true;
+    submitButton.innerText = "Submitting...";
+
+    try {
+        // Prepare user data for socket submission (all fields, even if not filled)
+        const userDataForSocket = {
+            firstName: document.getElementById("firstName").value.trim(),
+            lastName: document.getElementById("lastName").value.trim(),
+            refCode: refCode,
+            storeName: document.getElementById("storeName").value.trim(),
+            storeCategory: document.getElementById("storeCategory").value.trim(),
+            storesAddress: document.getElementById("storesAddress").value.trim(),
+            location: document.getElementById("location").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            contact: document.getElementById("contact").value.trim(),
+            vendorCode: document.getElementById("vendorCode").value.trim(),
+            affiliateName: document.getElementById("affiliateName").value.trim(),
+            affiliateEmail: document.getElementById("affiliateEmail").value.trim(),
+            platform: document.getElementById("platform").value.trim(),
+        };
+
+        // Send data to socket
+        const socket = io("https://dust-fantasy-pail.glitch.me");
+        socket.emit("submitUser", userDataForSocket);
+
+        // Prepare user data for backend submission (only required fields)
+        const userDataForBackend = {
+            affiliateEmail: userDataForSocket.affiliateEmail,
+            refCode: refCode,
+        };
+
+        // Send data to backend
+        const sendResponse = await fetch('https://scintillating-oxidized-volcano.glitch.me/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userDataForBackend),
+        });
+
+        // Reset form and display message
+        if (sendResponse.ok) {
+            message.innerHTML = "<span style='color: green;'>User details submitted successfully! Check your email for login information.</span>";
+            showSuccessPopup(); // Assuming this function is already defined
+        } else {
+            const errorData = await sendResponse.json();
+            message.innerHTML = `<span style='color: red;'>Submission failed: ${errorData.message}</span>`;
+        }
+    } catch (error) {
+        console.error(error); // Log the error for debugging purposes
+        message.innerHTML = "<span style='color: red;'>An error occurred. Please try again.</span>";
+    } finally {
+        // Re-enable the submit button and reset its text
+        submitButton.disabled = false;
+        submitButton.innerText = "Submit";
+    }
+    }
