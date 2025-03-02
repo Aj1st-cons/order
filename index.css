@@ -3,7 +3,7 @@
              margin: 20px; 
              text-align: center; 
          }
-         .heade {
+         .header {
              background-color: #000; 
              text-align: center; 
              padding: 10px 0; 
@@ -20,7 +20,7 @@
              gap: 10px;
              align-items: center;     
         } 
-        .header h1 { 
+        .heade { 
              position: absolute;
              top: 10px;
              left: 20px;
