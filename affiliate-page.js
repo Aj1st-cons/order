@@ -292,7 +292,7 @@ async function submitUser() {
         };
 
         // Send data to backend
-        const sendResponse = await fetch('https://scintillating-oxidized-volcano.glitch.me/send-email', {
+        const sendResponse = await fetch('https://cord-rocky-preface.glitch.me/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userDataForBackend),
