@@ -1,5 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {  
-    const addShopButton = document.getElementById("addShopBtn");  
+document.addEventListener("DOMContentLoaded", function () {
+    const addShopButton = document.getElementById("addShopBtn");
     const loginContainer = document.getElementById("loginContainer");
     const vendorForm = document.getElementById("vendorForm");
     const userIdInput = document.getElementById("userId");
@@ -13,64 +13,52 @@ document.addEventListener("DOMContentLoaded", function () {
     const paymentTableHead = document.getElementById("paymentTableHead");
     const paymentTableBody = document.getElementById("paymentTableBody");
     const closeVendorForm = document.getElementById("closeVendorForm");
+    const columnToggles = document.getElementById("columnToggles");
 
     let jsonData = [];
-    
-    // Event listener for opening the vendor form
-    addShopButton.addEventListener("click", function () {
+
+    // Show vendor form
+    addShopButton?.addEventListener("click", function () {
         loginContainer.style.display = "none";
         vendorForm.style.display = "block";
     });
 
-    // Event listener for closing the vendor form
-    closeVendorForm.addEventListener("click", function () {
+    // Close vendor form
+    closeVendorForm?.addEventListener("click", function () {
         vendorForm.style.display = "none";
         loginContainer.style.display = "block";
     });
 
-    // Check if user is already logged in        
+    // Check if a user is already logged in
     const savedUser = JSON.parse(localStorage.getItem("loggedInVendor"));
     if (savedUser) {
         showDashboard(savedUser);
     }
 
-    // Login button event listener
+    // Login functionality
     loginBtn?.addEventListener("click", function () {
-        const enteredEmail = userIdInput.value.trim();
+        const enteredEmail = userIdInput.value.trim().toLowerCase();
         const enteredVendorCode = vendorsCodeInput.value.trim();
 
-        // Validate input fields
-        if (!enteredEmail || !enteredVendorCode) {
-            userIdError.textContent = enteredEmail ? "" : "User ID is required.";
-            vendorsCodeError.textContent = enteredVendorCode ? "" : "REFF-Code is required.";
-            return;
-        }
+        userIdError.textContent = enteredEmail ? "" : "User ID is required.";
+        vendorsCodeError.textContent = enteredVendorCode ? "" : "REFF-Code is required.";
+        if (!enteredEmail || !enteredVendorCode) return;
 
-        // Fetch JSON data
+        // Fetch vendor data
         fetch("https://dust-fantasy-pail.glitch.me/data")
-            .then((response) => response.json())
-            .then((data) => {
-                if (!Array.isArray(data)) {
-                    console.error("Error: JSON data is not an array.");
-                    userIdError.textContent = "Data error. Try again later.";
-                    return;
-                }
-                jsonData = data;
+            .then(response => response.json())
+            .then(data => {
+                if (!Array.isArray(data)) throw new Error("Invalid data format");
 
-                // Filter vendors with valid properties before accessing them
-                const matchedVendors = data.filter(
-                    (vendor) =>
-                        vendor.affiliateEmail && vendor.refCode && // Ensure both exist
-                        vendor.affiliateEmail.trim().toLowerCase() === enteredEmail.toLowerCase() &&
-                        vendor.refCode.trim() === enteredVendorCode
+                jsonData = data;
+                const matchedVendors = data.filter(vendor =>
+                    vendor.affiliateEmail?.trim().toLowerCase() === enteredEmail &&
+                    vendor.refCode?.trim() === enteredVendorCode
                 );
 
                 if (matchedVendors.length > 0) {
-                    const validVendor = matchedVendors.find(
-                        (vendor) => vendor.affiliateName && vendor.affiliateName !== "N/A"
-                    ) || matchedVendors[0];
+                    const validVendor = matchedVendors.find(vendor => vendor.affiliateName && vendor.affiliateName !== "N/A") || matchedVendors[0];
 
-                    // Save vendor details in localStorage
                     localStorage.setItem("loggedInVendor", JSON.stringify(validVendor));
                     showDashboard(validVendor);
                 } else {
@@ -78,78 +66,119 @@ document.addEventListener("DOMContentLoaded", function () {
                     vendorsCodeError.textContent = "";
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error("Error fetching vendor data:", error);
                 userIdError.textContent = "Error fetching data. Try again later.";
             });
     });
 
-    // Function to show dashboard with vendor details
+    // Show dashboard function
     function showDashboard(vendor) {
-        if (vendor && vendor.affiliateName && vendor.affiliateName !== "N/A") {
-            dashboardAffiliateName.textContent = ` ${vendor.affiliateName},`;
-        } else {
-            dashboardAffiliateName.textContent = " User,";
-        }
+        dashboardAffiliateName.textContent = vendor.affiliateName && vendor.affiliateName !== "N/A" ? ` ${vendor.affiliateName},` : " User,";
 
-        // Hide login and show dashboard
         loginContainer.style.display = "none";
         vendorDashboard.style.display = "block";
         vendorForm.style.display = "none";
 
-        // Update payment details table
         updateDetails(vendor);
     }
 
     // Function to update payment details
     function updateDetails(matchedRow) {
-        // Clear existing headers and rows
-        paymentTableHead.innerHTML = "";
-        paymentTableBody.innerHTML = "";
-
-        // Fetch JSON data again
         fetch("https://dust-fantasy-pail.glitch.me/data")
             .then(response => response.json())
             .then(data => {
-                if (!Array.isArray(data)) {
-                    console.error("Fetched data is not an array.");
-                    return;
-                }
+                if (!Array.isArray(data)) throw new Error("Invalid data format");
 
-                // Filter rows based on matched user's email and refCode
                 const filteredRows = data.filter(row =>
-                    row.affiliateEmail === matchedRow.affiliateEmail && row.refCode === matchedRow.refCode
+                    row.affiliateEmail === matchedRow.affiliateEmail &&
+                    row.refCode === matchedRow.refCode
                 );
 
-                if (filteredRows.length === 0) {
-                    const noDataRow = document.createElement("tr");
-                    noDataRow.innerHTML = `<td colspan="100%" style="text-align: center;">No payment details found.</td>`;
-                    paymentTableBody.appendChild(noDataRow);
-                    return;
-                }
-
-                // Dynamically generate table headers
-                const headers = Object.keys(filteredRows[0]);
-                const headerRow = document.createElement("tr");
-                headers.forEach(header => {
-                    const th = document.createElement("th");
-                    th.textContent = header.replace(/([A-Z])/g, " $1").trim(); // Format camelCase to readable text
-                    headerRow.appendChild(th);
-                });
-                paymentTableHead.appendChild(headerRow);
-
-                // Add filtered rows to the table body
-                filteredRows.forEach(row => {
-                    const rowElement = document.createElement("tr");
-                    headers.forEach(header => {
-                        const td = document.createElement("td");
-                        td.textContent = row[header] || "N/A"; // Display "N/A" if value is missing
-                        rowElement.appendChild(td);
-                    });
-                    paymentTableBody.appendChild(rowElement);
-                });
+                renderTable(filteredRows);
             })
             .catch(error => console.error("Error fetching data:", error));
+    }
+
+    // Function to render the payment table
+    function renderTable(filteredRows) {
+        paymentTableHead.innerHTML = "";
+        paymentTableBody.innerHTML = "";
+
+        if (filteredRows.length === 0) {
+            paymentTableBody.innerHTML = `<tr><td colspan="100%" style="text-align: center;">No payment details found.</td></tr>`;
+            return;
+        }
+
+        // Define initially hidden columns
+        const hiddenColumns = new Set(["firstName", "lastName", "location", "vendorCode", "affiliateName", "affiliateEmail", "platform"]);
+
+        // Generate table headers
+        const headers = Object.keys(filteredRows[0]);
+        const headerRow = document.createElement("tr");
+
+        headers.forEach(header => {
+            const th = document.createElement("th");
+            th.textContent = header.replace(/([A-Z])/g, " $1").trim();
+            th.dataset.headerId = header;
+            headerRow.appendChild(th);
+        });
+
+        paymentTableHead.appendChild(headerRow);
+
+        // Generate table rows
+        filteredRows.forEach(row => {
+            const rowElement = document.createElement("tr");
+            headers.forEach(header => {
+                const td = document.createElement("td");
+                td.textContent = row[header] || "N/A";
+                td.dataset.headerId = header;
+                rowElement.appendChild(td);
+            });
+            paymentTableBody.appendChild(rowElement);
+        });
+
+        // Hide initially hidden columns
+        updateColumnVisibility(hiddenColumns);
+
+        // Create column toggles
+        createColumnToggles(headers, hiddenColumns);
+    }
+
+    // Function to show/hide columns
+    function updateColumnVisibility(hiddenColumns) {
+        document.querySelectorAll("#paymentTableHead th, #paymentTableBody td").forEach(element => {
+            element.style.display = hiddenColumns.has(element.dataset.headerId) ? "none" : "";
+        });
+    }
+
+    // Function to handle checkbox toggle
+    function toggleColumnVisibility(event, hiddenColumns) {
+        const column = event.target.value;
+        if (event.target.checked) {
+            hiddenColumns.delete(column);
+        } else {
+            hiddenColumns.add(column);
+        }
+        updateColumnVisibility(hiddenColumns);
+    }
+
+    // Create checkboxes for column toggling
+    function createColumnToggles(headers, hiddenColumns) {
+        columnToggles.innerHTML = "";
+
+        headers.forEach(header => {
+            const label = document.createElement("label");
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = header;
+            checkbox.checked = !hiddenColumns.has(header);
+            checkbox.addEventListener("change", (event) => toggleColumnVisibility(event, hiddenColumns));
+
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(" " + header.replace(/([A-Z])/g, " $1").trim()));
+            columnToggles.appendChild(label);
+        });
     }
 
     // Logout functionality
@@ -285,4 +314,4 @@ async function submitUser() {
         submitButton.disabled = false;
         submitButton.innerText = "Submit";
     }
-    }
+            }
