@@ -428,11 +428,11 @@
         h1 {
             display: flex;
             gap: 1px;
-            font-family: 'Lilita One', cursive;
+            font-family: 'Abril Fatface', serif;
             font-size: 50px;
             color: #009500;
             margin-top: -5px;
-            text-shadow: 5px 5px 5px black;
+            text-shadow: 2.5px 0px 0px black;
         }
         h1 span {
             opacity: 0;
