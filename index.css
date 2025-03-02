@@ -22,8 +22,6 @@
         } 
 .header h1 {
     position: absolute;
-    top: 10px;
-    left: 20px;
     margin: 0;
     text-decoration: none;
     font-family: 'Arsenal', sans-serif;
