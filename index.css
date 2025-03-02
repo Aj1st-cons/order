@@ -22,8 +22,8 @@
         } 
 .header h1 {
     position: absolute;
-    top: 10px;
-    left: 20px;
+    top: 0px;
+    left: 0px;
     margin: 0;
     text-decoration: none;
     font-family: 'Abril Fatface', serif;
