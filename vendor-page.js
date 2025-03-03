@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Payment Details (ensure correct IDs)
         document.getElementById("dashboard-totalSales").textContent = matchedRow.totalSales || "N/A";
-        document.getElementById("dashboard-totalPayment").textContent = matchedRow.totalPayment || "N/A";
+        document.getElementById("dashboard-totalReceived").textContent = matchedRow.totalReceived || "N/A";
         document.getElementById("dashboard-lastPaymentDate").textContent = matchedRow.lastPaymentDate || "N/A"; // Fixed ID
         document.getElementById("dashboard-lastPaidAmount").textContent = matchedRow.lastPaidAmount || "N/A";
         document.getElementById("dashboard-nextPaymentDate").textContent = matchedRow.nextPaymentDate || "N/A";
