@@ -275,10 +275,21 @@ async function submitUser() {
             location: document.getElementById("location").value.trim(),
             email: document.getElementById("email").value.trim(),
             contact: document.getElementById("contact").value.trim(),
-            vendorCode: document.getElementById("vendorCode").value.trim(),
-            affiliateName: document.getElementById("affiliateName").value.trim(),
+            vendorCode: document.getElementById("vendorCode").value.trim(),            
             affiliateEmail: document.getElementById("affiliateEmail").value.trim(),
-            platform: document.getElementById("platform").value.trim(),
+            affiliateName: document.getElementById("affiliateName").value.trim(),
+            platform: document.getElementById("platform").value.trim(),                            
+            
+            totalSales: document.getElementById("totalSales").value.trim(),
+             totalReceived: document.getElementById("totalReceived").value.trim(),
+             
+             balanceToReceive: document.getElementById("balanceToReceive").value.trim(),
+             
+             totalEarned: document.getElementById("totalEarned").value.trim(),
+             
+             paid: document.getElementById("paid").value.trim(),
+             
+             balance: document.getElementById("balance").value.trim(),  
         };
 
         // Send data to socket
@@ -314,4 +325,4 @@ async function submitUser() {
         submitButton.disabled = false;
         submitButton.innerText = "Submit";
     }
-            }
+                                                 }
