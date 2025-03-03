@@ -164,24 +164,22 @@ document.addEventListener("DOMContentLoaded", function () {
             userIdError.textContent = "Invalid User ID or Vendor Code.";
         }
     });
-
-    // Function to update the details on the page
+  
     function updateDetails(matchedRow) {
-    // Update dashboard fields with matched data
-    document.getElementById("dashboard-firstName").textContent = matchedRow.firstName || "N/A";
-    document.getElementById("dashboard-storeName").textContent = matchedRow.storeName || "N/A";
-    document.getElementById("dashboard-storesAddress").textContent = matchedRow.storesAddress || "N/A";
-    document.getElementById("dashboard-contact").textContent = matchedRow.contact || "N/A";
+        document.getElementById("dashboard-firstName").textContent = matchedRow.firstName || "N/A";
+        document.getElementById("dashboard-storeName").textContent = matchedRow.storeName || "N/A";
+        document.getElementById("dashboard-storesAddress").textContent = matchedRow.storesAddress || "N/A";
+        document.getElementById("dashboard-contact").textContent = matchedRow.contact || "N/A";
 
-    // Payment Details (default to "N/A" if missing)
-    document.getElementById("dashboard-totalSales").textContent = matchedRow.totalSales || "N/A";
-    document.getElementById("dashboard-totalPayment").textContent = matchedRow.totalPayment || "N/A";
-    document.getElementById("dashboard-lastPaymentDate").textContent = matchedRow.lastPaymentDate || "N/A";
-    document.getElementById("dashboard-lastPaidAmount").textContent = matchedRow.lastPaidAmount || "N/A";
-    document.getElementById("dashboard-nextPaymentDate").textContent = matchedRow.nextPaymentDate || "N/A";
-    document.getElementById("dashboard-amountToBePaid").textContent = matchedRow.amountToBePaid || "N/A";
-}
-    // Function to show the vendor dashboard
+        // Payment Details (ensure correct IDs)
+        document.getElementById("dashboard-totalSales").textContent = matchedRow.totalSales || "N/A";
+        document.getElementById("dashboard-totalPayment").textContent = matchedRow.totalPayment || "N/A";
+        document.getElementById("dashboard-lastPaymentDate").textContent = matchedRow.lastPaymentDate || "N/A"; // Fixed ID
+        document.getElementById("dashboard-lastPaidAmount").textContent = matchedRow.lastPaidAmount || "N/A";
+        document.getElementById("dashboard-nextPaymentDate").textContent = matchedRow.nextPaymentDate || "N/A";
+        document.getElementById("dashboard-amountToBePaid").textContent = matchedRow.amountToBePaid || "N/A";
+    }
+
     function showDashboard() {
         // Hide inputs and button
         document.getElementById("userId").style.display = "none";
@@ -190,6 +188,8 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("addShopBtn").style.display = "none";
         document.getElementById("userIdError").textContent = "";
         document.getElementById("vendorsCodeError").textContent = "";
+        document.querySelector("p").style.display = "none";
+        document.querySelector("h1").style.display = "none";        
 
         // Show the vendor dashboard
         document.getElementById("vendorDashboard").style.display = "block";
