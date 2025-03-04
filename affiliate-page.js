@@ -15,27 +15,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeVendorForm = document.getElementById("closeVendorForm");
     const columnToggles = document.getElementById("columnToggles");
 
+    // Elements to update dynamically
+    const aTotalSales = document.getElementById("aTotalSales");
+    const aTotalCommission = document.getElementById("aTotalCommission");
+    const aTotalCommissionPaid = document.getElementById("aTotalCommissionPaid");
+    const aLastPaidDate = document.getElementById("aLastPaidDate");
+    const aBalanceToPay = document.getElementById("aBalanceToPay");
+    const aNextPaymentDate = document.getElementById("aNextPaymentDate");
+
     let jsonData = [];
 
-    // Show vendor form
     addShopButton?.addEventListener("click", function () {
         loginContainer.style.display = "none";
         vendorForm.style.display = "block";
     });
 
-    // Close vendor form
     closeVendorForm?.addEventListener("click", function () {
         vendorForm.style.display = "none";
         loginContainer.style.display = "block";
     });
 
-    // Check if a user is already logged in
     const savedUser = JSON.parse(localStorage.getItem("loggedInVendor"));
     if (savedUser) {
         showDashboard(savedUser);
+        updateDashboardValues(savedUser); // Update the dashboard values when the page loads
     }
 
-    // Login functionality
     loginBtn?.addEventListener("click", function () {
         const enteredEmail = userIdInput.value.trim().toLowerCase();
         const enteredVendorCode = vendorsCodeInput.value.trim();
@@ -44,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
         vendorsCodeError.textContent = enteredVendorCode ? "" : "REFF-Code is required.";
         if (!enteredEmail || !enteredVendorCode) return;
 
-        // Fetch vendor data
         fetch("https://dust-fantasy-pail.glitch.me/data")
             .then(response => response.json())
             .then(data => {
@@ -61,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     localStorage.setItem("loggedInVendor", JSON.stringify(validVendor));
                     showDashboard(validVendor);
+                    updateDashboardValues(validVendor); // Update the dashboard values after login
                 } else {
                     userIdError.textContent = "Invalid credentials. Please try again.";
                     vendorsCodeError.textContent = "";
@@ -72,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     });
 
-    // Show dashboard function
     function showDashboard(vendor) {
         dashboardAffiliateName.textContent = vendor.affiliateName && vendor.affiliateName !== "N/A" ? ` ${vendor.affiliateName},` : " User,";
 
@@ -83,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateDetails(vendor);
     }
 
-    // Function to update payment details
     function updateDetails(matchedRow) {
         fetch("https://dust-fantasy-pail.glitch.me/data")
             .then(response => response.json())
@@ -96,11 +99,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 );
 
                 renderTable(filteredRows);
+                updateDashboardValues(filteredRows[0]); // Update the HTML values
             })
             .catch(error => console.error("Error fetching data:", error));
     }
 
-    // Function to render the payment table
     function renderTable(filteredRows) {
         paymentTableHead.innerHTML = "";
         paymentTableBody.innerHTML = "";
@@ -110,10 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Define initially hidden columns
         const hiddenColumns = new Set(["firstName", "lastName", "location", "vendorCode", "affiliateName", "affiliateEmail", "platform"]);
 
-        // Generate table headers
         const headers = Object.keys(filteredRows[0]);
         const headerRow = document.createElement("tr");
 
@@ -126,7 +127,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         paymentTableHead.appendChild(headerRow);
 
-        // Generate table rows
         filteredRows.forEach(row => {
             const rowElement = document.createElement("tr");
             headers.forEach(header => {
@@ -138,21 +138,16 @@ document.addEventListener("DOMContentLoaded", function () {
             paymentTableBody.appendChild(rowElement);
         });
 
-        // Hide initially hidden columns
         updateColumnVisibility(hiddenColumns);
-
-        // Create column toggles
         createColumnToggles(headers, hiddenColumns);
     }
 
-    // Function to show/hide columns
     function updateColumnVisibility(hiddenColumns) {
         document.querySelectorAll("#paymentTableHead th, #paymentTableBody td").forEach(element => {
             element.style.display = hiddenColumns.has(element.dataset.headerId) ? "none" : "";
         });
     }
 
-    // Function to handle checkbox toggle
     function toggleColumnVisibility(event, hiddenColumns) {
         const column = event.target.value;
         if (event.target.checked) {
@@ -163,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateColumnVisibility(hiddenColumns);
     }
 
-    // Create checkboxes for column toggling
     function createColumnToggles(headers, hiddenColumns) {
         columnToggles.innerHTML = "";
 
@@ -181,7 +175,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Logout functionality
+    function updateDashboardValues(vendor) {
+        if (vendor) {
+            aTotalSales.textContent = vendor.aTotalSales || "0";
+            aTotalCommission.textContent = vendor.aTotalCommission || "0";
+            aTotalCommissionPaid.textContent = vendor.aTotalCommissionPaid || "0";
+            aLastPaidDate.textContent = vendor.aLastPaidDate || "N/A";
+            aBalanceToPay.textContent = vendor.aBalanceToPay || "0";
+            aNextPaymentDate.textContent = vendor.aNextPaymentDate || "N/A";
+        }
+    }
+
     logoutBtn?.addEventListener("click", function () {
         localStorage.removeItem("loggedInVendor");
         vendorDashboard.style.display = "none";
@@ -325,4 +329,4 @@ async function submitUser() {
         submitButton.disabled = false;
         submitButton.innerText = "Submit";
     }
-                                                 }
+}
