@@ -260,12 +260,33 @@ async function submitUser() {
 
     // Generate and fill refCode input
     const refCode = generateRandomCode();
-    //Remove this since the field is hidden document.getElementById("refCode").value = refCode;
 
     // Disable the submit button and change its text
     const submitButton = document.querySelector("button[type='button']");
     submitButton.disabled = true;
     submitButton.innerText = "Submitting...";
+
+    // Create and display the countdown timer
+    const countdownElement = document.createElement("div");
+    countdownElement.id = "countdown";
+    countdownElement.style.color = "blue";
+    countdownElement.style.fontWeight = "bold";
+    countdownElement.style.marginTop = "10px";
+    submitButton.parentNode.insertBefore(countdownElement, submitButton.nextSibling);
+
+    let countdown = 30;
+    countdownElement.textContent = `Please wait ${countdown} seconds...`;
+
+    // Start the countdown timer
+    const countdownInterval = setInterval(() => {
+        countdown--;
+        countdownElement.textContent = `Please wait ${countdown} seconds...`;
+
+        if (countdown <= 0) {
+            clearInterval(countdownInterval); // Stop the timer when it reaches 0
+            countdownElement.textContent = ""; // Clear the countdown text
+        }
+    }, 1000);
 
     try {
         // Prepare user data for socket submission (all fields, even if not filled)
@@ -285,15 +306,11 @@ async function submitUser() {
             platform: document.getElementById("platform").value.trim(),                            
             
             totalSales: document.getElementById("totalSales").value.trim(),
-             totalReceived: document.getElementById("totalReceived").value.trim(),
-             
-             balanceToReceive: document.getElementById("balanceToReceive").value.trim(),
-             
-             totalEarned: document.getElementById("totalEarned").value.trim(),
-             
-             paid: document.getElementById("paid").value.trim(),
-             
-             balance: document.getElementById("balance").value.trim(),  
+            totalReceived: document.getElementById("totalReceived").value.trim(),
+            balanceToReceive: document.getElementById("balanceToReceive").value.trim(),
+            totalEarned: document.getElementById("totalEarned").value.trim(),
+            paid: document.getElementById("paid").value.trim(),
+            balance: document.getElementById("balance").value.trim(),  
         };
 
         // Send data to socket
@@ -328,5 +345,9 @@ async function submitUser() {
         // Re-enable the submit button and reset its text
         submitButton.disabled = false;
         submitButton.innerText = "Submit";
+
+        // Stop the countdown timer and clear the text
+        clearInterval(countdownInterval);
+        countdownElement.textContent = "";
     }
-}
+        }
