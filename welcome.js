@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             welcomeScreen.style.display = "none";
             localStorage.setItem("welcomeLastShown", now);
-        }, 5000);
+        }, 15000);
     } else {
         welcomeScreen.style.display = "none";
     }
