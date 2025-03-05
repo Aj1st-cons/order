@@ -228,7 +228,7 @@
             position: fixed;
             top: 150px;
             left: 50%; 
-            width: 30%;
+            width: 50%;            
             transform: translateX(-50%);
             background: rgba(0,0,0,1);
             color: white;
