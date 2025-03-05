@@ -410,7 +410,7 @@
             z-index: 9999;
             text-align: center;
             opacity: 0;
-            visibility: hidde;
+            visibility: hidden;
             transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
         }
         #welcome.visible {
@@ -427,7 +427,7 @@
         }
         h1 {
             display: flex;
-            gap: 1px;
+            
             font-family: 'Abril Fatface', serif;
             font-size: 30px;
             color: #009500;
@@ -632,10 +632,6 @@
     border-radius: 3px;
     cursor: pointer;
 }
-
-
-
-
 .footer {
   position: fixed;
   bottom: 0;
