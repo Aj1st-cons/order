@@ -428,8 +428,7 @@
         }
         h1 {
             display: flex;
-            
-            font-family: 'Abril Fatface', serif;
+            font-family: 'Righteous', cursive;
             font-size: 30px;
             color: #009500;
             margin-top: -5px;
@@ -437,6 +436,7 @@
         }
         h1 span {
             opacity: 0;
+            margin-right: 1px;
             transform: scale(0.8);
             animation: letter-emerge 0.3s ease-in-out forwards;
         }
