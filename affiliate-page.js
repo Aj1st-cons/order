@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const hiddenColumns = new Set(["firstName", "lastName", "location", "vendorCode", "affiliateName", "affiliateEmail", "platform"]);
+        const hiddenColumns = new Set(["firstName", "lastName", "location", "vendorCode", "affiliateName", "affiliateEmail", "platform", "aTotalSales", "aTotalCommission", "aTotalCommissionPaid", "aLastPaidDate", "aBalanceToPay", "aNextPaymentDate"]);
 
         const headers = Object.keys(filteredRows[0]);
         const headerRow = document.createElement("tr");
@@ -350,4 +350,4 @@ async function submitUser() {
         clearInterval(countdownInterval);
         countdownElement.textContent = "";
     }
-        }
+}
