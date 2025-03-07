@@ -351,3 +351,46 @@ async function submitUser() {
         countdownElement.textContent = "";
     }
 }
+//----------------‐-----------------------    
+        async function fetchAndUpdateCounter() {
+            try {
+                const response = await fetch("https://dust-fantasy-pail.glitch.me/data");
+                const data = await response.json();
+
+                if (Array.isArray(data) && data.length > 0) {
+                    let totalSales = parseInt(data[0].aTotalSales) || 0;
+                    updateCounter(totalSales);
+                } else {
+                    console.error("Invalid data format:", data);
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        function updateCounter(number) {
+            const counterContainer = document.getElementById("counter");
+            const totalSales = document.getElementById("aTotalSales");
+
+            // Convert number to string and ensure it's exactly 6 digits
+            let numStr = number.toString().padStart(6, '0');
+
+            // Update the Total Sales div
+            totalSales.textContent = `Total Sales: ${numStr}`;
+
+            // Clear old digits
+            counterContainer.innerHTML = '';
+
+            // Add new digits
+            for (let digit of numStr) {
+                let span = document.createElement("div");
+                span.className = "digit";
+                span.textContent = digit;
+                counterContainer.appendChild(span);
+            }
+        }
+
+        // Fetch data and update every 10 seconds
+        fetchAndUpdateCounter();
+        setInterval(fetchAndUpdateCounter, 10000);
+//----------------‐-----------------------
