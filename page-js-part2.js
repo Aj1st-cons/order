@@ -1,25 +1,33 @@
 function getUserLocation() {
-    let savedLocation = getSavedLocation();
+        let savedLocation = getSavedLocation();
 
-    if (savedLocation) {
-        updateReplaceableText(savedLocation);
-    }
+        if (savedLocation) {
+            updateReplaceableText(savedLocation);
+        }
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                let userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    timestamp: Date.now(),
-                    type: "device"
-                };
-                saveLocation(userLocation);
-                updateReplaceableText(userLocation);
-            }
-        );
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    let userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                        timestamp: Date.now(),
+                        type: "device"
+                    };
+                    saveLocation(userLocation);
+                    updateReplaceableText(userLocation);
+                },
+                () => {
+                    if (!savedLocation) {
+                        showLocationPopup();
+                    }
+                },
+                { timeout: 10000 }
+            );
+        } else if (!savedLocation) {
+            showLocationPopup();
+        }
     }
-}
 
     function saveLocation(location) {
         localStorage.setItem("userLocation", JSON.stringify(location));
@@ -195,5 +203,6 @@ function getUserLocation() {
         document.getElementById("locationPopup").style.display = "block";
     }
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   
-
+    // Initialize on page load
+    getUserLocation();
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    
