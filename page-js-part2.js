@@ -195,6 +195,5 @@ function getUserLocation() {
         document.getElementById("locationPopup").style.display = "block";
     }
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx   
-    // Initialize on page load
-    getUserLocation();
+
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    
