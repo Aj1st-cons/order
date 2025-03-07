@@ -352,3 +352,41 @@ async function submitUser() {
     }
 }
 //-------------------------------------- 
+    function updateCounter(number) {
+        const counterContainer = document.getElementById("counter");
+
+        // Ensure it's a 6-digit string (prepend "00" if it's 4 digits)
+        let numStr = number.toString().padStart(6, '0');
+
+        // Clear old digits
+        counterContainer.innerHTML = '';
+
+        // Add new digits
+        for (let digit of numStr) {
+            let span = document.createElement("div");
+            span.className = "digit";
+            span.textContent = digit;
+            counterContainer.appendChild(span);
+        }
+    }
+
+    // Function to fetch the number from aTotalSales (without modifying it)
+    function checkTotalSales() {
+        const totalSalesElement = document.getElementById("aTotalSales");
+        if (totalSalesElement) {
+            let salesText = totalSalesElement.textContent.replace(/\D/g, ""); // Extract only numbers
+            if (salesText) {
+                updateCounter(parseInt(salesText, 10));
+            }
+        }
+    }
+
+    // Use MutationObserver to detect changes in aTotalSales
+    const observer = new MutationObserver(checkTotalSales);
+    const totalSalesElement = document.getElementById("aTotalSales");
+
+    if (totalSalesElement) {
+        observer.observe(totalSalesElement, { childList: true, subtree: true });
+        checkTotalSales(); // Initial check in case it's already populated
+    }
+//----------------------------------------
