@@ -198,13 +198,3 @@ function getUserLocation() {
     // Initialize on page load
     getUserLocation();
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    
-    //FOOTER
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector('.home-btn').addEventListener('click', function() {
-        document.querySelectorAll('.popup, .popup2').forEach(popup => {
-            if (popup.style.display !== 'none') {
-                popup.style.display = 'none';
-            }
-        });
-    });
-});        
