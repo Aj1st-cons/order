@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const hiddenColumns = new Set(["firstName", "lastName", "location", "vendorCode", "affiliateName", "affiliateEmail", "platform", "aTotalSales", "aTotalCommission", "aTotalCommissionPaid", "aLastPaidDate", "aBalanceToPay", "aNextPaymentDate"]);
+        const hiddenColumns = new Set(["firstName", "lastName", "location", "vendorCode", "affiliateName", "affiliateEmail", "platform", "aTotalSales", "aTotalCommission", "aTotalCommissionPaid", "aLastPaidDate", "aBalanceToPay", "aNextPaymentDate", "lastPaymentDate", "lastPaidAmount", "nextPaymentDate", "amountToBePaid"]);
 
         const headers = Object.keys(filteredRows[0]);
         const headerRow = document.createElement("tr");
