@@ -19,5 +19,7 @@ const categoryUrls = {
             "tea": "https://order-1ib.pages.dev/Tea.html",
             "home": "https://order-1ib.pages.dev/Home.html",
             "seafood": "https://order-1ib.pages.dev/Seafood.html",
+            "cafeteria": "https://order-1ib.pages.dev/Cafeteria.html",
+            "restaurant": "https://order-1ib.pages.dev/Restaurant.html",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
