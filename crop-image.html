@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop & Convert to WebP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        input {
+            margin-bottom: 20px;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .image-box {
+            margin: 10px;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            max-width: 300px;
+            max-height: 300px;
+        }
+        button, a {
+            margin-top: 10px;
+            padding: 8px 12px;
+            cursor: pointer;
+            background: #007BFF;
+            color: white;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+        a:hover, button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Upload & Crop Images to 1:1 (Square) & Convert to WebP</h2>
+    <input type="file" id="imageInput" multiple accept="image/*">
+    
+    <div class="image-container" id="imageContainer"></div>
+    <button id="downloadAllBtn" style="display:none;">Download All Images</button>
+
+    <script>
+        let croppedImages = []; // Store WebP images for batch download
+
+        document.getElementById('imageInput').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const imageContainer = document.getElementById('imageContainer');
+            const downloadAllBtn = document.getElementById('downloadAllBtn');
+            imageContainer.innerHTML = ''; // Clear previous images
+            croppedImages = []; // Reset cropped images list
+
+            if (files.length > 0) {
+                downloadAllBtn.style.display = "block"; // Show "Download All" button
+            } else {
+                downloadAllBtn.style.display = "none";
+            }
+
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        
+                        // Get the smaller dimension for square cropping
+                        const size = Math.min(img.width, img.height);
+                        canvas.width = size;
+                        canvas.height = size;
+
+                        // Draw cropped image onto canvas
+                        ctx.drawImage(img, 
+                            (img.width - size) / 2, (img.height - size) / 2, // Source X, Y (center crop)
+                            size, size, // Source Width, Height
+                            0, 0, // Destination X, Y
+                            size, size // Destination Width, Height
+                        );
+
+                        // Convert to WebP
+                        canvas.toBlob(blob => {
+                            const url = URL.createObjectURL(blob);
+                            const fileName = file.name.replace(/\.[^/.]+$/, "") + ".webp"; // Keep original name
+
+                            // Store image info for batch download
+                            croppedImages.push({ url, fileName });
+
+                            // Create download button
+                            const downloadButton = document.createElement('a');
+                            downloadButton.href = url;
+                            downloadButton.download = fileName;
+                            downloadButton.innerText = 'Download WebP';
+
+                            // Create image box
+                            const imageBox = document.createElement('div');
+                            imageBox.className = 'image-box';
+                            imageBox.appendChild(canvas);
+                            imageBox.appendChild(downloadButton);
+
+                            imageContainer.appendChild(imageBox);
+                        }, 'image/webp');
+                    };
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Download all images one by one
+        document.getElementById('downloadAllBtn').addEventListener('click', function() {
+            croppedImages.forEach(image => {
+                const link = document.createElement('a');
+                link.href = image.url;
+                link.download = image.fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    </script>
+
+</body>
+</html>
