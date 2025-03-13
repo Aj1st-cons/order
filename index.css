@@ -287,7 +287,7 @@ body {
     margin-top: -20px;
     font-family: Arial, sans-serif;
     line-height: 0.9;
-    color: #009500;
+    color: #000;
     font-weight: bold;
     font-size: 11px;
         }
@@ -318,10 +318,10 @@ body {
     height: 40px;
     margin: 0;
     margin-top: -15px;
-    line-height: 0.8;
-    color: #009500;
+    line-height: 1;
+    color: #000;;
     font-weight: bold;
-    font-size: 11px;
+    font-size: 12px;
         }  
 .select-store {
   display: flex;
