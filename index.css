@@ -355,7 +355,7 @@ body {
   font-size: 15px;
   font-weight: bold;
   padding: 5px;
-  white-space: nowrap;
+  white-space: ;
 }
         .stores-grid {            
             display: grid; 
@@ -394,8 +394,8 @@ body {
             margin-top: 3px;
             line-height: 0.8;
             color: #009500;
-            font-size: 13px;
-            white-space: nowrap;
+            font-size: 15px;
+            white-space: ;
             font-weight: bold;
         }  
        
