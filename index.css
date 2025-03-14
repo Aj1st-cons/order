@@ -256,7 +256,7 @@ body {
         }
         .cardx { 
             margin-top: 0px;              
-            background: linear-gradient(to top right, #fff, #00950025, #fff);
+            background: linear-gradient(to bottom right, #d2eef1, #d7f1ee, #d2f1ee, #d6f0ef);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
             text-align: center;
