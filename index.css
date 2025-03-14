@@ -255,7 +255,8 @@ body {
             box-sizing: border-box;
         }
         .cardx { 
-            margin-top: 0px;              
+            margin-top: 0px;  
+            outline: 1px solid #009500;
             background: linear-gradient(to top right, #fff, #EEEEEE, #fff);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
             border-radius: 8px;
