@@ -99,7 +99,7 @@ body {
     grid-template-columns: repeat(3, 1fr); /* Example: 4 columns on desktop */
     gap: 20px; /* Increased gap for desktop */
     width: 80%; /* Centered grid with controlled width */
-    max-width: 1200px; /* Prevents it from becoming too wide */
+    max-width: 600px; /* Prevents it from becoming too wide */
   }
 }
 #itemPopup, #storesPopup {
