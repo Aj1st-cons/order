@@ -22,5 +22,6 @@ const categoryUrls = {
             "cafeteria": "https://order-1ib.pages.dev/Cafeteria.html",
             "restaurant": "https://order-1ib.pages.dev/Restaurant.html",
             "fastfoods": "https://order-1ib.pages.dev/Fastfood.html",
+            "accessories": "https://nearbys.pages.dev/Accessories",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
