@@ -83,14 +83,24 @@ body {
         }
 .item-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr); /* 3 columns by default */
   justify-content: center;
-  gap: 20px;
+  gap: 20px; /* Default gap for mobile */
   width: calc(100% - 120px);
   margin: 0 auto;
   margin-top: -10px;
   padding: 10px;
   box-sizing: border-box;
+}
+
+/* Desktop Styles */
+@media (min-width: 1024px) { /* Applies to screens wider than 1024px */
+  .item-grid {
+    grid-template-columns: repeat(4, 1fr); /* Example: 4 columns on desktop */
+    gap: 50px; /* Increased gap for desktop */
+    width: 80%; /* Centered grid with controlled width */
+    max-width: 1200px; /* Prevents it from becoming too wide */
+  }
 }
 #itemPopup, #storesPopup {
   position: fixed;
@@ -243,19 +253,6 @@ body {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        #categ {            
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 20px; 
-            width: 100vw;              
-            height: auto;  
-            margin: 0 auto;                 
-            padding: 20px;             
-            box-sizing: border-box;    
-            background-color: #fff;
-            margin-top: 100px;
-            margin-bottom: 50px;
         }
         .cardx { 
             margin-top: 0px;              
