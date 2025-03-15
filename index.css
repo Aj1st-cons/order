@@ -115,6 +115,9 @@ body {
   padding-bottom: 70px;
   box-sizing: border-box;
 }
+#popup3 {
+  padding-bottom: 120px;
+}
          #errorPopup {
             position: fixed;
             display: none;
