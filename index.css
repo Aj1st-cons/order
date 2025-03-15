@@ -102,7 +102,7 @@ body {
     max-width: 600px; /* Prevents it from becoming too wide */
   }
 }
-#itemPopup, #storesPopup {
+#itemPopup, #storesPopup, #popup3 {
   position: fixed;
   width: 100%;
   height: calc(100% - 105px);
