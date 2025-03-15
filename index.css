@@ -254,7 +254,7 @@ body {
             padding: 0;
             box-sizing: border-box;
         }
-        .cardx { 
+        .cardx, .card3 { 
             margin-top: 0px;  
             outline: 0.25px solid #009500;
             background: linear-gradient(to top right, #fff, #EEEEEE, #fff);
