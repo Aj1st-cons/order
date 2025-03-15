@@ -686,7 +686,4 @@ margin-top: -30px;
           grid-template-columns:repeat(10, 1fr); 
           overflow-x: auto;
         }
-        .content-section cardx {
-          width:60px; 
-          height:70px;
-        }
+        
