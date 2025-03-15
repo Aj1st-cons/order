@@ -676,3 +676,13 @@ margin-top: -30px;
         #welcome h1 span:nth-child(7) { animation-delay: 0.7s; }
         #welcome h1 span:nth-child(8) { animation-delay: 1s; }
         #welcome h1 span:nth-child(9) { animation-delay: 2.2s; } 
+
+        .content-section {
+          display:none; 
+          height:auto; 
+          padding:10px 2px; 
+          margin:20px 5px; 
+          gap:20px; 
+          grid-template-columns:repeat(10, 1fr); 
+          overflow-x: auto;
+        }
