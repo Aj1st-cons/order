@@ -267,16 +267,16 @@ body {
             height: 120px;
             transition: transform 0.2s; 
         }
-        .cardx:hover {
+        .cardx:hover, .card3:hover {
             transform: scale(1.05);    
         }
-        .cardx img {
+        .cardx img, .card3 img {
             width: 100%;
             height: auto;
             object-fit: cover;
             border-radius: 8px;
         }
-        .cardx p {
+        .cardx p, .card3 p {
     display: flex;
     align-items: center;
     justify-content: center;
