@@ -288,9 +288,15 @@ body {
     margin-top: -17px;
     font-family: Arial, sans-serif;
     line-height: 0.9;
-    color: #009500;
+    color: #E0E5E5;
     font-weight: bold;
     font-size: 13px;
+    text-shadow:
+    -0.3px -0.3px 0 #000,
+     0.3px -0.3px 0 #000,
+    -1.4px  0px 0 #000,
+    -2.4px  0px 0 #000,
+     0.3px  0.3px 0 #000;     
         }
                            
         .item-card {
