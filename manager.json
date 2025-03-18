@@ -1,6 +1,1 @@
-{
-  "John": "1234",
-  "Ajanth": "4567",
-  "Dharshi": "5678",
-  "Anushka": "2010"
-}
+["John", "Ajanth", "Dharshi", "Anushka"]
