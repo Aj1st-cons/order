@@ -1,6 +1,6 @@
-[
-  { "manager": "John", "id": 1234 },
-  { "manager": "Ajanth", "id": 4567 },
-  { "manager": "Dharshi", "id": 5678 },
-  { "manager": "Anushka", "id": 2010 }
-]
+{
+  "John": "1234",
+  "Ajanth": "4567",
+  "Dharshi": "5678",
+  "Anushka": "2010"
+}
