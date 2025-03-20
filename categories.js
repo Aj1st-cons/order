@@ -25,12 +25,12 @@ const categoryUrls = {
             "appliences": "https://nearbys.pages.dev/Appliences",
             "accessories": "https://nearbys.pages.dev/Accessories",
             "watches": "https://nearbys.pages.dev/Watches",
-            "phones": "https://nearbys.pages.dev/phones",
             "kids": "https://nearbys.pages.dev/Kids",
             "ladies": "https://nearbys.pages.dev/Ladies",
             "men": "https://nearbys.pages.dev/Men",
             "shoes": "https://nearbys.pages.dev/Shoes",
             "bags": "https://nearbys.pages.dev/Bags",
             "glasses": "https://nearbys.pages.dev/Glasses",
+            "samsung": "https://nearbys.pages.dev/Samsung",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
