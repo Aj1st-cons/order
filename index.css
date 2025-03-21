@@ -81,6 +81,23 @@ body {
             display: none;            
             overflow-y: auto;
         }
+.section-title { 
+background: #009500; 
+margin: 0px 0px; 
+}
+.section-title p{
+margin:0 auto; 
+color:#E0E5E5; 
+font-family: 'Righteous', cursive; font-size:20px; 
+font-weight:bold;
+font-style:italic;  
+margin-bottom:10px;
+text-shadow: 
+-0.3px -0.3px 0 #000, 
+0.3px -0.3px 0 #000, 
+-1.4px  0px 0 #000, 
+0.3px  0.3px 0 #000;
+}
 .item-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 columns by default */
