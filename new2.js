@@ -148,7 +148,7 @@ function searchStores(stores) {
   if (nearbyVendors.length > 0) {
     window.location.href = `https://order-app-ae.myshopify.com/pages/stores?collections=${nearbyVendors.join(",")}`;
   } else {
-    document.getElementById("errorPopup").style.display = "block";
+    document.getElementById("noItemPopup").style.display = "block";
   }
 }
 
