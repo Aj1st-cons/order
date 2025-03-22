@@ -25,7 +25,7 @@ const categoryUrls = {
             "appliences": "https://nearbys.pages.dev/Appliences",
             "accessories": "https://nearbys.pages.dev/Accessories",
             "watches": "https://nearbys.pages.dev/Watches",
-            "kids": "https://nearbys.pages.dev/Kids",
+            "kid": "https://nearbys.pages.dev/Kids",
             "ladies": "https://nearbys.pages.dev/Ladies",
             "men": "https://nearbys.pages.dev/Men",
             "shoes": "https://nearbys.pages.dev/Shoes",
