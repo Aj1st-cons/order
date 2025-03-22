@@ -1,4 +1,4 @@
- //show brands of mobiles, laptops   
+     //show brands of mobiles, laptops   
        document.addEventListener("DOMContentLoaded", function() {
     let lastOpenedSection = null; // Store the last opened section
 
@@ -71,45 +71,69 @@ function showNoItemPopup() {
 //xxxxxxxxxxxxxxxxxxxxxxxx
 
     function showItems(category) {
+    // Fetch the category data
+    fetch(categoryUrls[category])
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
+        })
+        .then(data => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(data, "text/html");
+            let items = [];
 
-        fetch(categoryUrls[category])
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.text();
-            })
-            .then(data => {
-                let parser = new DOMParser();
-                let doc = parser.parseFromString(data, "text/html");
-                let items = [];
-
-                doc.querySelectorAll(".item-card").forEach(card => {
-                    let img = card.querySelector("img")?.src;
-                    let name = card.querySelector("p")?.textContent;
-                    if (img && name) items.push({ name, image: img });
-                });
-
-                let itemList = `<div class="item-grid">`;
-                items.forEach(item => {
-                    itemList += `
-                        <div class="item-card" onclick="searchItem('${item.name}')">
-                            <img src="${item.image}" alt="${item.name}" loading="lazy">
-                            <p>${item.name}</p>
-                        </div>
-                    `;
-                });
-                itemList += `</div>`;
-                document.getElementById("itemList").innerHTML = itemList;
-                document.getElementById("itemPopup").style.display = "block";
-            })
-            .catch(error => {
-                console.error("Error loading items:", error);
-                document.getElementById("noItemPopup").style.display = "block";
+            // Parse items from the fetched HTML
+            doc.querySelectorAll(".item-card").forEach(card => {
+                let img = card.querySelector("img")?.src;
+                let name = card.querySelector("p")?.textContent;
+                if (img && name) items.push({ name, image: img });
             });
+
+            // Generate item list HTML
+            let itemList = `<div class="item-grid">`;
+            items.forEach(item => {
+                itemList += `
+                    <div class="item-card" onclick="searchItem('${item.name}')">
+                        <img src="${item.image}" alt="${item.name}" loading="lazy">
+                        <p>${item.name}</p>
+                    </div>
+                `;
+            });
+            itemList += `</div>`;
+            
+            // Update the item list in the DOM
+            document.getElementById("itemList").innerHTML = itemList;
+            document.getElementById("itemPopup").style.display = "block";
+        })
+        .catch(error => {
+            console.error("Error loading items:", error);
+
+            // Dynamically create and display the error popup
+            let noItemPopup = document.getElementById("noItemPopup");
+            
+            if (!noItemPopup) {
+                noItemPopup = document.createElement("div");
+                noItemPopup.className = "bottom-popup";
+                noItemPopup.id = "noItemPopup";
+                noItemPopup.innerHTML = `
+                    <p><strong>Sorry!</strong><br><br>The selected item is not available nearby.</p><br>
+                    <button onclick="closeNoItemPopup()">OK</button>
+                `;
+                document.body.appendChild(noItemPopup);
+            }
+
+            // Reset and show the popup
+            noItemPopup.style.display = "block";
+        });
+}
+
+// Function to close the error popup
+function closeNoItemPopup() {
+    let noItemPopup = document.getElementById("noItemPopup");
+    if (noItemPopup) {
+        noItemPopup.style.display = "none";
     }
-  
-  function closeNoItemPopup() {
-    document.getElementById("noItemPopup").style.display = "none";
-}  
+}
 
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -266,4 +290,4 @@ function getDistance(lat1, lon1, lat2, lon2) {
             Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-          }
+}
