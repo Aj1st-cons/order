@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple Images: Crop to 1:1, Center Main Object & Convert to WebP</title>
+  <style>
+    html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+  overflow-y: auto; /* Allows vertical scrolling */
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.image-container {
+  max-width: 100%;
+  overflow: hidden;
+  text-align: center;
+}
+
+canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px auto;
+}
+  </style>
+</head>
+<body>
+  <h1>Multiple Images: Crop to 1:1, Center Main Object & Convert to WebP</h1>
+  <input type="file" id="imageInput" accept="image/*" multiple>
+  <br><br>
+  <button id="downloadAllBtn" disabled>Download All</button>
+  <div id="imagesContainer"></div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const imagesContainer = document.getElementById('imagesContainer');
+    const downloadAllBtn = document.getElementById('downloadAllBtn');
+
+    // Array to keep track of processed canvas elements
+    let processedCanvases = [];
+
+    imageInput.addEventListener('change', (e) => {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+
+      // Clear previous results
+      imagesContainer.innerHTML = '';
+      processedCanvases = [];
+
+      Array.from(files).forEach((file, idx) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            // Process each image and create its container
+            createImageContainer(img, idx);
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    function createImageContainer(img, idx) {
+      // Create a container div
+      const container = document.createElement('div');
+      container.className = 'image-container';
+
+      // Create a canvas for the processed image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Process image: Crop to square, center main object with white background
+      processImage(img, canvas, ctx);
+
+      // Save the processed canvas for the "Download All" functionality
+      processedCanvases.push({ canvas: canvas, index: idx });
+
+      // Create an individual download button for this image
+      const downloadBtn = document.createElement('button');
+      downloadBtn.textContent = 'Download WebP';
+      downloadBtn.addEventListener('click', () => {
+        downloadCanvas(canvas, `Fruit_${idx}.webp`);
+      });
+
+      // Append the canvas and download button to the container, then container to imagesContainer.
+      container.appendChild(canvas);
+      container.appendChild(document.createElement('br'));
+      container.appendChild(downloadBtn);
+      imagesContainer.appendChild(container);
+
+      // Enable the download all button if at least one image is processed.
+      if (processedCanvases.length > 0) {
+        downloadAllBtn.disabled = false;
+      }
+    }
+
+    function processImage(img, canvas, ctx) {
+      // Use original image dimensions for analysis.
+      const width = img.width;
+      const height = img.height;
+
+      // Create a temporary canvas to extract pixel data.
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = width;
+      tempCanvas.height = height;
+      const tempCtx = tempCanvas.getContext('2d');
+      tempCtx.drawImage(img, 0, 0, width, height);
+      const imageData = tempCtx.getImageData(0, 0, width, height).data;
+
+      // Detect the main object's bounding box using brightness threshold.
+      let threshold = 100; // Adjust as needed.
+      let minX = width, minY = height, maxX = 0, maxY = 0;
+      let found = false;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const index = (y * width + x) * 4;
+          const r = imageData[index];
+          const g = imageData[index + 1];
+          const b = imageData[index + 2];
+          // Calculate brightness as average of RGB.
+          const brightness = (r + g + b) / 3;
+          if (brightness > threshold) {
+            found = true;
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x > maxX) maxX = x;
+            if (y > maxY) maxY = y;
+          }
+        }
+      }
+
+      // If no pixels were found above threshold, default to image center.
+      let objectCenter = { x: width / 2, y: height / 2 };
+      if (found) {
+        objectCenter.x = (minX + maxX) / 2;
+        objectCenter.y = (minY + maxY) / 2;
+      }
+
+      // Decide the output square canvas size.
+      // Use the larger dimension to ensure the whole image fits.
+      const squareSize = Math.max(width, height);
+      canvas.width = squareSize;
+      canvas.height = squareSize;
+
+      // Fill canvas with white background.
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, squareSize, squareSize);
+
+      // Calculate offset so that the object's center aligns with the canvas center.
+      const offsetX = (squareSize / 2) - objectCenter.x;
+      const offsetY = (squareSize / 2) - objectCenter.y;
+
+      // Draw the original image with the computed offset.
+      ctx.drawImage(img, offsetX, offsetY);
+    }
+
+    function downloadCanvas(canvas, filename) {
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 'image/webp');
+    }
+
+    downloadAllBtn.addEventListener('click', () => {
+      // For each processed canvas, trigger a download.
+      processedCanvases.forEach(({ canvas, index }) => {
+        // Create a unique filename for each canvas.
+        downloadCanvas(canvas, `fruit_${index}.webp`);
+      });
+    });
+  </script>
+</body>
+</html>
