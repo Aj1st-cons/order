@@ -35,7 +35,7 @@
     // Get all sections with an ID
     document.querySelectorAll("[id]").forEach(section => {
         let sectionId = section.id; // Get section ID
-        let fetchUrl = `https://nearbys.pages.dev/${sectionId}.html`; // Construct the fetch URL
+        let fetchUrl = `https://nearbysx.pages.dev/${sectionId}.html`; // Construct the fetch URL
 
         // Fetch content and load it inside the section
         fetch(fetchUrl)
