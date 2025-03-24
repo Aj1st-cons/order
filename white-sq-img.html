@@ -85,7 +85,7 @@ canvas {
       const downloadBtn = document.createElement('button');
       downloadBtn.textContent = 'Download WebP';
       downloadBtn.addEventListener('click', () => {
-        downloadCanvas(canvas, `Fruit_${idx}.webp`);
+        downloadCanvas(canvas, `image_${idx}.webp`);
       });
 
       // Append the canvas and download button to the container, then container to imagesContainer.
@@ -178,7 +178,7 @@ canvas {
       // For each processed canvas, trigger a download.
       processedCanvases.forEach(({ canvas, index }) => {
         // Create a unique filename for each canvas.
-        downloadCanvas(canvas, `fruit_${index}.webp`);
+        downloadCanvas(canvas, `image_${index}.webp`);
       });
     });
   </script>
