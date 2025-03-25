@@ -162,6 +162,12 @@ function searchItem(item) {
     return;
   }
 
+  // Get the alt value from the clicked item's image
+  let clickedItem = event.currentTarget.querySelector("img");
+  if (clickedItem) {
+    item = clickedItem.getAttribute("alt");
+  }
+
   const radii = [1, 2, 3, 4, 5];
   let nearbyVendors = [];
 
