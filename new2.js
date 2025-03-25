@@ -154,83 +154,90 @@ function searchStores(stores) {
 
 //xxxxxxxxxxxxxxxxxxxxxxxx
 function searchItem(event) {
-  let userLocation = getActiveLocation();
+    let userLocation = getActiveLocation();
 
-  if (!userLocation) {
-    showSelectLocationPopup();
-    return;
-  }
-
-  // Get the clicked item's image and its alt attribute
-  let clickedItem = event.currentTarget.querySelector("img");
-  let item = clickedItem ? clickedItem.getAttribute("alt") : null;
-
-  if (!item) {
-    console.error("No alt attribute found for the clicked item.");
-    document.getElementById("errorPopup").style.display = "block";
-    return;
-  }
-
-  const radii = [1, 2, 3, 4, 5];
-  let nearbyVendors = [];
-
-  // Loop through radii until vendors are found or maximum radius reached
-  for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
-    const radius = radii[i];
-    nearbyVendors = []; // reset for this radius
-
-    for (const vendor in vendors) {
-      let distance = getDistance(
-        userLocation.lat, userLocation.lon,
-        vendors[vendor].lat, vendors[vendor].lng
-      );
-      if (distance <= radius) {
-        nearbyVendors.push(`vendor:${vendor}`);
-      }
+    // Check if location is available
+    if (!userLocation) {
+        showSelectLocationPopup();
+        return;
     }
-  }
 
-  if (nearbyVendors.length > 0) {
-    window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
-  } else {
-    document.getElementById("errorPopup").style.display = "block";
-  }
+    // Get the clicked item's image and its alt attribute (which contains the item name)
+    let clickedItem = event.currentTarget.querySelector("img");
+    let item = clickedItem ? clickedItem.getAttribute("alt") : null;
+
+    if (!item) {
+        console.error("No alt attribute found for the clicked item.");
+        document.getElementById("errorPopup").style.display = "block";
+        return;
+    }
+
+    const radii = [1, 2, 3, 4, 5];
+    let nearbyVendors = [];
+
+    // Loop through radii until vendors are found or maximum radius reached
+    for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
+        const radius = radii[i];
+        nearbyVendors = []; // reset for this radius
+
+        for (const vendor in vendors) {
+            let distance = getDistance(
+                userLocation.lat, userLocation.lon,
+                vendors[vendor].lat, vendors[vendor].lng
+            );
+            // Check if the vendor is within the radius
+            if (distance <= radius) {
+                nearbyVendors.push(`vendor:${vendor}`);
+            }
+        }
+    }
+
+    // If nearby vendors are found, build the search URL and redirect
+    if (nearbyVendors.length > 0) {
+        window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
+    } else {
+        // If no vendors are found, show the error popup
+        document.getElementById("errorPopup").style.display = "block";
+    }
 }
 
-
+// Function to get the active location from localStorage
 function getActiveLocation() {
-  const selectedLocation = localStorage.getItem('selectedLocation');
-  const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
+    const selectedLocation = localStorage.getItem('selectedLocation');
+    const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
 
-  if (selectedLocation && selectedLocationCoords) {
-    return JSON.parse(selectedLocationCoords);
-  }
+    // Check if the selected location is available
+    if (selectedLocation && selectedLocationCoords) {
+        return JSON.parse(selectedLocationCoords);
+    }
 
-  const currentLocation = localStorage.getItem('currentLocation');
-  const locationExpiry = localStorage.getItem('locationExpiry');
+    // Fallback to current location if available
+    const currentLocation = localStorage.getItem('currentLocation');
+    const locationExpiry = localStorage.getItem('locationExpiry');
 
-  if (currentLocation && locationExpiry && Date.now() < parseInt(locationExpiry)) {
-    return JSON.parse(currentLocation);
-  }
+    if (currentLocation && locationExpiry && Date.now() < parseInt(locationExpiry)) {
+        return JSON.parse(currentLocation);
+    }
 
-  return null;
+    return null;
 }
 
+// Function to show a popup if location is not selected
 function showSelectLocationPopup() {
-  const selectLocationPopup = document.getElementById("selectLocationPopup");
-  selectLocationPopup.style.display = "block";
-  setTimeout(() => {
-    selectLocationPopup.style.display = "none";
-  }, 4000);
+    const selectLocationPopup = document.getElementById("selectLocationPopup");
+    selectLocationPopup.style.display = "block";
+    setTimeout(() => {
+        selectLocationPopup.style.display = "none";
+    }, 4000);
 }
 
-// Keep the existing getDistance function
+// Function to calculate the distance between two coordinates (Haversine formula)
 function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Earth's radius in km
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // Distance in kilometers
+                                      }
