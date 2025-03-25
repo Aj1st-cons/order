@@ -153,22 +153,21 @@ function searchStores(stores) {
 }
 
 //xxxxxxxxxxxxxxxxxxxxxxxx
-function searchItem(event) {
+function handleClick(event) {
+    // Get the alt text from the image inside the clicked item-card
+    const imgElement = event.currentTarget.querySelector('img');
+    const itemName = imgElement ? imgElement.alt : '';
+    
+    if (itemName) {
+        searchItem(itemName);
+    }
+}
+
+function searchItem(item) {
     let userLocation = getActiveLocation();
 
-    // Check if location is available
     if (!userLocation) {
         showSelectLocationPopup();
-        return;
-    }
-
-    // Get the clicked item's image and its alt attribute (which contains the item name)
-    let clickedItem = event.currentTarget.querySelector("img");  // Get the clicked image from the parent div
-    let item = clickedItem ? clickedItem.getAttribute("alt") : null;  // Get the alt attribute
-
-    if (!item) {
-        console.error("No alt attribute found for the clicked item.");
-        document.getElementById("errorPopup").style.display = "block";
         return;
     }
 
@@ -180,38 +179,32 @@ function searchItem(event) {
         const radius = radii[i];
         nearbyVendors = []; // reset for this radius
 
-        for (const vendor in vendors) {
-            let distance = getDistance(
-                userLocation.lat, userLocation.lon,
-                vendors[vendor].lat, vendors[vendor].lng
-            );
-            // Check if the vendor is within the radius
-            if (distance <= radius) {
-                nearbyVendors.push(`vendor:${vendor}`);
-            }
+        for (const vendor in vendors) {  
+            let distance = getDistance(  
+                userLocation.lat, userLocation.lon,  
+                vendors[vendor].lat, vendors[vendor].lng  
+            );  
+            if (distance <= radius) {  
+                nearbyVendors.push(`vendor:${vendor}`);  
+            }  
         }
     }
 
-    // If nearby vendors are found, build the search URL and redirect
     if (nearbyVendors.length > 0) {
         window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
     } else {
-        // If no vendors are found, show the error popup
         document.getElementById("errorPopup").style.display = "block";
     }
 }
 
-// Function to get the active location from localStorage
 function getActiveLocation() {
     const selectedLocation = localStorage.getItem('selectedLocation');
     const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
 
-    // Check if the selected location is available
     if (selectedLocation && selectedLocationCoords) {
         return JSON.parse(selectedLocationCoords);
     }
 
-    // Fallback to current location if available
     const currentLocation = localStorage.getItem('currentLocation');
     const locationExpiry = localStorage.getItem('locationExpiry');
 
@@ -222,7 +215,6 @@ function getActiveLocation() {
     return null;
 }
 
-// Function to show a popup if location is not selected
 function showSelectLocationPopup() {
     const selectLocationPopup = document.getElementById("selectLocationPopup");
     selectLocationPopup.style.display = "block";
@@ -231,13 +223,13 @@ function showSelectLocationPopup() {
     }, 4000);
 }
 
-// Function to calculate the distance between two coordinates (Haversine formula)
+// Keep the existing getDistance function
 function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius of the Earth in kilometers
+    const R = 6371; // Earth's radius in km
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // Distance in kilometers
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
