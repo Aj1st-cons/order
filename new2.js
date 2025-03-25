@@ -154,7 +154,7 @@ function searchStores(stores) {
 
 //xxxxxxxxxxxxxxxxxxxxxxxx
 
-function searchItem(item) {
+unction searchItem(item) {
   let userLocation = getActiveLocation();
 
   if (!userLocation) {
