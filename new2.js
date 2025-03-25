@@ -163,8 +163,8 @@ function searchItem(event) {
     }
 
     // Get the clicked item's image and its alt attribute (which contains the item name)
-    let clickedItem = event.currentTarget.querySelector("img");
-    let item = clickedItem ? clickedItem.getAttribute("alt") : null;
+    let clickedItem = event.currentTarget.querySelector("img");  // Get the clicked image from the parent div
+    let item = clickedItem ? clickedItem.getAttribute("alt") : null;  // Get the alt attribute
 
     if (!item) {
         console.error("No alt attribute found for the clicked item.");
@@ -240,4 +240,4 @@ function getDistance(lat1, lon1, lat2, lon2) {
         Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
         Math.sin(dLon / 2) * Math.sin(dLon / 2);
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // Distance in kilometers
-                                      }
+}
