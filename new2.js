@@ -153,8 +153,7 @@ function searchStores(stores) {
 }
 
 //xxxxxxxxxxxxxxxxxxxxxxxx
-
-function searchItem(item) {
+function searchItem(event) {
   let userLocation = getActiveLocation();
 
   if (!userLocation) {
@@ -162,10 +161,14 @@ function searchItem(item) {
     return;
   }
 
-  // Get the alt value from the clicked item's image
+  // Get the clicked item's image and its alt attribute
   let clickedItem = event.currentTarget.querySelector("img");
-  if (clickedItem) {
-    item = clickedItem.getAttribute("alt");
+  let item = clickedItem ? clickedItem.getAttribute("alt") : null;
+
+  if (!item) {
+    console.error("No alt attribute found for the clicked item.");
+    document.getElementById("errorPopup").style.display = "block";
+    return;
   }
 
   const radii = [1, 2, 3, 4, 5];
@@ -193,6 +196,7 @@ function searchItem(item) {
     document.getElementById("errorPopup").style.display = "block";
   }
 }
+
 
 function getActiveLocation() {
   const selectedLocation = localStorage.getItem('selectedLocation');
