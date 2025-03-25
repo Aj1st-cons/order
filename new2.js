@@ -154,15 +154,16 @@ function searchStores(stores) {
 
 //xxxxxxxxxxxxxxxxxxxxxxxx
 function handleClick(event) {
-    // Get the alt text from the image inside the clicked item-card
-    const imgElement = event.currentTarget.querySelector('img');
-    const itemName = imgElement ? imgElement.alt : '';
+    // Get the alt text from the image (the full search term)
+    const img = event.currentTarget.querySelector('img');
+    const searchTerm = img.alt;
     
-    if (itemName) {
-        searchItem(itemName);
+    if (searchTerm) {
+        searchItem(searchTerm);
     }
 }
 
+// Rest of your existing functions remain exactly the same
 function searchItem(item) {
     let userLocation = getActiveLocation();
 
@@ -174,10 +175,9 @@ function searchItem(item) {
     const radii = [1, 2, 3, 4, 5];
     let nearbyVendors = [];
 
-    // Loop through radii until vendors are found or maximum radius reached
     for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
         const radius = radii[i];
-        nearbyVendors = []; // reset for this radius
+        nearbyVendors = [];
 
         for (const vendor in vendors) {  
             let distance = getDistance(  
@@ -197,39 +197,4 @@ function searchItem(item) {
     }
 }
 
-function getActiveLocation() {
-    const selectedLocation = localStorage.getItem('selectedLocation');
-    const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
-
-    if (selectedLocation && selectedLocationCoords) {
-        return JSON.parse(selectedLocationCoords);
-    }
-
-    const currentLocation = localStorage.getItem('currentLocation');
-    const locationExpiry = localStorage.getItem('locationExpiry');
-
-    if (currentLocation && locationExpiry && Date.now() < parseInt(locationExpiry)) {
-        return JSON.parse(currentLocation);
-    }
-
-    return null;
-}
-
-function showSelectLocationPopup() {
-    const selectLocationPopup = document.getElementById("selectLocationPopup");
-    selectLocationPopup.style.display = "block";
-    setTimeout(() => {
-        selectLocationPopup.style.display = "none";
-    }, 4000);
-}
-
-// Keep the existing getDistance function
-function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Earth's radius in km
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
+// Keep all other existing functions exactly the same
