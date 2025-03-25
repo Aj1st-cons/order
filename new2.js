@@ -153,20 +153,26 @@ function searchStores(stores) {
 }
 
 //xxxxxxxxxxxxxxxxxxxxxxxx
-function handleClick(event) {
-    // Get the alt text from the image (the full search term)
-    const img = event.currentTarget.querySelector('img');
-    const searchTerm = img.alt;
+function handleItemClick(event) {
+    // Prevent default behavior if needed
+    event.preventDefault();
     
+    // Get the closest item-card element
+    const card = event.currentTarget;
+    
+    // Get the image element and its alt text (search term)
+    const img = card.querySelector('img');
+    if (!img) return;
+    
+    const searchTerm = img.alt.trim();
     if (searchTerm) {
         searchItem(searchTerm);
     }
 }
 
-// Rest of your existing functions remain exactly the same
 function searchItem(item) {
     let userLocation = getActiveLocation();
-
+    
     if (!userLocation) {
         showSelectLocationPopup();
         return;
@@ -175,26 +181,67 @@ function searchItem(item) {
     const radii = [1, 2, 3, 4, 5];
     let nearbyVendors = [];
 
-    for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
-        const radius = radii[i];
+    // Loop through radii until vendors are found
+    for (let radius of radii) {
         nearbyVendors = [];
-
-        for (const vendor in vendors) {  
-            let distance = getDistance(  
-                userLocation.lat, userLocation.lon,  
-                vendors[vendor].lat, vendors[vendor].lng  
-            );  
-            if (distance <= radius) {  
-                nearbyVendors.push(`vendor:${vendor}`);  
-            }  
+        
+        for (const vendor in vendors) {
+            let distance = getDistance(
+                userLocation.lat, userLocation.lon,
+                vendors[vendor].lat, vendors[vendor].lng
+            );
+            
+            if (distance <= radius) {
+                nearbyVendors.push(`vendor:${vendor}`);
+            }
         }
+        
+        if (nearbyVendors.length > 0) break;
     }
 
     if (nearbyVendors.length > 0) {
-        window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
+        const searchUrl = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join("+OR+")}`;
+        window.location.href = searchUrl;
     } else {
         document.getElementById("errorPopup").style.display = "block";
     }
 }
 
-// Keep all other existing functions exactly the same
+function getActiveLocation() {
+    const selectedLocation = localStorage.getItem('selectedLocation');
+    const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
+
+    if (selectedLocation && selectedLocationCoords) {
+        return JSON.parse(selectedLocationCoords);
+    }
+
+    const currentLocation = localStorage.getItem('currentLocation');
+    const locationExpiry = localStorage.getItem('locationExpiry');
+
+    if (currentLocation && locationExpiry && Date.now() < parseInt(locationExpiry)) {
+        return JSON.parse(currentLocation);
+    }
+
+    return null;
+}
+
+function showSelectLocationPopup() {
+    const selectLocationPopup = document.getElementById("selectLocationPopup");
+    if (selectLocationPopup) {
+        selectLocationPopup.style.display = "block";
+        setTimeout(() => {
+            selectLocationPopup.style.display = "none";
+        }, 4000);
+    }
+}
+
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
