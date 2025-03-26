@@ -16,7 +16,7 @@ const categoryUrls = {
             "tea": "https://order-1ib.pages.dev/Tea.html",
             "babies": "https://order-1ib.pages.dev/Babies.html",
             "home": "https://order-1ib.pages.dev/Home.html",
-            "pets": "https://order-1ib.pages.dev/Pets.html",
+            "pets": "https://nearbysx.pages.dev/Pets.html",
             "beauty": "https://order-1ib.pages.dev/Beauty.html",
             "personal": "https://order-1ib.pages.dev/Personal.html",
             "fitness": "https://nearbys.pages.dev/Fitness",
