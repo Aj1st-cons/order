@@ -188,23 +188,56 @@ function searchItem(item) {
   }
 }
 
+
+
+
+
 function getActiveLocation() {
-  const selectedLocation = localStorage.getItem('selectedLocation');
-  const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
+    const selectedLocation = localStorage.getItem('selectedLocation');
+    const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
+    const currentLocation = localStorage.getItem('currentLocation');
+    const locationExpiry = localStorage.getItem('locationExpiry');
 
-  if (selectedLocation && selectedLocationCoords) {
-    return JSON.parse(selectedLocationCoords);
-  }
+    // If the last active location was "Current Location"
+    if (selectedLocation === "Current Location") {
+        if (currentLocation && locationExpiry) {
+            // Check if the location has expired
+            if (Date.now() > parseInt(locationExpiry)) {
+                // Clear expired location data
+                localStorage.removeItem('currentLocation');
+                localStorage.removeItem('locationExpiry');
+                localStorage.removeItem('selectedLocation');
+                localStorage.removeItem('selectedLocationCoords');
 
-  const currentLocation = localStorage.getItem('currentLocation');
-  const locationExpiry = localStorage.getItem('locationExpiry');
+                // Reset displayed location text
+                document.querySelector('.replaceable-text').textContent = "Select Location";
 
-  if (currentLocation && locationExpiry && Date.now() < parseInt(locationExpiry)) {
-    return JSON.parse(currentLocation);
-  }
+                return null; // No active location
+            } else {
+                return JSON.parse(currentLocation); // Return valid current location
+            }
+        } else {
+            // If no valid current location, reset text
+            document.querySelector('.replaceable-text').textContent = "Select Location";
+            return null;
+        }
+    }
 
-  return null;
+    // If a saved location exists and isn't "Current Location," return it
+    if (selectedLocation && selectedLocationCoords) {
+        return JSON.parse(selectedLocationCoords);
+    }
+
+    return null; // No active location
 }
+
+// Call getActiveLocation on page load
+document.addEventListener("DOMContentLoaded", function () {
+    getActiveLocation();
+});
+
+
+
 
 function showSelectLocationPopup() {
   const selectLocationPopup = document.getElementById("selectLocationPopup");
@@ -223,4 +256,4 @@ function getDistance(lat1, lon1, lat2, lon2) {
             Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
+}    
