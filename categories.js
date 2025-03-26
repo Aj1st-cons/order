@@ -22,7 +22,7 @@ const categoryUrls = {
             "fitness": "https://nearbys.pages.dev/Fitness",
             "cafeteria": "https://order-1ib.pages.dev/Cafeteria.html",
             "restaurant": "https://order-1ib.pages.dev/Restaurant.html",
-            "fastfood": "https://order-1ib.pages.dev/Fastfood.html",
+            "fastfood": "https://nearbysx.pages.dev/Fastfood.html",
             "appliences": "https://nearbysx.pages.dev/Appliences",
             "accessories": "https://nearbysx.pages.dev/Accessories",
             "watches": "https://nearbysx.pages.dev/Watches",            
