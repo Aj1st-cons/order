@@ -94,7 +94,7 @@ function searchItem(item, cn) {
     }
 
     if (nearbyVendors.length > 0) {
-        window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${cn}+${nearbyVendors.join(" OR ")}`;
+        window.location.href = `https://order-app-ae.myshopify.com/search?q=${cn}+${nearbyVendors.join(" OR ")}`;
     } else {
         document.getElementById("errorPopup").style.display = "block";
     }
