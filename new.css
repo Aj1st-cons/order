@@ -345,7 +345,7 @@ body {
 #itemPopup, #storesPopup {
     position: fixed;
     width: 100%;
-    height: calc(100% - 105px);
+    height: calc(100% - 90px);
     background-color: #ffffff;
     display: none;
     overflow-y: auto;
