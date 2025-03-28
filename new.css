@@ -461,14 +461,11 @@ body {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-  }
-
+}
 
         #main-content {
             display: none;
         }
-
-        /* Welcome Screen */
         #welcome {
             position: fixed;
             top: 0;
@@ -480,9 +477,7 @@ body {
             align-items: center;
             background: #fff;
             z-index: 9999;
-        }
-
-        /* Welcome Heading */
+        }        
         #welcome h1 {
             display: flex;
             align-items: center;
@@ -491,8 +486,6 @@ body {
             color: #009500;
             text-shadow: 6px 0px 0px black;
         }
-
-        /* Letter Animation */
         #welcome h1 span {
             opacity: 0;
             margin-right: 5px;
@@ -501,7 +494,6 @@ body {
             font-style: italic;
             animation: welcome-letter-emerge 0.5s ease-in-out forwards;
         }
-
         #welcome h1 .online {
             color: #E0E5E5;
             font-style: normal;
@@ -533,3 +525,58 @@ body {
         #welcome h1 span:nth-child(7) { animation-delay: 0.7s; }
         #welcome h1 span:nth-child(8) { animation-delay: 1s; }
         #welcome h1 span:nth-child(9) { animation-delay: 2.2s; } 
+
+        .install-button, .ios-install-button {
+            background: #009500; 
+            color: white; 
+            font-weight: bold;
+            font-size: 16px; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 10px;
+            cursor: pointer; 
+            text-align: center; 
+            display: block; 
+            margin: 10px auto; 
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 140px;
+        }
+        p.install-button {
+            all: unset;
+            font-size: 13px;
+        }    
+        .install-label {
+            width: 100px; 
+            height: auto;
+            display: block;
+            margin: 0 auto 5px;
+        }
+        .dim-overlay {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.5); 
+            z-index: 998;
+        }
+        .ios-install-guide {
+            display: none; 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            text-align: center; 
+            z-index: 999;
+        }
+        .close-guide {
+            background: red; 
+            color: white; 
+            border-radius: 10px; 
+            padding: 5px 50px; 
+            font-size: 15px; 
+            cursor: pointer; 
+            margin-top: 5px; 
+            font-weight: bold;
+        }
