@@ -403,7 +403,7 @@ body {
     padding: 10px;
     box-sizing: border-box;
 }
-.stores-card {
+.stores-card, .devices-card {
     margin-top: 0px;
     text-align: center;
     padding: 5px;
@@ -412,11 +412,11 @@ body {
     height: 115px;
     transition: transform 0.2s;
 }
-.stores-card:hover {
+.stores-card:hover, .devices-card:hover {
     transform: scale(1.05);
     color: darkred;
 }
-.stores-card img {
+.stores-card img, .devices-card img {
     width: 100%;
     outline: 0.5px solid #000;
     aspect-ratio: 1 / 1;
@@ -424,7 +424,7 @@ body {
     display: block;
     border-radius: 50%;
 }
-.stores-card p {
+.stores-card p, .devices-card p {
     margin-top: 3px;
     line-height: 0.8;
     color: #009500;
