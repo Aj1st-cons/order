@@ -29,9 +29,6 @@ const categoryUrls = {
             "kids": "https://nearbysx.pages.dev/Kids",
             "ladies": "https://nearbysx.pages.dev/Ladies",
             "men": "https://nearbysx.pages.dev/Men",
-            "shoes": "https://nearbysx.pages.dev/Shoes",
-            "bags": "https://nearbysx.pages.dev/Bags",
-            "glasses": "https://nearbysx.pages.dev/Glasses",
-            "samsungMobiles": "https://nearbysx.pages.dev/Samsung-Mobiles",
+            "S-series": "https://nearbysx.pages.dev/Watches",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
