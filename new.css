@@ -342,7 +342,7 @@ body {
         max-width: 600px;
     }
 }
-#itemPopup, #storesPopup {
+#itemPopup, #storesPopup, #devicesPopup {
     position: fixed;
     width: 100%;
     height: calc(100% - 90px);
