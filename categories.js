@@ -29,6 +29,6 @@ const categoryUrls = {
             "kids": "https://nearbysx.pages.dev/Kids",
             "ladies": "https://nearbysx.pages.dev/Ladies",
             "men": "https://nearbysx.pages.dev/Men",
-            "sseries": "https://nearbysx.pages.dev/Watches",
+            "sseries": "https://nearbysx.pages.dev/Watch",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
