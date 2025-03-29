@@ -32,6 +32,6 @@ const categoryUrls = {
             "shoes": "https://nearbysx.pages.dev/Shoes",
             "bags": "https://nearbysx.pages.dev/Bags",
             "glasses": "https://nearbysx.pages.dev/Glasses",
-            "samsung": "https://nearbysx.pages.dev/Samsung",
+            "samsungMobiles": "https://nearbysx.pages.dev/Samsung-mobiles",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
