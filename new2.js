@@ -64,113 +64,6 @@ function closeNoItemPopup() {
 }
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-function searchItem(item, cn) {
-    let userLocation = getActiveLocation();
-
-    if (!userLocation) {
-        showSelectLocationPopup();
-        return;
-    }
-
-    const radii = [1, 2, 3, 4, 5];
-    let nearbyVendors = [];
-
-    for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
-        const radius = radii[i];
-        nearbyVendors = [];
-
-        for (const vendor in vendors) {
-            let distance = getDistance(
-                userLocation.lat, userLocation.lon,
-                vendors[vendor].lat, vendors[vendor].lng
-            );
-            if (distance <= radius) {
-                nearbyVendors.push(`vendor:${vendor}`);
-            }
-        }
-    }
-
-    if (nearbyVendors.length > 0) {
-        window.location.href = `https://order-app-ae.myshopify.com/search?q=${cn}+${nearbyVendors.join(" OR ")}`;
-    } else {
-        document.getElementById("errorPopup").style.display = "block";
-    }
-}
-
-//xxxxxxxxxxxxxxxxxxxxxxxx
-
-function getActiveLocation() {
-    const selectedLocation = localStorage.getItem('selectedLocation');
-    const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
-    const currentLocation = localStorage.getItem('currentLocation');
-    const locationExpiry = localStorage.getItem('locationExpiry');
-
-    // If the last active location was "Current Location"
-    if (selectedLocation === "Current Location") {
-        if (currentLocation && locationExpiry) {
-            // Check if the location has expired
-            if (Date.now() > parseInt(locationExpiry)) {
-                // Clear expired location data
-                localStorage.removeItem('currentLocation');
-                localStorage.removeItem('locationExpiry');
-                localStorage.removeItem('selectedLocation');
-                localStorage.removeItem('selectedLocationCoords');
-
-                // Reset displayed location text
-                document.querySelector('.replaceable-text').textContent = "Select Location";
-
-                return null; // No active location
-            } else {
-                return JSON.parse(currentLocation); // Return valid current location
-            }
-        } else {
-            // If no valid current location, reset text
-            document.querySelector('.replaceable-text').textContent = "Select Location";
-            return null;
-        }
-    }
-
-    // If a saved location exists and isn't "Current Location," return it
-    if (selectedLocation && selectedLocationCoords) {
-        return JSON.parse(selectedLocationCoords);
-    }
-
-    return null; // No active location
-}
-
-// Call getActiveLocation on page load
-document.addEventListener("DOMContentLoaded", function () {
-    getActiveLocation();
-});
-
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-function showSelectLocationPopup() {
-  const selectLocationPopup = document.getElementById("selectLocationPopup");
-  selectLocationPopup.style.display = "block";
-  setTimeout(() => {
-    selectLocationPopup.style.display = "none";
-  }, 4000);
-}
-
-// Keep the existing getDistance function
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // Earth's radius in km
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}        
-
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-
-
-
-
-
      //show brands of mobiles, laptops   
        document.addEventListener("DOMContentLoaded", function() {
     let lastOpenedSection = null; // Store the last opened section
@@ -204,7 +97,6 @@ function getDistance(lat1, lon1, lat2, lon2) {
 });
 
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
    document.addEventListener("DOMContentLoaded", function () {
     // Get all sections with an ID
     document.querySelectorAll("[id]").forEach(section => {
@@ -325,3 +217,109 @@ function searchStores(stores) {
     document.getElementById("noItemPopup").style.display = "block";
   }
 }
+
+//xxxxxxxxxxxxxxxxxxxxxxxx
+
+function searchItem(item) {
+  let userLocation = getActiveLocation();
+
+  if (!userLocation) {
+    showSelectLocationPopup();
+    return;
+  }
+
+  const radii = [1, 2, 3, 4, 5];
+  let nearbyVendors = [];
+
+  // Loop through radii until vendors are found or maximum radius reached
+  for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
+    const radius = radii[i];
+    nearbyVendors = []; // reset for this radius
+
+    for (const vendor in vendors) {
+      let distance = getDistance(
+        userLocation.lat, userLocation.lon,
+        vendors[vendor].lat, vendors[vendor].lng
+      );
+      if (distance <= radius) {
+        nearbyVendors.push(`vendor:${vendor}`);
+      }
+    }
+  }
+
+  if (nearbyVendors.length > 0) {
+    window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(item)}+${nearbyVendors.join(" OR ")}`;
+  } else {
+    document.getElementById("errorPopup").style.display = "block";
+  }
+}
+
+
+
+
+
+function getActiveLocation() {
+    const selectedLocation = localStorage.getItem('selectedLocation');
+    const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
+    const currentLocation = localStorage.getItem('currentLocation');
+    const locationExpiry = localStorage.getItem('locationExpiry');
+
+    // If the last active location was "Current Location"
+    if (selectedLocation === "Current Location") {
+        if (currentLocation && locationExpiry) {
+            // Check if the location has expired
+            if (Date.now() > parseInt(locationExpiry)) {
+                // Clear expired location data
+                localStorage.removeItem('currentLocation');
+                localStorage.removeItem('locationExpiry');
+                localStorage.removeItem('selectedLocation');
+                localStorage.removeItem('selectedLocationCoords');
+
+                // Reset displayed location text
+                document.querySelector('.replaceable-text').textContent = "Select Location";
+
+                return null; // No active location
+            } else {
+                return JSON.parse(currentLocation); // Return valid current location
+            }
+        } else {
+            // If no valid current location, reset text
+            document.querySelector('.replaceable-text').textContent = "Select Location";
+            return null;
+        }
+    }
+
+    // If a saved location exists and isn't "Current Location," return it
+    if (selectedLocation && selectedLocationCoords) {
+        return JSON.parse(selectedLocationCoords);
+    }
+
+    return null; // No active location
+}
+
+// Call getActiveLocation on page load
+document.addEventListener("DOMContentLoaded", function () {
+    getActiveLocation();
+});
+
+
+
+
+function showSelectLocationPopup() {
+  const selectLocationPopup = document.getElementById("selectLocationPopup");
+  selectLocationPopup.style.display = "block";
+  setTimeout(() => {
+    selectLocationPopup.style.display = "none";
+  }, 4000);
+}
+
+// Keep the existing getDistance function
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}    
