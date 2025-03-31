@@ -1,90 +1,210 @@
-// Function to show items based on category function showItems(category) { fetch(categoryUrls[category]) .then(response => { if (!response.ok) throw new Error('Network response was not ok'); return response.text(); }) .then(data => { let parser = new DOMParser(); let doc = parser.parseFromString(data, "text/html"); let items = [];
+//xxxxxxxxxxxxxxxxxxxxxxxx
 
-// Parse items from the fetched HTML
-        doc.querySelectorAll(".item-card").forEach(card => {
-            let img = card.querySelector("img")?.src;
-            let name = card.querySelector("p")?.textContent;
-            let cn = card.getAttribute("cn"); // Extract 'cn' attribute
+// Function to show devices based on category
+function showDevices(category) {
+    const popup = document.getElementById('devicesPopup');
+    const container = document.getElementById('devicesContainer');
 
-            if (img && name && cn) items.push({ name, image: img, cn });
+    // Fetch the devices HTML for the selected category
+    fetch(`https://nearbysx.pages.dev/${category}.html`)
+        .then(response => response.text())
+        .then(html => {
+            container.innerHTML = html;
+            addDeviceClickListeners(); // Add click listeners to dynamically loaded elements
+        })
+        .catch(error => {
+            container.innerHTML = "Failed to load devices.";
+            console.error("Error fetching devices", error);
         });
 
-        // Generate item list HTML
-        let itemList = `<div class="item-grid">`;
-        items.forEach(item => {
-            itemList += `
-                <div class="item-card" cn="${item.cn}" onclick="searchItem('${item.name}', '${item.cn}')">
-                    <img src="${item.image}" alt="${item.name}" loading="lazy">
-                    <p>${item.name}</p>
-                </div>
-            `;
+    popup.style.display = 'block'; // Display the devices popup
+}
+
+// Function to add click listeners to device cards
+function addDeviceClickListeners() {
+    document.querySelectorAll('#devicesContainer .item-card').forEach(item => {
+        item.addEventListener('click', function () {
+            const match = this.getAttribute('onclick')?.match(/'([^']+)'/);
+            if (match) {
+                showSeries(match[1]); // Pass series name to showSeries function
+            }
         });
-        itemList += `</div>`;
-        
-        document.getElementById("itemList").innerHTML = itemList;
-        document.getElementById("itemPopup").style.display = "block";
-    })
-    .catch(error => {
-        console.error("Error loading items:", error);
-        showNoItemPopup();
     });
-
 }
 
-// Function to show 'No items found' popup function showNoItemPopup() { let noItemPopup = document.getElementById("noItemPopup");
+// Function to show series based on selected device
+function showSeries(series) {
+    const popup = document.getElementById('seriesPopup');
+    const container = document.getElementById('seriesContainer');
 
-if (!noItemPopup) {
-    noItemPopup = document.createElement("div");
-    noItemPopup.className = "bottom-popup";
-    noItemPopup.id = "noItemPopup";
-    noItemPopup.innerHTML = `
-        <p><strong>Sorry!</strong><br><br>The selected item is not available nearby.</p><br>
-        <button onclick="closeNoItemPopup()">OK</button>
-    `;
-    document.body.appendChild(noItemPopup);
-}
-noItemPopup.style.display = "block";
+    // Fetch the series HTML for the selected device
+    fetch(`https://nearbysx.pages.dev/${series}.html`)
+        .then(response => response.text())
+        .then(html => {
+            container.innerHTML = html;
+            addSeriesClickListeners(); // Add click listeners to dynamically loaded series cards
+        })
+        .catch(error => {
+            container.innerHTML = "Failed to load series.";
+            console.error("Error fetching series", error);
+        });
 
-}
-
-// Function to close the error popup function closeNoItemPopup() { let noItemPopup = document.getElementById("noItemPopup"); if (noItemPopup) { noItemPopup.style.display = "none"; } }
-
-// Function to search for items based on model and location function searchItem(item, cn) { let userLocation = getActiveLocation();
-
-if (!userLocation) {
-    showSelectLocationPopup();
-    return;
+    popup.style.display = 'block'; // Display the series popup
 }
 
-const radii = [1, 2, 3, 4, 5];
-let nearbyVendors = [];
+// Function to add click listeners to series cards
+function addSeriesClickListeners() {
+    document.querySelectorAll('#seriesContainer .item-card').forEach(item => {
+        item.addEventListener('click', function () {
+            const model = this.getAttribute('mn'); // Get 'mn' attribute
+            if (model) {
+                searchByModel(model); // Pass model name to searchByModel function
+            }
+        });
+    });
+}
 
-for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
-    const radius = radii[i];
-    nearbyVendors = [];
+// Function to close any popup by ID
+function closePopup(popupId) {
+    document.getElementById(popupId).style.display = 'none';
+}
 
-    for (const vendor in vendors) {
-        let distance = getDistance(
-            userLocation.lat, userLocation.lon,
-            vendors[vendor].lat, vendors[vendor].lng
-        );
-        if (distance <= radius) {
-            nearbyVendors.push(`vendor:${vendor}`);
+//xxxxxxxxxxxxxxxxxxxxxxxx
+
+function searchByModel(mn) {
+    let userLocation = getActiveLocation();
+
+    if (!userLocation) {
+        showSelectLocationPopup();
+        return;
+    }
+
+    const radii = [1, 2, 3, 4, 5];
+    let nearbyVendors = [];
+
+    for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
+        const radius = radii[i];
+        nearbyVendors = [];
+
+        for (const vendor in vendors) {
+            let distance = getDistance(
+                userLocation.lat, userLocation.lon,
+                vendors[vendor].lat, vendors[vendor].lng
+            );
+            if (distance <= radius) {
+                nearbyVendors.push(`vendor:${vendor}`);
+            }
         }
+    }
+
+    if (nearbyVendors.length > 0) {
+        window.location.href = `https://order-app-ae.myshopify.com/search?q=${mn}+${nearbyVendors.join(" OR ")}`;
+    } else {
+        alert("No nearby vendors found.");
     }
 }
 
-if (nearbyVendors.length > 0) {
-    window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(cn)}+${nearbyVendors.join(" OR ")}`;
-} else {
-    alert("No nearby vendors found.");
-}
-
-}
-
-
-
 //xxxxxxxxxxxxxxxxxxxxxxxx
+
+function showItems(category) {
+    fetch(categoryUrls[category])
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
+        })
+        .then(data => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(data, "text/html");
+            let items = [];
+
+            doc.querySelectorAll(".item-card").forEach(card => {
+                let img = card.querySelector("img")?.src;
+                let name = card.querySelector("p")?.textContent;
+                let cn = card.getAttribute("cn");
+
+                if (img && name && cn) items.push({ name, image: img, cn });
+            });
+
+            let itemList = `<div class="item-grid">`;
+            items.forEach(item => {
+                itemList += `
+                    <div class="item-card" cn="${item.cn}" onclick="searchItem('${item.name}', '${item.cn}')">
+                        <img src="${item.image}" alt="${item.name}" loading="lazy">
+                        <p>${item.name}</p>
+                    </div>
+                `;
+            });
+            itemList += `</div>`;
+
+            document.getElementById("itemList").innerHTML = itemList;
+            document.getElementById("itemPopup").style.display = "block";
+        })
+        .catch(error => {
+            console.error("Error loading items:", error);
+            showNoItemPopup();
+        });
+}
+
+function showNoItemPopup() {
+    let noItemPopup = document.getElementById("noItemPopup");
+
+    if (!noItemPopup) {
+        noItemPopup = document.createElement("div");
+        noItemPopup.className = "bottom-popup";
+        noItemPopup.id = "noItemPopup";
+        noItemPopup.innerHTML = `
+            <p><strong>Sorry!</strong><br><br>The selected item is not available nearby.</p><br>
+            <button onclick="closeNoItemPopup()">OK</button>
+        `;
+        document.body.appendChild(noItemPopup);
+    }
+
+    noItemPopup.style.display = "block";
+}
+
+function closeNoItemPopup() {
+    let noItemPopup = document.getElementById("noItemPopup");
+    if (noItemPopup) {
+        noItemPopup.style.display = "none";
+    }
+}
+
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+function searchItem(item, cn) {
+    let userLocation = getActiveLocation();
+
+    if (!userLocation) {
+        showSelectLocationPopup();
+        return;
+    }
+
+    const radii = [1, 2, 3, 4, 5];
+    let nearbyVendors = [];
+
+    for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
+        const radius = radii[i];
+        nearbyVendors = [];
+
+        for (const vendor in vendors) {
+            let distance = getDistance(
+                userLocation.lat, userLocation.lon,
+                vendors[vendor].lat, vendors[vendor].lng
+            );
+            if (distance <= radius) {
+                nearbyVendors.push(`vendor:${vendor}`);
+            }
+        }
+    }
+
+    if (nearbyVendors.length > 0) {
+        window.location.href = `https://order-app-ae.myshopify.com/search?q=${cn}+${nearbyVendors.join(" OR ")}`;
+    } else {
+        alert("No nearby vendors found.");
+    }
+}
+
+//xxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 function getActiveLocation() {
     const selectedLocation = localStorage.getItem('selectedLocation');
