@@ -14,16 +14,14 @@ function showItems(category) {
             doc.querySelectorAll(".item-card").forEach(card => {
                 let img = card.querySelector("img")?.src;
                 let name = card.querySelector("p")?.textContent;
-                let cn = card.getAttribute("cn"); // Extract 'cn' attribute
-
-                if (img && name && cn) items.push({ name, image: img, cn });
+                if (img && name) items.push({ name, image: img });
             });
 
             // Generate item list HTML
             let itemList = `<div class="item-grid">`;
             items.forEach(item => {
                 itemList += `
-                    <div class="item-card" cn="${item.cn}" onclick="searchItem('${item.name}', '${item.cn}')">
+                    <div class="item-card" onclick="searchItem('${item.name}')">
                         <img src="${item.image}" alt="${item.name}" loading="lazy">
                         <p>${item.name}</p>
                     </div>
