@@ -325,105 +325,78 @@ function searchStores(stores) {
 }   
 
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-// Function to show devices based on category
-function showDevices(category) {
-    const popup = document.getElementById('devicesPopup');
-    const container = document.getElementById('devicesContainer');
+// Function to show devices based on category function showDevices(category) { const popup = document.getElementById('devicesPopup'); const container = document.getElementById('devicesContainer');
 
-    // Fetch the devices HTML for the selected category
-    fetch(`https://nearbysx.pages.dev/${category}.html`)
-        .then(response => response.text())
-        .then(html => {
-            container.innerHTML = html;
-            addDeviceClickListeners(); // Add click listeners to dynamically loaded elements
-        })
-        .catch(error => {
-            container.innerHTML = "Failed to load devices.";
-            console.error("Error fetching devices", error);
-        });
-
-    popup.style.display = 'block'; // Display the devices popup
-}
-
-// Function to add click listeners to device cards
-function addDeviceClickListeners() {
-    document.querySelectorAll('#devicesContainer .cardx').forEach(item => {
-        item.addEventListener('click', function() {
-            const match = this.getAttribute('onclick').match(/'([^']+)'/);
-            if (match) {
-                showSeries(match[1]); // Pass series name to showSeries function
-            }
-        });
+// Fetch the devices HTML for the selected category
+fetch(`https://nearbysx.pages.dev/${category}.html`)
+    .then(response => response.text())
+    .then(html => {
+        container.innerHTML = html;
+        addDeviceClickListeners(); // Add click listeners to dynamically loaded elements
+    })
+    .catch(error => {
+        container.innerHTML = "Failed to load devices.";
+        console.error("Error fetching devices", error);
     });
+
+popup.style.display = 'block'; // Display the devices popup
+
 }
 
-// Function to show series based on selected device
-function showSeries(series) {
-    const popup = document.getElementById('seriesPopup');
-    const container = document.getElementById('seriesContainer');
+// Function to add click listeners to device cards function addDeviceClickListeners() { document.querySelectorAll('#devicesContainer .cardx').forEach(item => { item.addEventListener('click', function() { const match = this.getAttribute('onclick').match(/'([^']+)'/); if (match) { showSeries(match[1]); // Pass series name to showSeries function } }); }); }
 
-    // Fetch the series HTML for the selected device
-    fetch(`https://nearbysx.pages.dev/${series}.html`)
-        .then(response => response.text())
-        .then(html => {
-            container.innerHTML = html;
-            addSeriesClickListeners(); // Add click listeners to dynamically loaded series cards
-        })
-        .catch(error => {
-            container.innerHTML = "Failed to load series.";
-            console.error("Error fetching series", error);
-        });
+// Function to show series based on selected device function showSeries(series) { const popup = document.getElementById('seriesPopup'); const container = document.getElementById('seriesContainer');
 
-    popup.style.display = 'block'; // Display the series popup
-}
-
-// Function to add click listeners to series cards
-function addSeriesClickListeners() {
-    document.querySelectorAll('#seriesContainer .cardx').forEach(item => {
-        item.addEventListener('click', function() {
-            const model = this.getAttribute('mn');
-            if (model) {
-                searchItem(model); // Pass model name to searchItem function
-            }
-        });
+// Fetch the series HTML for the selected device
+fetch(`https://nearbysx.pages.dev/${series}.html`)
+    .then(response => response.text())
+    .then(html => {
+        container.innerHTML = html;
+        addSeriesClickListeners(); // Add click listeners to dynamically loaded series cards
+    })
+    .catch(error => {
+        container.innerHTML = "Failed to load series.";
+        console.error("Error fetching series", error);
     });
+
+popup.style.display = 'block'; // Display the series popup
+
 }
 
-// Function to search for items based on model and user location
-function searchItem(model) {
-    let userLocation = getActiveLocation();
+// Function to add click listeners to series cards function addSeriesClickListeners() { document.querySelectorAll('#seriesContainer .item-card').forEach(item => { item.addEventListener('click', function() { const model = this.getAttribute('mn'); if (model) { searchItem(model); // Pass model name to searchItem function } }); }); }
 
-    if (!userLocation) {
-        showSelectLocationPopup(); // Show location selection popup if no active location
-        return;
-    }
+// Function to search for items based on model and user location function searchItem(model) { let userLocation = getActiveLocation();
 
-    const radii = [1, 2, 3, 4, 5];
-    let nearbyVendors = [];
+if (!userLocation) {
+    showSelectLocationPopup(); // Show location selection popup if no active location
+    return;
+}
 
-    for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
-        const radius = radii[i];
-        nearbyVendors = [];
+const radii = [1, 2, 3, 4, 5];
+let nearbyVendors = [];
 
-        for (const vendor in vendors) {
-            let distance = getDistance(
-                userLocation.lat, userLocation.lon,
-                vendors[vendor].lat, vendors[vendor].lng
-            );
-            if (distance <= radius) {
-                nearbyVendors.push(`vendor:${vendor}`);
-            }
+for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
+    const radius = radii[i];
+    nearbyVendors = [];
+
+    for (const vendor in vendors) {
+        let distance = getDistance(
+            userLocation.lat, userLocation.lon,
+            vendors[vendor].lat, vendors[vendor].lng
+        );
+        if (distance <= radius) {
+            nearbyVendors.push(`vendor:${vendor}`);
         }
     }
-
-    if (nearbyVendors.length > 0) {
-        window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(model)}+${nearbyVendors.join(" OR ")}`;
-    } else {
-        alert("No nearby vendors found."); // Alert if no vendors are found within the radius
-    }
 }
 
-// Function to close any popup by ID
-function closePopup(popupId) {
-    document.getElementById(popupId).style.display = 'none';
+if (nearbyVendors.length > 0) {
+    window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(model)}+${nearbyVendors.join(" OR ")}`;
+} else {
+    alert("No nearby vendors found."); // Alert if no vendors are found within the radius
 }
+
+}
+
+// Function to close any popup by ID function closePopup(popupId) { document.getElementById(popupId).style.display = 'none'; }
+
