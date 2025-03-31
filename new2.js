@@ -98,11 +98,11 @@ function searchByModel(mn) {
     }
 
     if (nearbyVendors.length > 0) {
-    window.location.href = `https://order-app-ae.myshopify.com/search?q=${cn}+${nearbyVendors.join(" OR ")}`;
-} else {
-    document.getElementById("noItemPopup").style.display = "block";
+        window.location.href = `https://order-app-ae.myshopify.com/search?q=${mn}+${nearbyVendors.join(" OR ")}`;
+    } else {
+        alert("No nearby vendors found.");
+    }
 }
-}   
 
 //xxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -148,9 +148,18 @@ function showItems(category) {
 function showNoItemPopup() {
     let noItemPopup = document.getElementById("noItemPopup");
 
-    if (noItemPopup) {
-        noItemPopup.style.display = "block";
+    if (!noItemPopup) {
+        noItemPopup = document.createElement("div");
+        noItemPopup.className = "bottom-popup";
+        noItemPopup.id = "noItemPopup";
+        noItemPopup.innerHTML = `
+            <p><strong>Sorry!</strong><br><br>The selected item is not available nearby.</p><br>
+            <button onclick="closeNoItemPopup()">OK</button>
+        `;
+        document.body.appendChild(noItemPopup);
     }
+
+    noItemPopup.style.display = "block";
 }
 
 function closeNoItemPopup() {
@@ -188,12 +197,12 @@ function searchItem(item, cn) {
         }
     }
 
-if (nearbyVendors.length > 0) {
-    window.location.href = `https://order-app-ae.myshopify.com/search?q=${cn}+${nearbyVendors.join(" OR ")}`;
-} else {
-    document.getElementById("noItemPopup").style.display = "block";
+    if (nearbyVendors.length > 0) {
+        window.location.href = `https://order-app-ae.myshopify.com/search?q=${cn}+${nearbyVendors.join(" OR ")}`;
+    } else {
+        alert("No nearby vendors found.");
+    }
 }
-}    
 
 //xxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -417,4 +426,6 @@ function searchStores(stores) {
   } else {
     document.getElementById("noItemPopup").style.display = "block";
   }
-}
+}   
+
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
