@@ -102,6 +102,23 @@ function searchByModel(mn) {
     }
 }
 
+//xxxxxxxxxxxxxxxxxxxxx    
+    
+function showNoItemPopup() {
+    let noItemPopup = document.getElementById("noItemPopup");
+
+    if (noItemPopup) {
+        noItemPopup.style.display = "block";
+    }
+}
+
+function closeNoItemPopup() {
+    let noItemPopup = document.getElementById("noItemPopup");
+    if (noItemPopup) {
+        noItemPopup.style.display = "none";
+    }
+}
+
 //xxxxxxxxxxxxxxxxxxxxxxxx
 
 function showItems(category) {
@@ -141,21 +158,6 @@ function showItems(category) {
             console.error("Error loading items:", error);
             showNoItemPopup();
         });
-}
-
-function showNoItemPopup() {
-    let noItemPopup = document.getElementById("noItemPopup");
-
-    if (noItemPopup) {
-        noItemPopup.style.display = "block";
-    }
-}
-
-function closeNoItemPopup() {
-    let noItemPopup = document.getElementById("noItemPopup");
-    if (noItemPopup) {
-        noItemPopup.style.display = "none";
-    }
 }
 
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
