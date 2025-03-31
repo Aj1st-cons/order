@@ -101,24 +101,7 @@ function searchByModel(mn) {
         showNoItemPopup();  // Use the function to show the popup
     }
 }
-
-//xxxxxxxxxxxxxxxxxxxxx    
-    
-function showNoItemPopup() {
-    let noItemPopup = document.getElementById("noItemPopup");
-
-    if (noItemPopup) {
-        noItemPopup.style.display = "block";
-    }
-}
-
-function closeNoItemPopup() {
-    let noItemPopup = document.getElementById("noItemPopup");
-    if (noItemPopup) {
-        noItemPopup.style.display = "none";
-    }
-}
-
+        
 //xxxxxxxxxxxxxxxxxxxxxxxx
 
 function showItems(category) {
