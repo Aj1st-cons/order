@@ -342,7 +342,7 @@ body {
         max-width: 600px;
     }
 }
-#itemPopup, #storesPopup, #devicesPopup {
+#itemPopup, #storesPopup, #devicesPopup, #seriesPopup {
     position: fixed;
     width: 100%;
     height: calc(100% - 90px);
@@ -392,7 +392,7 @@ body {
         -0.7px  0px 0 #000,
          0.3px  0.3px 0 #000;
 }
-.stores-grid, .devices-grid {
+.stores-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-content: center;
@@ -403,7 +403,7 @@ body {
     padding: 10px;
     box-sizing: border-box;
 }
-.stores-card, .devices-card {
+.stores-card {
     margin-top: 0px;
     text-align: center;
     padding: 5px;
@@ -412,11 +412,11 @@ body {
     height: 115px;
     transition: transform 0.2s;
 }
-.stores-card:hover, .devices-card:hover {
+.stores-card:hover {
     transform: scale(1.05);
     color: darkred;
 }
-.stores-card img, .devices-card img {
+.stores-card img {
     width: 100%;
     outline: 0.5px solid #000;
     aspect-ratio: 1 / 1;
@@ -424,7 +424,7 @@ body {
     display: block;
     border-radius: 50%;
 }
-.stores-card p, .devices-card p {
+.stores-card p {
     margin-top: 3px;
     line-height: 0.8;
     color: #009500;
