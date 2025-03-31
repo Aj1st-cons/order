@@ -1,73 +1,55 @@
-function showItems(category) {
-    // Fetch the category data
-    fetch(categoryUrls[category])
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.text();
-        })
-        .then(data => {
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(data, "text/html");
-            let items = [];
+// Function to show items based on category function showItems(category) { fetch(categoryUrls[category]) .then(response => { if (!response.ok) throw new Error('Network response was not ok'); return response.text(); }) .then(data => { let parser = new DOMParser(); let doc = parser.parseFromString(data, "text/html"); let items = [];
 
-            // Parse items from the fetched HTML
-            doc.querySelectorAll(".item-card").forEach(card => {
-                let img = card.querySelector("img")?.src;
-                let name = card.querySelector("p")?.textContent;
-                let cn = card.getAttribute("cn"); // Extract 'cn' attribute
+// Parse items from the fetched HTML
+        doc.querySelectorAll(".item-card").forEach(card => {
+            let img = card.querySelector("img")?.src;
+            let name = card.querySelector("p")?.textContent;
+            let cn = card.getAttribute("cn"); // Extract 'cn' attribute
 
-                if (img && name && cn) items.push({ name, image: img, cn });
-            });
-
-            // Generate item list HTML
-            let itemList = `<div class="item-grid">`;
-            items.forEach(item => {
-                itemList += `
-                    <div class="item-card" cn="${item.cn}" onclick="searchItem('${item.name}', '${item.cn}')">
-                        <img src="${item.image}" alt="${item.name}" loading="lazy">
-                        <p>${item.name}</p>
-                    </div>
-                `;
-            });
-            itemList += `</div>`;
-            
-            // Update the item list in the DOM
-            document.getElementById("itemList").innerHTML = itemList;
-            document.getElementById("itemPopup").style.display = "block";
-        })
-        .catch(error => {
-            console.error("Error loading items:", error);
-
-            // Dynamically create and display the error popup
-            let noItemPopup = document.getElementById("noItemPopup");
-            
-            if (!noItemPopup) {
-                noItemPopup = document.createElement("div");
-                noItemPopup.className = "bottom-popup";
-                noItemPopup.id = "noItemPopup";
-                noItemPopup.innerHTML = `
-                    <p><strong>Sorry!</strong><br><br>The selected item is not available nearby.</p><br>
-                    <button onclick="closeNoItemPopup()">OK</button>
-                `;
-                document.body.appendChild(noItemPopup);
-            }
-
-            // Reset and show the popup
-            noItemPopup.style.display = "block";
+            if (img && name && cn) items.push({ name, image: img, cn });
         });
+
+        // Generate item list HTML
+        let itemList = `<div class="item-grid">`;
+        items.forEach(item => {
+            itemList += `
+                <div class="item-card" cn="${item.cn}" onclick="searchItem('${item.name}', '${item.cn}')">
+                    <img src="${item.image}" alt="${item.name}" loading="lazy">
+                    <p>${item.name}</p>
+                </div>
+            `;
+        });
+        itemList += `</div>`;
+        
+        document.getElementById("itemList").innerHTML = itemList;
+        document.getElementById("itemPopup").style.display = "block";
+    })
+    .catch(error => {
+        console.error("Error loading items:", error);
+        showNoItemPopup();
+    });
+
 }
 
-// Function to close the error popup
-function closeNoItemPopup() {
-    let noItemPopup = document.getElementById("noItemPopup");
-    if (noItemPopup) {
-        noItemPopup.style.display = "none";
-    }
-}    
+// Function to show 'No items found' popup function showNoItemPopup() { let noItemPopup = document.getElementById("noItemPopup");
 
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+if (!noItemPopup) {
+    noItemPopup = document.createElement("div");
+    noItemPopup.className = "bottom-popup";
+    noItemPopup.id = "noItemPopup";
+    noItemPopup.innerHTML = `
+        <p><strong>Sorry!</strong><br><br>The selected item is not available nearby.</p><br>
+        <button onclick="closeNoItemPopup()">OK</button>
+    `;
+    document.body.appendChild(noItemPopup);
+}
+noItemPopup.style.display = "block";
 
-function searchItem(item, cn) { let userLocation = getActiveLocation();
+}
+
+// Function to close the error popup function closeNoItemPopup() { let noItemPopup = document.getElementById("noItemPopup"); if (noItemPopup) { noItemPopup.style.display = "none"; } }
+
+// Function to search for items based on model and location function searchItem(item, cn) { let userLocation = getActiveLocation();
 
 if (!userLocation) {
     showSelectLocationPopup();
@@ -93,12 +75,14 @@ for (let i = 0; i < radii.length && nearbyVendors.length === 0; i++) {
 }
 
 if (nearbyVendors.length > 0) {
-    window.location.href = `https://order-app-ae.myshopify.com/search?q=${cn}+${nearbyVendors.join(" OR ")}`;
+    window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(cn)}+${nearbyVendors.join(" OR ")}`;
 } else {
     alert("No nearby vendors found.");
 }
 
 }
+
+
 
 //xxxxxxxxxxxxxxxxxxxxxxxx
 
