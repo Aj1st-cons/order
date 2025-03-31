@@ -63,8 +63,7 @@ function closeNoItemPopup() {
     if (noItemPopup) {
         noItemPopup.style.display = "none";
     }
-}    
-
+}
 //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 function searchItem(item, cn) {
