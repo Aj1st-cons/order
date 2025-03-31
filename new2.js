@@ -1,5 +1,3 @@
-//xxxxxxxxxxxxxxxxxxxxxxxx
-
 // Function to show devices based on category
 function showDevices(category) {
     const popup = document.getElementById('devicesPopup');
@@ -98,9 +96,9 @@ function searchByModel(mn) {
     }
 
     if (nearbyVendors.length > 0) {
-        window.location.href = `https://order-app-ae.myshopify.com/search?q=${mn}+${nearbyVendors.join(" OR ")}`;
+        window.location.href = `https://order-app-ae.myshopify.com/search?q=${encodeURIComponent(mn)}+${nearbyVendors.join(" OR ")}`;
     } else {
-        alert("No nearby vendors found.");
+        showNoItemPopup();  // Use the function to show the popup
     }
 }
 
@@ -148,18 +146,9 @@ function showItems(category) {
 function showNoItemPopup() {
     let noItemPopup = document.getElementById("noItemPopup");
 
-    if (!noItemPopup) {
-        noItemPopup = document.createElement("div");
-        noItemPopup.className = "bottom-popup";
-        noItemPopup.id = "noItemPopup";
-        noItemPopup.innerHTML = `
-            <p><strong>Sorry!</strong><br><br>The selected item is not available nearby.</p><br>
-            <button onclick="closeNoItemPopup()">OK</button>
-        `;
-        document.body.appendChild(noItemPopup);
+    if (noItemPopup) {
+        noItemPopup.style.display = "block";
     }
-
-    noItemPopup.style.display = "block";
 }
 
 function closeNoItemPopup() {
@@ -197,12 +186,12 @@ function searchItem(item, cn) {
         }
     }
 
-    if (nearbyVendors.length > 0) {
-        window.location.href = `https://order-app-ae.myshopify.com/search?q=${cn}+${nearbyVendors.join(" OR ")}`;
-    } else {
-        alert("No nearby vendors found.");
-    }
+if (nearbyVendors.length > 0) {
+    window.location.href = `https://order-app-ae.myshopify.com/search?q=${cn}+${nearbyVendors.join(" OR ")}`;
+} else {
+    document.getElementById("noItemPopup").style.display = "block";
 }
+}    
 
 //xxxxxxxxxxxxxxxxxxxxxxxxxxx
 
@@ -426,6 +415,4 @@ function searchStores(stores) {
   } else {
     document.getElementById("noItemPopup").style.display = "block";
   }
-}   
-
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+}
