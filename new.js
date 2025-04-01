@@ -125,5 +125,3 @@ function closeErrorPopup() {
 }
 
 loadLocations();
-
-//xxxxxxxxxxxxxxxxxxxxxxxx
