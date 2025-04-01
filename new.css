@@ -355,6 +355,9 @@ body {
     padding-bottom: 70px;
     box-sizing: border-box;
 }
+#storesPopup {
+    z-index: 100;
+}
 .item-card {
     margin-top: 0px;
     text-align: center;
@@ -382,7 +385,7 @@ body {
     margin: 0;
     margin-top: -15px;
     line-height: 1;
-    color: #307D7E;
+    color: #000;
     font-weight: bold;
     font-size: 13px;
     font-family: 'Chivo', sans-serif;
