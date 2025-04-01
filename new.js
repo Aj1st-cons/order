@@ -133,6 +133,7 @@ function closeVisiblePopup() {
     const popups = [
         { id: 'seriesPopup', display: 'block' },
         { id: 'devicesPopup', display: 'block' },
+        { id: 'storesPopup', display: 'block' },
         { id: 'itemPopup', display: 'block' }
     ];
 
