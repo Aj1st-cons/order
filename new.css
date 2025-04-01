@@ -582,3 +582,20 @@ body {
             margin-top: 5px; 
             font-weight: bold;
         }
+#closeSinglePopup {
+    position: fixed !important;
+    top: 30%; 
+    right: 0; 
+    transform: translateY(-50%); 
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001; 
+    padding: 5px; 
+}
+
+#closeSinglePopup img {
+    width: 60px;
+    height: 60px;
+    display: block;
+}
