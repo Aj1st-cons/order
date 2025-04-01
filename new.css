@@ -584,7 +584,7 @@ body {
         }
 #closeSinglePopup {
     position: fixed !important;
-    top: 30%; 
+    top: 40%; 
     right: 0; 
     transform: translateY(-50%); 
     background: none;
