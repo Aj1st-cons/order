@@ -131,9 +131,9 @@ loadLocations();
 function closeVisiblePopup() {
     // List all possible popups to check
     const popups = [
-        { id: 'seriesPopup', display: 'block' },
-        { id: 'devicesPopup', display: 'block' },
         { id: 'storesPopup', display: 'block' },
+        { id: 'seriesPopup', display: 'block' },
+        { id: 'devicesPopup', display: 'block' }, 
         { id: 'itemPopup', display: 'block' }
     ];
 
