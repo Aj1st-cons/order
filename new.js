@@ -125,3 +125,30 @@ function closeErrorPopup() {
 }
 
 loadLocations();
+
+//xxxxxxxxxxxxxxxxxxxxxxxx
+
+function closeVisiblePopup() {
+    // List all possible popups to check
+    const popups = [
+        { id: 'seriesPopup', display: 'block' },
+        { id: 'devicesPopup', display: 'block' },
+        { id: 'itemPopup', display: 'block' }
+    ];
+
+    // Find the first visible popup and close it
+    for (const popup of popups) {
+        const element = document.getElementById(popup.id);
+        if (element && element.style.display === popup.display) {
+            closePopup(popup.id);
+            return; // Exit after closing the first visible popup
+        }
+    }
+}
+
+ function closePopup(popupId) {
+    const popup = document.getElementById(popupId);
+    if (popup) {
+        popup.style.display = 'none';
+    }
+}   
