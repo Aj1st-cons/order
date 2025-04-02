@@ -262,9 +262,9 @@ body {
 }
 .cardx {
     margin-top: 0px;
-    outline: 0.25px solid #009500;
-    background: linear-gradient(to top right, #fff, #EEEEEE, #fff);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    outlin: 0.25px solid #009500;
+    backgroun: linear-gradient(to top right, #fff, #EEEEEE, #fff);
+    box-shado: 0 0 10px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     text-align: center;
     padding: 5px;
