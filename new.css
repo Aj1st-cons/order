@@ -382,12 +382,7 @@ body {
     color: #307D7E;
     font-weight: bold;
     font-size: 13px;
-    font-family: 'Chivo', sans-serif;
-    text-shad:
-        -0.3px -0.3px 0 #000,
-         0.3px -0.3px 0 #000,
-        -0.7px  0px 0 #000,
-         0.3px  0.3px 0 #000;
+    font-family: 'Chivo', sans-serif;    
 }
 .stores-grid {
     display: grid;
@@ -453,7 +448,7 @@ body {
     margin-top: -30px;             
     transition: background-color 0.3s ease;    
 }
-.current-location, .replaceable-text, .stores-card, .cardz, .cardx, item-card {
+.current-location, .replaceable-text, .stores-card, .cardz, .cardx, .item-card {
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
