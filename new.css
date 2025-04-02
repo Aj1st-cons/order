@@ -264,7 +264,7 @@ body {
     margin-top: 0px;
     outlin: 0.25px solid #009500;
     backgroun: linear-gradient(to top right, #fff, #EEEEEE, #fff);
-    box-shado: 0 0 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     border-radius: 8px;
     text-align: center;
     padding: 5px;
