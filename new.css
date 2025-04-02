@@ -291,9 +291,10 @@ body {
     margin-top: -17px;
     font-family: Arial, sans-serif;
     line-height: 0.9;
-    color: #000;
-    font-weight: bold;
-    font-size: 13px;
+    color: #307D7E;
+    font-weigh: bold;
+    font-size: 11px;
+    white-space: nowrap;
 }
 .content-section {
     display: none;
