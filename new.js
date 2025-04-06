@@ -100,10 +100,10 @@ function saveRename() {
 function startLoading() {
     document.getElementById('loadingOverlay').style.display = 'block';
     let countdown = 30;
-    document.getElementById('countdown').textContent = `Receiving location ${countdown} s`;
+    document.getElementById('countdown').textContent = `Receiving location ${countdown} seconds`;
     countdownInterval = setInterval(() => {
         countdown--;
-        document.getElementById('countdown').textContent = `Receiving location ${countdown} s`;
+        document.getElementById('countdown').textContent = `Receiving location ${countdown} seconds`;
         if (countdown <= 0) {
             stopLoading();
             showErrorPopup();
