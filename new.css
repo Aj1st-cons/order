@@ -10,6 +10,7 @@ body {
     :root {
       color-scheme: light;
     }
+ }
 .location-container { 
     position: absolute; 
     top: 10px; 
