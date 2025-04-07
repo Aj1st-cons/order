@@ -209,16 +209,17 @@ body {
     font-size: 12px;         
 }  
 .cardz-container {
-    margin-top:120px; 
-    padding:10px 0; 
-    display: flex; 
-    background: #EEEEEE; 
-    gap: 20px; position: 
-    fixed; overflow-y: 
-    hidden; width: 100%; 
-    height: 60px; 
-    justify-content: center; 
+    position: fixed;
+    top: 60px; 
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #EEEEEE;
+    gap: 20px;
     z-index: 100;
+    overflow-y: hidden;
 }
 .cardz {
   margin-top: 5px;
