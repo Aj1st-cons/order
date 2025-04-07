@@ -209,7 +209,7 @@ body {
     font-size: 12px;         
 }  
 .cardz-container {
-    margin-top:130px; 
+    margin-top:120px; 
     padding:10px 0; 
     display: flex; 
     background: #EEEEEE; 
@@ -218,8 +218,7 @@ body {
     hidden; width: 100%; 
     height: 60px; 
     justify-content: center; 
-    z-index: 100; 
-    font-family: 'Righteous', cursive;
+    z-index: 100;
 }
 .cardz {
   margin-top: 5px;
