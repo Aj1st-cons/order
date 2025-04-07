@@ -364,7 +364,7 @@ body {
 .item-card img {
     width: 100%;
     height: auto;
-    outline: 0.5px solid #009500;
+    outlne: 0.5px solid #009500;
     object-fit: cover;
     border-radius: 10px;
 }
