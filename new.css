@@ -527,3 +527,34 @@ body {
     height: 60px;
     display: block;
 }
+
+.contact {
+  background: #EEEEEE;
+  font-family: 'Righteous', cursive;
+}
+
+.contact-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 50px 10px;
+  margin-bottom: 40px;
+}
+
+.contact-logo {
+  width: 100px;
+  height: auto;
+  margin-bottom: -9px;
+}
+
+.contact-link {
+  color: #009500;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.contact-link i {
+  font-size: 20px;
+}
