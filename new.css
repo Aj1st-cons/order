@@ -444,65 +444,6 @@ body {
         #main-content {
             display: none;
         }
-        #welcome {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            background: #fff;
-            z-index: 9999;
-        }        
-        #welcome h1 {
-            display: flex;
-            align-items: center;
-            font-weight: bold;
-            font-size: 50px;
-            color: #009500;
-            text-shadow: 6px 0px 0px black;
-        }
-        #welcome h1 span {
-            opacity: 0;
-            margin-right: 5px;
-            display: inline-block;
-            transform: translateX(50px);
-            font-style: italic;
-            animation: welcome-letter-emerge 0.5s ease-in-out forwards;
-        }
-        #welcome h1 .online {
-            color: #E0E5E5;
-            font-style: normal;
-            opacity: 0;
-            font-size: 30px;
-            transform: translateX(50px);
-            animation: welcome-word-emerge 0.5s ease-in-out forwards 1.5s;
-            text-shadow: 2px 0px 0px black;
-        }
-
-        /* Animations */
-        @keyframes welcome-letter-emerge {
-            0% { opacity: 0; transform: translateX(50px); }
-            100% { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes welcome-word-emerge {
-            0% { opacity: 0; transform: translateX(50px); }
-            100% { opacity: 1; transform: translateX(0); }
-        }
-
-        /* Sequential Delays */
-        #welcome h1 span:nth-child(1) { animation-delay: 0.1s; }
-        #welcome h1 span:nth-child(2) { animation-delay: 0.2s; }
-        #welcome h1 span:nth-child(3) { animation-delay: 0.3s; }
-        #welcome h1 span:nth-child(4) { animation-delay: 0.4s; }
-        #welcome h1 span:nth-child(5) { animation-delay: 0.5s; }
-        #welcome h1 span:nth-child(6) { animation-delay: 0.6s; }
-        #welcome h1 span:nth-child(7) { animation-delay: 0.7s; }
-        #welcome h1 span:nth-child(8) { animation-delay: 1s; }
-        #welcome h1 span:nth-child(9) { animation-delay: 2.2s; } 
 
         .install-button, .ios-install-button {
             background: #009500; 
