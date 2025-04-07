@@ -210,6 +210,19 @@ body {
     font-weight: bold;
     font-size: 12px;         
 }  
+.cardz-container {
+    margin-top:10px; 
+    padding:10px 0; 
+    display: flex; 
+    background: #EEEEEE; 
+    gap: 20px; position: 
+    fixed; overflow-y: 
+    hidden; width: 100%; 
+    height: 60px; 
+    justify-content: center; 
+    z-index: 100; 
+    font-family: 'Righteous', cursive;
+}
 .cardz {
   margin-top: 5px;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
