@@ -349,9 +349,6 @@ body {
 #storesPopup {
     z-index: 10;
 }
-#likedPopup {
-    z-index: 11;
-}
 .item-card {
     margin-top: 0px;
     text-align: center;
@@ -384,7 +381,7 @@ body {
     font-size: 12px;
     font-family: 'Chivo', sans-serif;    
 }
-.stores-grid {
+.stores-grid, .liked-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-content: center;
@@ -423,6 +420,43 @@ body {
     font-size: 15px;
     font-weight: bold;
 }
+
+.liked-card {
+    margin-top: 0px;
+    text-align: center;
+    padding: 5px;
+    cursor: pointer;
+    width: 100px;
+    height: 115px;
+    transition: transform 0.2s; 
+}
+.liked-card:hover {
+    transform: scale(1.05);
+    color: darkred;
+}
+.liked-card img {
+    width: 100%;
+    outline: 0.5px solid #000;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+}
+.liked-card p {
+    margin-top: 3px;
+    line-height: 0.8;
+    color: #009500;
+    font-size: 15px;
+    font-weight: bold;
+}
+#likedCollections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 20px; 
+}
+
 .bottom-popup {
     position: fixed;
     top: 150px;
@@ -448,7 +482,7 @@ body {
     margin-top: -30px;             
     transition: background-color 0.3s ease;    
 }
-.current-location, .replaceable-text, .stores-card, .cardz, .cardx, .item-card {
+.current-location, .replaceable-text, .stores-card, .cardz, .cardx, .item-card, .liked-card {
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
