@@ -334,7 +334,7 @@ body {
     display: none;
     overflow-y: auto;
 }
-#itemPopup, #storesPopup, #devicesPopup, #seriesPopup {
+#itemPopup, #storesPopup, #devicesPopup, #seriesPopup, #likedPopup {
     position: fixed;
     width: 100%;
     height: calc(100% - 90px);
@@ -346,7 +346,7 @@ body {
     padding-bottom: 70px;
     box-sizing: border-box;
 }
-#storesPopup {
+#storesPopup, #likedPopup {
     z-index: 10;
 }
 .item-card {
