@@ -387,7 +387,7 @@ body {
     font-size: 12px;
     font-family: 'Chivo', sans-serif;    
 }
-.stores-grid, .liked-grid {
+.stores-grid, #likedCollections {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-content: center;
@@ -455,7 +455,7 @@ body {
     font-size: 15px;
     font-weight: bold;
 }
-#likedCollections {
+#likedCollect {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
