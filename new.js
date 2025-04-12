@@ -30,7 +30,7 @@ function setCurrentLocation() {
             const coords = { lat: position.coords.latitude, lon: position.coords.longitude };
             localStorage.setItem('currentLocation', JSON.stringify(coords));
             localStorage.setItem('locationExpiry', Date.now() + 3600000);
-            saveAndDisplayLocation('Current Location', coords);
+            saveAndDisplayLocation('My Location', coords);
             stopLoading();
         }, () => {
             stopLoading();
