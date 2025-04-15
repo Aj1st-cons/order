@@ -1,57 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>QR to A4 PDF</title>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR A4 PDF Generator</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
       background: #f5f5f5;
-      padding: 30px;
+      padding: 20px;
+      margin: 0;
+      text-align: center;
     }
 
     #inputSection {
       margin-bottom: 20px;
     }
 
-    #doc {
-      width: 21cm;
-      height: 29.7cm;
-      padding: 3cm 2cm;
-      background: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      margin: auto;
-    }
-
-    #qrCanvas {
-      margin-top: 20px;
+    input[type="text"] {
+      width: 100%;
+      max-width: 300px;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
 
     button {
-      margin: 5px;
-      padding: 10px 20px;
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 6px auto;
+      padding: 10px;
       font-size: 16px;
+      border: none;
+      background-color: #005000;
+      color: white;
+      border-radius: 5px;
       cursor: pointer;
+    }
+
+    #doc {
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 210 / 297;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      margin: 20px auto;
+      padding: 0;
+      box-sizing: border-box;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #doc::before {
+      content: "";
+      position: absolute;
+      top: 0.75in;
+      bottom: 0.75in;
+      left: 0.75in;
+      right: 0.75in;
+      border: 2px solid #009500;
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+
+    #docContent {
+      padding: 0.75in;
+      text-align: center;
+      width: 100%;
+      box-sizing: border-box;
+      z-index: 1;
+    }
+
+    #doc h3 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    canvas {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+      #doc {
+        transform: scale(1);
+      }
     }
   </style>
 </head>
 <body>
+
   <div id="inputSection">
-    <h2>Create A4 PDF with QR</h2>
+    <h2>QR code for Stores</h2>
     <input type="text" id="collection" placeholder="Enter collection name" />
-    <br/>
-    <button onclick="generateQR()">Generate</button>
+    <button onclick="generateQR()">Generate QR</button>
     <button onclick="downloadPDF()">Download PDF</button>
     <button onclick="sharePDF()">Share PDF</button>
   </div>
 
   <div id="doc">
-    <h3>Scan to visit:</h3>
-    <p id="urlText"></p>
-    <div id="qrCanvas"></div>
+    <div id="docContent">
+      <h3>Scan to shop with</h3>
+      <img style="width:150px; height: auto;" src="https://cdn.shopify.com/s/files/1/0947/2340/8240/files/1000084881.webp?v=1743588303">
+      <div id="qrCanvas"></div>
+    </div>
   </div>
 
   <script>
@@ -62,7 +122,6 @@
       if (!col) return alert("Please enter a collection name");
 
       currentURL = `https://nearbys.online/pages/stores?collections=${col}`;
-      document.getElementById("urlText").textContent = currentURL;
 
       QRCode.toCanvas(currentURL, { width: 250 }, function (err, canvas) {
         if (err) {
@@ -98,7 +157,6 @@
       };
 
       const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
-
       const file = new File([blob], "store-link.pdf", { type: "application/pdf" });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -116,5 +174,6 @@
       }
     }
   </script>
+
 </body>
 </html>
