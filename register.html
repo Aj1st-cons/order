@@ -44,38 +44,19 @@
     }
 
     #doc {
-      width: 100%;
-      max-width: 100%;
-      aspect-ratio: 210 / 297;
       background: white;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      margin: 20px auto;
-      padding: 0;
       box-sizing: border-box;
-      position: relative;
+      width: 100%;
+      max-width: 794px; /* A4 width in px at 96dpi */
+      aspect-ratio: 210 / 297;
+      margin: 20px auto;
+      padding: 0.75in;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      border: 2px solid #009500;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-    }
-
-    #doc::before {
-      content: "";
-      position: absolute;
-      top: 0.75in;
-      bottom: 0.75in;
-      left: 0.75in;
-      right: 0.75in;
-      border: 2px solid #009500;
-      box-sizing: border-box;
-      pointer-events: none;
-    }
-
-    #docContent {
-      padding: 0.75in;
-      text-align: center;
-      width: 100%;
-      box-sizing: border-box;
-      z-index: 1;
     }
 
     #doc h3 {
@@ -85,13 +66,25 @@
       text-align: center;
     }
 
-    canvas {
+    #qrCanvas {
       margin-top: 20px;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
     }
 
     @media (max-width: 600px) {
       #doc {
-        transform: scale(1);
+        width: 100%;
+        padding: 20px;
+        aspect-ratio: auto;
+      }
+
+      img {
+        max-width: 100%;
+        height: auto;
       }
     }
   </style>
@@ -107,11 +100,9 @@
   </div>
 
   <div id="doc">
-    <div id="docContent">
-      <h3>Scan to shop with</h3>
-      <img style="width:150px; height: auto;" src="https://cdn.shopify.com/s/files/1/0947/2340/8240/files/1000084881.webp?v=1743588303">
-      <div id="qrCanvas"></div>
-    </div>
+    <h3>Scan to shop with</h3>
+    <img id="storeLogo" src="https://cdn.shopify.com/s/files/1/0947/2340/8240/files/1000084881.webp?v=1743588303" style="width:150px; height:auto;" crossorigin="anonymous">
+    <div id="qrCanvas"></div>
   </div>
 
   <script>
@@ -135,61 +126,58 @@
     }
 
     function loadImage(url) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous"; // Enables CORS
-    img.onload = () => resolve();
-    img.onerror = reject;
-    img.src = url;
-  });
-}
-
-async function downloadPDF() {
-  const imageUrl = "https://cdn.shopify.com/s/files/1/0947/2340/8240/files/1000084881.webp?v=1743588303";
-  await loadImage(imageUrl);
-
-  const element = document.getElementById("doc");
-  const opt = {
-    margin: 0,
-    filename: 'store-link.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
-  };
-  html2pdf().set(opt).from(element).save();
-}
-
-async function sharePDF() {
-  const imageUrl = "https://cdn.shopify.com/s/files/1/0947/2340/8240/files/1000084881.webp?v=1743588303";
-  await loadImage(imageUrl);
-
-  const element = document.getElementById("doc");
-  const opt = {
-    margin: 0,
-    filename: 'store-link.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
-  };
-
-  const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
-  const file = new File([blob], "store-link.pdf", { type: "application/pdf" });
-
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try {
-      await navigator.share({
-        files: [file],
-        title: "Store QR PDF",
-        text: "Scan this QR code to visit the store!"
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => resolve();
+        img.onerror = reject;
+        img.src = url;
       });
-    } catch (err) {
-      alert("Sharing cancelled or failed.");
     }
-  } else {
-    alert("Sharing not supported on this device/browser.");
-  }
-}
-  </script>
 
+    async function downloadPDF() {
+      await loadImage(document.getElementById("storeLogo").src);
+
+      const element = document.getElementById("doc");
+      const opt = {
+        margin: 0,
+        filename: 'store-link.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    async function sharePDF() {
+      await loadImage(document.getElementById("storeLogo").src);
+
+      const element = document.getElementById("doc");
+      const opt = {
+        margin: 0,
+        filename: 'store-link.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+
+      const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+      const file = new File([blob], "store-link.pdf", { type: "application/pdf" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "Store QR PDF",
+            text: "Scan this QR code to visit the store!"
+          });
+        } catch (err) {
+          alert("Sharing cancelled or failed.");
+        }
+      } else {
+        alert("Sharing not supported on this device/browser.");
+      }
+    }
+  </script>
 </body>
 </html>
