@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>QR to A5 PDF</title>
+  <title>QR to A4 PDF</title>
   <meta charset="UTF-8" />
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -18,9 +18,9 @@
     }
 
     #doc {
-      width: 14.8cm;
-      height: 21cm;
-      padding: 2cm;
+      width: 21cm;
+      height: 29.7cm;
+      padding: 3cm 2cm;
       background: white;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       margin: auto;
@@ -32,17 +32,20 @@
 
     button {
       margin: 5px;
-      padding: 8px 16px;
+      padding: 10px 20px;
       font-size: 16px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div id="inputSection">
-    <h2>Create A5 PDF with QR</h2>
+    <h2>Create A4 PDF with QR</h2>
     <input type="text" id="collection" placeholder="Enter collection name" />
+    <br/>
     <button onclick="generateQR()">Generate</button>
     <button onclick="downloadPDF()">Download PDF</button>
+    <button onclick="sharePDF()">Share PDF</button>
   </div>
 
   <div id="doc">
@@ -61,7 +64,7 @@
       currentURL = `https://nearbys.online/pages/stores?collections=${col}`;
       document.getElementById("urlText").textContent = currentURL;
 
-      QRCode.toCanvas(currentURL, { width: 200 }, function (err, canvas) {
+      QRCode.toCanvas(currentURL, { width: 250 }, function (err, canvas) {
         if (err) {
           console.error(err);
           return alert("Error generating QR code");
@@ -79,9 +82,38 @@
         filename:     'store-link.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'cm', format: 'a5', orientation: 'portrait' }
+        jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' }
       };
       html2pdf().set(opt).from(element).save();
+    }
+
+    async function sharePDF() {
+      const element = document.getElementById("doc");
+      const opt = {
+        margin: 0,
+        filename: 'store-link.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+      };
+
+      const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+
+      const file = new File([blob], "store-link.pdf", { type: "application/pdf" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "Store QR PDF",
+            text: "Scan this QR code to visit the store!"
+          });
+        } catch (err) {
+          alert("Sharing cancelled or failed.");
+        }
+      } else {
+        alert("Sharing not supported on this device/browser.");
+      }
     }
   </script>
 </body>
