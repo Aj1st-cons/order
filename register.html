@@ -44,26 +44,25 @@
     }
 
     #doc {
-      background: white;
-      box-sizing: border-box;
-      width: 100%;
-      max-width: 794px; /* A4 width in px at 96dpi */
-      aspect-ratio: 210 / 297;
+      width: 794px;
+      height: 1123px;
+      padding: 54px;
       margin: 20px auto;
-      padding: 0.75in;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      box-sizing: border-box;
+      background: white;
       border: 2px solid #009500;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
 
     #doc h3 {
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 10px;
-      text-align: center;
     }
 
     #qrCanvas {
@@ -75,16 +74,20 @@
       margin: 0 auto;
     }
 
+    img {
+      width: 150px;
+      height: auto;
+    }
+
     @media (max-width: 600px) {
       #doc {
         width: 100%;
+        height: auto;
         padding: 20px;
-        aspect-ratio: auto;
       }
 
       img {
         max-width: 100%;
-        height: auto;
       }
     }
   </style>
@@ -101,7 +104,7 @@
 
   <div id="doc">
     <h3>Scan to shop with</h3>
-    <img id="storeLogo" src="https://cdn.shopify.com/s/files/1/0947/2340/8240/files/1000084881.webp?v=1743588303" style="width:150px; height:auto;" crossorigin="anonymous">
+    <img id="storeLogo" src="https://cdn.shopify.com/s/files/1/0947/2340/8240/files/1000084881.webp?v=1743588303" crossorigin="anonymous">
     <div id="qrCanvas"></div>
   </div>
 
@@ -144,7 +147,7 @@
         filename: 'store-link.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' }
       };
       html2pdf().set(opt).from(element).save();
     }
@@ -158,7 +161,7 @@
         filename: 'store-link.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' }
       };
 
       const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
