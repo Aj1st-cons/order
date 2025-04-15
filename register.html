@@ -134,45 +134,61 @@
       });
     }
 
-    function downloadPDF() {
-      const element = document.getElementById("doc");
-      const opt = {
-        margin:       0,
-        filename:     'store-link.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'cm', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(element).save();
+    function loadImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // Enables CORS
+    img.onload = () => resolve();
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+async function downloadPDF() {
+  const imageUrl = "https://cdn.shopify.com/s/files/1/0947/2340/8240/files/1000084881.webp?v=1743588303";
+  await loadImage(imageUrl);
+
+  const element = document.getElementById("doc");
+  const opt = {
+    margin: 0,
+    filename: 'store-link.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+
+async function sharePDF() {
+  const imageUrl = "https://cdn.shopify.com/s/files/1/0947/2340/8240/files/1000084881.webp?v=1743588303";
+  await loadImage(imageUrl);
+
+  const element = document.getElementById("doc");
+  const opt = {
+    margin: 0,
+    filename: 'store-link.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
+  };
+
+  const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
+  const file = new File([blob], "store-link.pdf", { type: "application/pdf" });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: "Store QR PDF",
+        text: "Scan this QR code to visit the store!"
+      });
+    } catch (err) {
+      alert("Sharing cancelled or failed.");
     }
-
-    async function sharePDF() {
-      const element = document.getElementById("doc");
-      const opt = {
-        margin: 0,
-        filename: 'store-link.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'cm', format: 'a4', orientation: 'portrait' }
-      };
-
-      const blob = await html2pdf().set(opt).from(element).outputPdf('blob');
-      const file = new File([blob], "store-link.pdf", { type: "application/pdf" });
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({
-            files: [file],
-            title: "Store QR PDF",
-            text: "Scan this QR code to visit the store!"
-          });
-        } catch (err) {
-          alert("Sharing cancelled or failed.");
-        }
-      } else {
-        alert("Sharing not supported on this device/browser.");
-      }
-    }
+  } else {
+    alert("Sharing not supported on this device/browser.");
+  }
+}
   </script>
 
 </body>
