@@ -1,5 +1,5 @@
 let vendors = {
-"aj": { lat: 24.385, lng: 54.584, categories: ["Cafeteria"] },
+"aj": { lat: 24.385, lng: 54.584, categories: ["Grocery"] },
 "gh": { lat: 25.255, lng: 54.627, categories: ["Cafeteria"] },
 "jithu": { lat: 25.301, lng: 55.375, categories: ["Cafeteria", "Grocery"] },
 "bj": { lat: 24.382, lng: 54.582, categories: ["Cafeteria", "Grocery"] },    
