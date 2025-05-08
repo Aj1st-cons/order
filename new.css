@@ -63,49 +63,6 @@ body {
     background: rgba(0, 0, 0, 0.3); 
     z-index: 2000; 
 }
-.modal { 
-    display: none; 
-    position: fixed; 
-    top: 30%; 
-    left: 50%; 
-    font-family: 'Righteous', cursive;
-    font-weight: bold;
-    transform: translate(-50%, -50%); 
-    background: white; 
-    border: 1px solid #ccc; 
-    box-shadow: 0 0 10px rgba(0,0,0,0.2); 
-    padding: 20px; 
-    width: 250px;
-    border-radius:10px; 
-    text-align: center; 
-    z-index: 2000; 
-}
-.modal input { 
-    width: 90%; 
-    padding: 8px; 
-    margin: 10px 0;
-    margin-bottom: 25px; 
-    border: 1px solid #ccc; 
-}
-.modal .btn-group { 
-    display: flex; 
-    justify-content: space-between; 
-}
-.btn { 
-    padding: 8px 15px; 
-    border: none; 
-    cursor: pointer; 
-}
-.btn.cancel { 
-    background: gray; 
-    color: white; 
-    border-radius:5px;
-}
-.btn.save { 
-    background: green; 
-    color: white;
-    border-radius:5px; 
-}
 .loading-overlay { 
     display: none; 
     position: fixed; 
