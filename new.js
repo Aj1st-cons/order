@@ -125,3 +125,47 @@ function closeErrorPopup() {
 }
 
 loadLocations();
+
+function getActiveLocation() {
+    const selectedLocation = localStorage.getItem('selectedLocation');
+    const selectedLocationCoords = localStorage.getItem('selectedLocationCoords');
+    const currentLocation = localStorage.getItem('currentLocation');
+    const locationExpiry = localStorage.getItem('locationExpiry');
+
+    // If the last active location was "Current Location"
+    if (selectedLocation === "Current Location") {
+        if (currentLocation && locationExpiry) {
+            // Check if the location has expired
+            if (Date.now() > parseInt(locationExpiry)) {
+                // Clear expired location data
+                localStorage.removeItem('currentLocation');
+                localStorage.removeItem('locationExpiry');
+                localStorage.removeItem('selectedLocation');
+                localStorage.removeItem('selectedLocationCoords');
+
+                // Reset displayed location text
+                document.querySelector('.replaceable-text').textContent = "Select Location";
+
+                return null; // No active location
+            } else {
+                return JSON.parse(currentLocation); // Return valid current location
+            }
+        } else {
+            // If no valid current location, reset text
+            document.querySelector('.replaceable-text').textContent = "Select Location";
+            return null;
+        }
+    }
+
+    // If a saved location exists and isn't "Current Location," return it
+    if (selectedLocation && selectedLocationCoords) {
+        return JSON.parse(selectedLocationCoords);
+    }
+
+    return null; // No active location
+}
+
+// Call getActiveLocation on page load
+document.addEventListener("DOMContentLoaded", function () {
+    getActiveLocation();
+});
