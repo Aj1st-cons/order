@@ -653,7 +653,6 @@ body {
 .contact {
   background: #EEEEEE;
   font-family: 'Righteous', cursive;
-  margin-bottom:-20px;
 }
 
 .contact-inner {
@@ -661,9 +660,8 @@ body {
   justify-content: space-between;
   align-items: center;
   width: calc(100% - 20px);
-  margin: 0 auto;
+  margin: 0 10px;
   padding: 50px 10px;
-  margin-bottom: 0px;
 }
 
 .contact-logo {
