@@ -653,6 +653,7 @@ body {
 .contact {
   background: #EEEEEE;
   font-family: 'Righteous', cursive;
+  margin-bottom:-20px;
 }
 
 .contact-inner {
