@@ -1,0 +1,185 @@
+<body>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Upload Instructions</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .slider-container {
+      position: relative; 
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      background: #F0FFF0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+      margin-top: -50px;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 20px;     
+      font-size: 30px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .slide-image {
+      width: 250px;
+      height: auto;
+      margin-top: 0px;
+      object-fit: contain;
+      border-radius:20px;
+      outline: 2px solid #009500;
+    }
+    .instruction-text {
+      color: #009500;
+      font-weight:bold;
+      font-size: 20px;
+      text-align: left;
+      min-height: 50px;
+      margin: 0 20px;
+      margin-top: 20px;
+    }
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 40px;
+      font-weight: bold;
+      color: #ff0000;
+      cursor: pointer;
+      background: #00950025;      
+      border-radius: 50%;
+      user-select: none;
+    }
+    .arrow.left {
+      left: 1px; 
+      padding: 5px 20px 5px 0px;     
+    }
+    .arrow.right {
+      right: 1px;
+      padding: 5px 0px 5px 20px;
+    }
+  </style>
+
+<div class="slider-container">
+  <div class="close-btn" onclick="goBack()">✕</div>
+  <div class="arrow left" onclick="prevSlide()">《 </div>
+  <div id="instruction" class="instruction-text"></div>
+  <img id="slideImage" class="slide-image" src="" alt="Slide">
+  <div class="arrow right" onclick="nextSlide()"> 》</div>
+</div>
+
+<script>
+  const slides = [
+    { img: 'https://i.postimg.cc/L6YXshV0/1-1.gif', texts: ['Set your camera ratio to 1:1'] },
+    { texts: ['1- Set the plain background', '2- Adjust lighting', '3- Center the product in frame', '4- Avoid shadows or glares', '5- Capture from multiple angles'] },
+    { img: 'https://i.postimg.cc/wTMX1xPR/1.jpg', texts: ['Click the menu button'] },
+    { img: 'https://i.postimg.cc/Bn12CYJq/2.webp', texts: ['Click the PRODUCTS'] },
+    { img: 'https://i.postimg.cc/ZKQrptt7/3.webp', texts: ['Click the PRODUCTS LIST'] },
+    { img: 'https://i.postimg.cc/DzkLprz1/4.webp', texts: ['Click ADD PRODUCT Button'] },
+    { img: 'https://i.postimg.cc/zvcRCWMb/5.webp', texts: ['Add the PRODUCT NAME', 'Add DESCRIPTIONS if any'] },
+    { img: 'https://i.postimg.cc/qMNKkbh8/6.webp', texts: ['Add the WEIGHT of the product', 'Add the PRICE'] },
+    { img: 'https://i.postimg.cc/hPNdhLTN/8.webp', texts: ['Click UPLOAD IMAGE'] },
+    { img: 'https://i.postimg.cc/SKhYfmZr/9.webp', texts: ['Select the captured images', 'Click done/upload'] },
+    { img: 'https://i.postimg.cc/vZ96n4vT/10.webp', texts: ['Click UPLOAD IMAGE'] },
+    { img: 'https://i.postimg.cc/HL9cSFRC/11.webp', texts: ['Click SAVE CHANGES'] },
+    { img: 'https://i.postimg.cc/sXfBbwCG/12.webp', texts: ['Click the 3 dot menu'] },
+    { img: 'https://i.postimg.cc/PJPC5Jxt/13.webp', texts: ['Click refresh'] },
+    { img: 'https://i.postimg.cc/QCwH9D9c/14.webp', texts: ['Click VIEW IN STORE to check'] },
+    { img: 'https://i.postimg.cc/Px6LHYd3/15.webp', texts: ['Confirm the product and details are correct!'] },
+    {texts: ['Thats it!', 'Proceed to upload the other Products!'] },
+  ];
+
+  let currentIndex = 0;
+  const imageEl = document.getElementById('slideImage');
+  const textEl = document.getElementById('instruction');
+
+  // Track active timeouts to clear them on slide change
+  let activeTimeouts = [];
+
+  function clearActiveTimeouts() {
+    activeTimeouts.forEach(timeout => clearTimeout(timeout));
+    activeTimeouts = [];
+  }
+
+  function typeWriter(text, container, i = 0, cb) {
+    container.innerHTML = text.substring(0, i);
+    if (i < text.length) {
+      const timeout = setTimeout(() => typeWriter(text, container, i + 1, cb), 30);
+      activeTimeouts.push(timeout);
+    } else if (cb) {
+      const timeout = setTimeout(cb, 300);
+      activeTimeouts.push(timeout);
+    }
+  }
+
+  function showSlide(index) {
+    clearActiveTimeouts(); // 🚫 Clear timeouts before doing anything
+    const slide = slides[index];
+
+    // Image
+    if (slide.img) {
+      imageEl.src = slide.img;
+      imageEl.style.display = 'block';
+    } else {
+      imageEl.style.display = 'none';
+    }
+
+    // Clear previous text
+    textEl.innerHTML = '';
+
+    // Animate text lines
+    const texts = slide.texts;
+    let i = 0;
+
+    function showNextLine() {
+      if (i < texts.length) {
+        const lineEl = document.createElement('div');
+        textEl.appendChild(lineEl);
+        typeWriter(texts[i], lineEl, 0, () => {
+          i++;
+          showNextLine();
+        });
+      }
+    }
+
+    showNextLine();
+  }
+
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      showSlide(currentIndex);
+    }
+  }
+
+  function nextSlide() {
+    if (currentIndex < slides.length - 1) {
+      currentIndex++;
+      showSlide(currentIndex);
+    }
+  }
+
+  function goBack() {
+    window.history.back();
+  }
+
+  // Initial load
+  showSlide(currentIndex);
+</script>
+</body>
