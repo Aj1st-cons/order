@@ -86,7 +86,7 @@
         .size-units-container {
             display: flex;
             gap: 5px;
-            margin-top: 20px; /* Added space for labels */
+            margin-top: 20px;
         }
         .size-unit-group {
             display: flex;
@@ -198,7 +198,7 @@
         <h1>Item Capture System</h1>
         
         <div class="report-section">
-            <div><button id="printReport">Print</button></div>
+            <div><button id="printReport">Print</button></div>            
             <div>
                 <input type="date" id="startDate">
                 <input type="date" id="endDate">
@@ -329,6 +329,41 @@
             </thead>
             <tbody id="itemsTableBody"></tbody>
         </table>
+        
+        <div class="item-detail-view" id="itemDetailView">
+            <div class="item-detail-container">
+                <div>
+                    <img id="detailImage" class="item-image" src="" alt="Item image">
+                    <div class="multi-image-container" id="detailMultiImageContainer"></div>
+                </div>
+                <div class="item-info">
+                    <div class="input-group">
+                        <label for="detailName">Name</label>
+                        <input type="text" id="detailName">
+                    </div>
+                    <div class="input-group">
+                        <label for="detailPrice">Price</label>
+                        <div class="price-container">
+                            <input type="number" id="detailPrice" class="price-value" step="0.01" style="width:150px;">
+                            <input type="text" id="detailCurrency" class="currency-selector">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="detailSize">Size</label>
+                        <input type="text" id="detailSize">
+                    </div>
+                    <div class="input-group">
+                        <label>Color</label>
+                        <div class="color-selector" id="detailColorSelector"></div>
+                        <input type="hidden" id="detailSelectedColor" value="">
+                    </div>
+                    <div class="save-section">
+                        <button id="updateItem">Update</button>
+                        <button id="closeDetail">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -346,6 +381,7 @@
         const viewItemsBtn = document.getElementById('viewItems');
         const itemsTable = document.getElementById('itemsTable');
         const itemsTableBody = document.getElementById('itemsTableBody');
+        const itemDetailView = document.getElementById('itemDetailView');
         const multiImageContainer = document.getElementById('multiImageContainer');
         const printReportBtn = document.getElementById('printReport');
         const filterByDateBtn = document.getElementById('filterByDate');
@@ -355,6 +391,7 @@
         // Variables
         let stream = null;
         let capturedImages = [];
+        let currentEditingId = null;
         
         // Initialize camera
         async function initCamera() {
@@ -446,8 +483,8 @@
             });
         });
         
-        // Save item with images to device storage
-        saveItemBtn.addEventListener('click', async () => {
+        // Save item
+        saveItemBtn.addEventListener('click', () => {
             if (!itemName.value) {
                 alert('Please enter an item name');
                 return;
@@ -458,85 +495,25 @@
                 return;
             }
             
-            try {
-                // Save images to device storage
-                const savedImagePaths = [];
-                for (const imgData of capturedImages) {
-                    const path = await saveImageToDevice(imgData, itemName.value);
-                    if (path) savedImagePaths.push(path);
-                }
-                
-                if (savedImagePaths.length === 0) {
-                    alert('Failed to save images to device');
-                    return;
-                }
-                
-                const item = {
-                    id: Date.now(),
-                    name: itemName.value,
-                    price: document.getElementById('itemPrice').value,
-                    currency: document.getElementById('currency').value,
-                    size: document.getElementById('itemSize').value,
-                    weightUnit: document.getElementById('weightUnit').value,
-                    volumeUnit: document.getElementById('volumeUnit').value,
-                    clothingUnit: document.getElementById('clothingUnit').value,
-                    lengthUnit: document.getElementById('lengthUnit').value,
-                    color: document.getElementById('selectedColor').value,
-                    images: savedImagePaths,
-                    date: new Date().toISOString()
-                };
-                
-                saveItemToLocalStorage(item);
-                resetForm();
-                alert('Item saved successfully! Images are available in your gallery.');
-            } catch (error) {
-                console.error('Error saving item:', error);
-                alert('Error saving item. Please try again.');
-            }
+            const item = {
+                id: Date.now(),
+                name: itemName.value,
+                price: document.getElementById('itemPrice').value,
+                currency: document.getElementById('currency').value,
+                size: document.getElementById('itemSize').value,
+                weightUnit: document.getElementById('weightUnit').value,
+                volumeUnit: document.getElementById('volumeUnit').value,
+                clothingUnit: document.getElementById('clothingUnit').value,
+                lengthUnit: document.getElementById('lengthUnit').value,
+                color: document.getElementById('selectedColor').value,
+                images: capturedImages,
+                date: new Date().toISOString()
+            };
+            
+            saveItemToLocalStorage(item);
+            resetForm();
+            alert('Item saved successfully!');
         });
-        
-        // Save image to device storage (simplified version)
-        async function saveImageToDevice(imageData, itemName) {
-            // In a real app, you would use the File System Access API or a Cordova plugin
-            // This is a simplified version that won't actually save to device storage
-            // but shows how you would structure the code
-            
-            // For a real implementation, you would need to:
-            // 1. Use the File System Access API (for modern browsers)
-            // 2. Or use a Cordova plugin like cordova-plugin-file
-            // 3. Or use a framework like Capacitor's Filesystem API
-            
-            // This is just a placeholder that returns the data URL
-            // In a real app, you would return the actual file path
-            return imageData;
-            
-            /* Example of real implementation with Cordova:
-            return new Promise((resolve, reject) => {
-                const filename = `${itemName}_${Date.now()}.jpg`;
-                window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, (dir) => {
-                    dir.getFile(filename, { create: true }, (file) => {
-                        file.createWriter((fileWriter) => {
-                            const blob = dataURItoBlob(imageData);
-                            fileWriter.write(blob);
-                            resolve(cordova.file.externalDataDirectory + filename);
-                        }, reject);
-                    }, reject);
-                }, reject);
-            });
-            */
-        }
-        
-        // Helper function to convert data URI to Blob
-        function dataURItoBlob(dataURI) {
-            const byteString = atob(dataURI.split(',')[1]);
-            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-            const ab = new ArrayBuffer(byteString.length);
-            const ia = new Uint8Array(ab);
-            for (let i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
-            }
-            return new Blob([ab], { type: mimeString });
-        }
         
         // Save to local storage
         function saveItemToLocalStorage(item) {
@@ -571,6 +548,7 @@
         viewItemsBtn.addEventListener('click', () => {
             loadItemsTable();
             itemsTable.style.display = 'table';
+            itemDetailView.style.display = 'none';
         });
         
         // Load items table
@@ -612,10 +590,18 @@
                     <td><div style="width:20px;height:20px;background-color:${getColorValue(item.color)};border:1px solid #ccc;"></div> ${item.color}</td>
                     <td>${new Date(item.date).toLocaleDateString()}</td>
                     <td>
+                        <button class="view-item" data-id="${item.id}">View</button>
                         <button class="delete-item" data-id="${item.id}">Delete</button>
                     </td>
                 `;
                 itemsTableBody.appendChild(row);
+            });
+            
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    viewItemDetails(this.dataset.id);
+                });
             });
             
             // Add event listeners to delete buttons
@@ -645,6 +631,140 @@
             };
             return colorMap[color] || color;
         }
+        
+        // View item details
+        function viewItemDetails(id) {
+            const items = JSON.parse(localStorage.getItem('items')) || [];
+            const item = items.find(i => i.id == id);
+            
+            if (!item) {
+                alert('Item not found');
+                return;
+            }
+            
+            currentEditingId = id;
+            
+            // Set detail view values
+            document.getElementById('detailImage').src = item.images[0];
+            document.getElementById('detailName').value = item.name;
+            document.getElementById('detailPrice').value = item.price;
+            document.getElementById('detailCurrency').value = item.currency;
+            
+            // Format size
+            let sizeDisplay = item.size;
+            if (item.weightUnit) sizeDisplay += ` ${item.weightUnit}`;
+            if (item.volumeUnit) sizeDisplay += ` ${item.volumeUnit}`;
+            if (item.clothingUnit) sizeDisplay += ` ${item.clothingUnit}`;
+            if (item.lengthUnit) sizeDisplay += ` ${item.lengthUnit}`;
+            document.getElementById('detailSize').value = sizeDisplay;
+            
+            // Set color
+            document.getElementById('detailSelectedColor').value = item.color;
+            
+            // Create color selector in detail view
+            const detailColorSelector = document.getElementById('detailColorSelector');
+            detailColorSelector.innerHTML = '';
+            
+            const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White', 'Gray', 'Purple', 'Orange', 'Pink', 'Brown', 'Custom'];
+            colors.forEach(color => {
+                const option = document.createElement('div');
+                option.className = 'color-option';
+                option.dataset.color = color;
+                
+                if (color === 'Custom') {
+                    option.innerHTML = '<input type="color" style="width:100%;height:100%;opacity:0;" title="Custom color">';
+                    if (!colors.includes(item.color)) {
+                        option.style.backgroundColor = item.color;
+                        option.classList.add('selected');
+                    }
+                } else {
+                    option.style.backgroundColor = getColorValue(color);
+                    if (color === item.color) {
+                        option.classList.add('selected');
+                    }
+                }
+                
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('#detailColorSelector .color-option').forEach(el => el.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    if (this.dataset.color === 'Custom') {
+                        const colorPicker = this.querySelector('input[type="color"]');
+                        colorPicker.click();
+                        colorPicker.addEventListener('change', function() {
+                            document.getElementById('detailSelectedColor').value = this.value;
+                            colorPicker.parentElement.style.backgroundColor = this.value;
+                        });
+                    } else {
+                        document.getElementById('detailSelectedColor').value = this.dataset.color;
+                    }
+                });
+                
+                detailColorSelector.appendChild(option);
+            });
+            
+            // Load multiple images
+            const detailMultiImageContainer = document.getElementById('detailMultiImageContainer');
+            detailMultiImageContainer.innerHTML = '';
+            item.images.forEach((img, index) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = img;
+                imgElement.className = 'multi-image-preview';
+                if (index === 0) {
+                    imgElement.classList.add('active-image');
+                }
+                imgElement.addEventListener('click', () => {
+                    document.querySelectorAll('#detailMultiImageContainer .multi-image-preview').forEach(el => el.classList.remove('active-image'));
+                    imgElement.classList.add('active-image');
+                    document.getElementById('detailImage').src = img;
+                });
+                detailMultiImageContainer.appendChild(imgElement);
+            });
+            
+            itemsTable.style.display = 'none';
+            itemDetailView.style.display = 'block';
+        }
+        
+        // Update item
+        document.getElementById('updateItem').addEventListener('click', () => {
+            const items = JSON.parse(localStorage.getItem('items')) || [];
+            const itemIndex = items.findIndex(i => i.id == currentEditingId);
+            
+            if (itemIndex === -1) {
+                alert('Item not found');
+                return;
+            }
+            
+            // Parse the size field (this is simplified - in a real app you'd want better parsing)
+            const sizeInput = document.getElementById('detailSize').value;
+            const sizeParts = sizeInput.split(' ');
+            
+            items[itemIndex] = {
+                ...items[itemIndex],
+                name: document.getElementById('detailName').value,
+                price: document.getElementById('detailPrice').value,
+                currency: document.getElementById('detailCurrency').value,
+                size: sizeParts[0] || '',
+                weightUnit: sizeParts[1] === 'g' || sizeParts[1] === 'kg' ? sizeParts[1] : '',
+                volumeUnit: sizeParts[1] === 'ml' || sizeParts[1] === 'l' ? sizeParts[1] : 
+                          (sizeParts[2] === 'ml' || sizeParts[2] === 'l' ? sizeParts[2] : ''),
+                clothingUnit: sizeParts.find(p => ['XS','S','M','L','XL','XXL','3XL','4XL','5XL'].includes(p)) || '',
+                lengthUnit: sizeParts.find(p => p === 'cm' || p === 'inch') || '',
+                color: document.getElementById('detailSelectedColor').value
+            };
+            
+            localStorage.setItem('items', JSON.stringify(items));
+            loadItemsTable();
+            itemDetailView.style.display = 'none';
+            itemsTable.style.display = 'table';
+            alert('Item updated successfully!');
+        });
+        
+        // Close detail view
+        document.getElementById('closeDetail').addEventListener('click', () => {
+            itemDetailView.style.display = 'none';
+            itemsTable.style.display = 'table';
+        });
         
         // Delete item
         function deleteItem(id) {
@@ -746,4 +866,4 @@
         });
     </script>
 </body>
-                </html>
+</html>
