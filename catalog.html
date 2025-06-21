@@ -212,7 +212,7 @@
         
         <div class="input-group">
             <label for="itemName">Item Name</label>
-            <input type="text" id="itemName" placeholder="Item name will auto-recognize">
+            <input type="text" id="itemName" placeholder="Enter item name">
         </div>
         
         <div class="input-group">
@@ -401,14 +401,6 @@
             camera.style.display = 'none';
             captureButtons.style.display = 'none';
             retakeButtons.style.display = 'block';
-            
-            // Simulate item recognition (in a real app, you'd use an API)
-            setTimeout(() => {
-                if (!itemName.value) {
-                    const randomItems = ['Apple', 'Book', 'Bottle', 'Shoe', 'Shirt', 'Pen', 'Notebook'];
-                    itemName.value = randomItems[Math.floor(Math.random() * randomItems.length)];
-                }
-            }, 500);
         });
         
         // Retake photo
@@ -850,4 +842,4 @@
         });
     </script>
 </body>
-                          </html>
+</html>
