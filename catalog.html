@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Capture System</title>
+    <style>
+        :root {
+            --primary-color: #009500;
+            --text-color: #000;
+            --bg-color: #fff;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+        }
+        .camera-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        #camera {
+            width: 300px;
+            height: 300px;
+            border: 2px solid var(--primary-color);
+            margin-bottom: 10px;
+        }
+        #preview {
+            width: 300px;
+            height: 300px;
+            border: 2px solid var(--primary-color);
+            margin-bottom: 10px;
+            display: none;
+            object-fit: cover;
+        }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .price-container, .size-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .price-value, .size-value {
+            flex: 1;
+        }
+        .currency-selector, .size-units {
+            width: 80px;
+        }
+        .size-units-container {
+            display: flex;
+            gap: 5px;
+        }
+        .size-unit-input {
+            width: 60px;
+        }
+        .color-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .color-option.selected {
+            border-color: var(--primary-color);
+        }
+        .save-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        .view-items {
+            width: 100%;
+            margin-top: 30px;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            display: none;
+        }
+        .items-table th, .items-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .items-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .items-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .item-detail-view {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .item-detail-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        @media (min-width: 768px) {
+            .item-detail-container {
+                flex-direction: row;
+            }
+        }
+        .item-image {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+        }
+        .item-info {
+            flex: 1;
+        }
+        .report-section {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .multi-image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .multi-image-preview {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .active-image {
+            border: 2px solid var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Item Capture System</h1>
+        
+        <div class="report-section">
+            <button id="printReport">Print Report</button>
+            <div>
+                <input type="date" id="startDate">
+                <input type="date" id="endDate">
+                <button id="filterByDate">Filter</button>
+            </div>
+        </div>
+        
+        <div class="camera-container">
+            <video id="camera" autoplay playsinline></video>
+            <canvas id="canvas" style="display:none;"></canvas>
+            <img id="preview" alt="Captured preview">
+            
+            <div id="captureButtons">
+                <button id="capture">Capture Photo</button>
+            </div>
+            <div id="retakeButtons" style="display:none;">
+                <button id="retake">Retake Photo</button>
+                <button id="addAnother">Add Another Photo</button>
+            </div>
+            
+            <div class="multi-image-container" id="multiImageContainer"></div>
+        </div>
+        
+        <div class="input-group">
+            <label for="itemName">Item Name</label>
+            <input type="text" id="itemName" placeholder="Item name will auto-recognize">
+        </div>
+        
+        <div class="input-group">
+            <label for="itemPrice">Price</label>
+            <div class="price-container">
+                <input type="number" id="itemPrice" class="price-value" placeholder="0.00" step="0.01">
+                <select id="currency" class="currency-selector">
+                    <option value="Dhs">Dhs</option>
+                    <option value="USD">USD</option>
+                    <option value="INR">INR</option>
+                    <option value="SAR">SAR</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label for="itemSize">Size</label>
+            <div class="size-container">
+                <input type="text" id="itemSize" class="size-value" placeholder="Size value">
+                <div class="size-units-container">
+                    <select id="weightUnit" class="size-unit-input">
+                        <option value="">-</option>
+                        <option value="g">g</option>
+                        <option value="kg">kg</option>
+                    </select>
+                    <select id="volumeUnit" class="size-unit-input">
+                        <option value="">-</option>
+                        <option value="ml">ml</option>
+                        <option value="l">l</option>
+                    </select>
+                    <select id="clothingUnit" class="size-unit-input">
+                        <option value="">-</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                        <option value="3XL">3XL</option>
+                        <option value="4XL">4XL</option>
+                        <option value="5XL">5XL</option>
+                    </select>
+                    <select id="lengthUnit" class="size-unit-input">
+                        <option value="">-</option>
+                        <option value="cm">cm</option>
+                        <option value="inch">inch</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label>Color</label>
+            <div class="color-selector">
+                <div class="color-option" data-color="Red" style="background-color: #FF0000;"></div>
+                <div class="color-option" data-color="Blue" style="background-color: #0000FF;"></div>
+                <div class="color-option" data-color="Green" style="background-color: #008000;"></div>
+                <div class="color-option" data-color="Yellow" style="background-color: #FFFF00;"></div>
+                <div class="color-option" data-color="Black" style="background-color: #000000;"></div>
+                <div class="color-option" data-color="White" style="background-color: #FFFFFF; border: 1px solid #ccc;"></div>
+                <div class="color-option" data-color="Gray" style="background-color: #808080;"></div>
+                <div class="color-option" data-color="Purple" style="background-color: #800080;"></div>
+                <div class="color-option" data-color="Orange" style="background-color: #FFA500;"></div>
+                <div class="color-option" data-color="Pink" style="background-color: #FFC0CB;"></div>
+                <div class="color-option" data-color="Brown" style="background-color: #A52A2A;"></div>
+                <div class="color-option" data-color="Custom">
+                    <input type="color" style="width:100%;height:100%;opacity:0;" title="Custom color">
+                </div>
+            </div>
+            <input type="hidden" id="selectedColor" value="">
+        </div>
+        
+        <div class="save-section">
+            <button id="saveItem">Save Item</button>
+        </div>
+        
+        <button class="view-items" id="viewItems">View Saved Items</button>
+        
+        <table class="items-table" id="itemsTable">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="itemsTableBody"></tbody>
+        </table>
+        
+        <div class="item-detail-view" id="itemDetailView">
+            <div class="item-detail-container">
+                <div>
+                    <img id="detailImage" class="item-image" src="" alt="Item image">
+                    <div class="multi-image-container" id="detailMultiImageContainer"></div>
+                </div>
+                <div class="item-info">
+                    <div class="input-group">
+                        <label for="detailName">Name</label>
+                        <input type="text" id="detailName">
+                    </div>
+                    <div class="input-group">
+                        <label for="detailPrice">Price</label>
+                        <div class="price-container">
+                            <input type="number" id="detailPrice" class="price-value" step="0.01">
+                            <input type="text" id="detailCurrency" class="currency-selector">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="detailSize">Size</label>
+                        <input type="text" id="detailSize">
+                    </div>
+                    <div class="input-group">
+                        <label>Color</label>
+                        <div class="color-selector" id="detailColorSelector"></div>
+                        <input type="hidden" id="detailSelectedColor" value="">
+                    </div>
+                    <div class="save-section">
+                        <button id="updateItem">Update</button>
+                        <button id="closeDetail">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const camera = document.getElementById('camera');
+        const canvas = document.getElementById('canvas');
+        const preview = document.getElementById('preview');
+        const captureBtn = document.getElementById('capture');
+        const retakeBtn = document.getElementById('retake');
+        const addAnotherBtn = document.getElementById('addAnother');
+        const captureButtons = document.getElementById('captureButtons');
+        const retakeButtons = document.getElementById('retakeButtons');
+        const itemName = document.getElementById('itemName');
+        const saveItemBtn = document.getElementById('saveItem');
+        const viewItemsBtn = document.getElementById('viewItems');
+        const itemsTable = document.getElementById('itemsTable');
+        const itemsTableBody = document.getElementById('itemsTableBody');
+        const itemDetailView = document.getElementById('itemDetailView');
+        const multiImageContainer = document.getElementById('multiImageContainer');
+        const printReportBtn = document.getElementById('printReport');
+        const filterByDateBtn = document.getElementById('filterByDate');
+        const startDate = document.getElementById('startDate');
+        const endDate = document.getElementById('endDate');
+        
+        // Variables
+        let stream = null;
+        let capturedImages = [];
+        let currentEditingId = null;
+        
+        // Initialize camera
+        async function initCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        facingMode: 'environment',
+                        aspectRatio: 1 
+                    } 
+                });
+                camera.srcObject = stream;
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+                alert("Could not access the camera. Please ensure you've granted camera permissions.");
+            }
+        }
+        
+        // Capture photo
+        captureBtn.addEventListener('click', () => {
+            canvas.width = camera.videoWidth;
+            canvas.height = camera.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(camera, 0, 0, canvas.width, canvas.height);
+            
+            const imageData = canvas.toDataURL('image/jpeg');
+            capturedImages.push(imageData);
+            updateMultiImagePreview();
+            
+            preview.src = imageData;
+            preview.style.display = 'block';
+            camera.style.display = 'none';
+            captureButtons.style.display = 'none';
+            retakeButtons.style.display = 'block';
+            
+            // Simulate item recognition (in a real app, you'd use an API)
+            setTimeout(() => {
+                if (!itemName.value) {
+                    const randomItems = ['Apple', 'Book', 'Bottle', 'Shoe', 'Shirt', 'Pen', 'Notebook'];
+                    itemName.value = randomItems[Math.floor(Math.random() * randomItems.length)];
+                }
+            }, 500);
+        });
+        
+        // Retake photo
+        retakeBtn.addEventListener('click', () => {
+            preview.style.display = 'none';
+            camera.style.display = 'block';
+            captureButtons.style.display = 'block';
+            retakeButtons.style.display = 'none';
+            capturedImages = [];
+            multiImageContainer.innerHTML = '';
+        });
+        
+        // Add another photo
+        addAnotherBtn.addEventListener('click', () => {
+            preview.style.display = 'none';
+            camera.style.display = 'block';
+            captureButtons.style.display = 'block';
+            retakeButtons.style.display = 'none';
+        });
+        
+        // Update multi-image preview
+        function updateMultiImagePreview() {
+            multiImageContainer.innerHTML = '';
+            capturedImages.forEach((img, index) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = img;
+                imgElement.className = 'multi-image-preview';
+                if (index === capturedImages.length - 1) {
+                    imgElement.classList.add('active-image');
+                }
+                imgElement.addEventListener('click', () => {
+                    document.querySelectorAll('.multi-image-preview').forEach(el => el.classList.remove('active-image'));
+                    imgElement.classList.add('active-image');
+                    preview.src = img;
+                });
+                multiImageContainer.appendChild(imgElement);
+            });
+        }
+        
+        // Color selection
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                if (this.dataset.color === 'Custom') {
+                    const colorPicker = this.querySelector('input[type="color"]');
+                    colorPicker.click();
+                    colorPicker.addEventListener('change', function() {
+                        document.getElementById('selectedColor').value = this.value;
+                        colorPicker.parentElement.style.backgroundColor = this.value;
+                    });
+                } else {
+                    document.getElementById('selectedColor').value = this.dataset.color;
+                }
+            });
+        });
+        
+        // Save item
+        saveItemBtn.addEventListener('click', () => {
+            if (!itemName.value) {
+                alert('Please enter an item name');
+                return;
+            }
+            
+            if (capturedImages.length === 0) {
+                alert('Please capture at least one photo');
+                return;
+            }
+            
+            const item = {
+                id: Date.now(),
+                name: itemName.value,
+                price: document.getElementById('itemPrice').value,
+                currency: document.getElementById('currency').value,
+                size: document.getElementById('itemSize').value,
+                weightUnit: document.getElementById('weightUnit').value,
+                volumeUnit: document.getElementById('volumeUnit').value,
+                clothingUnit: document.getElementById('clothingUnit').value,
+                lengthUnit: document.getElementById('lengthUnit').value,
+                color: document.getElementById('selectedColor').value,
+                images: capturedImages,
+                date: new Date().toISOString()
+            };
+            
+            saveItemToLocalStorage(item);
+            resetForm();
+            alert('Item saved successfully!');
+        });
+        
+        // Save to local storage
+        function saveItemToLocalStorage(item) {
+            let items = JSON.parse(localStorage.getItem('items')) || [];
+            items.push(item);
+            localStorage.setItem('items', JSON.stringify(items));
+        }
+        
+        // Reset form
+        function resetForm() {
+            itemName.value = '';
+            document.getElementById('itemPrice').value = '';
+            document.getElementById('currency').value = 'Dhs';
+            document.getElementById('itemSize').value = '';
+            document.getElementById('weightUnit').value = 'g';
+            document.getElementById('volumeUnit').value = '';
+            document.getElementById('clothingUnit').value = '';
+            document.getElementById('lengthUnit').value = '';
+            document.getElementById('selectedColor').value = '';
+            document.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+            
+            capturedImages = [];
+            multiImageContainer.innerHTML = '';
+            
+            preview.style.display = 'none';
+            camera.style.display = 'block';
+            captureButtons.style.display = 'block';
+            retakeButtons.style.display = 'none';
+        }
+        
+        // View items
+        viewItemsBtn.addEventListener('click', () => {
+            loadItemsTable();
+            itemsTable.style.display = 'table';
+            itemDetailView.style.display = 'none';
+        });
+        
+        // Load items table
+        function loadItemsTable(filterStartDate = null, filterEndDate = null) {
+            let items = JSON.parse(localStorage.getItem('items')) || [];
+            
+            // Filter by date if provided
+            if (filterStartDate && filterEndDate) {
+                items = items.filter(item => {
+                    const itemDate = new Date(item.date);
+                    return itemDate >= new Date(filterStartDate) && itemDate <= new Date(filterEndDate);
+                });
+            }
+            
+            itemsTableBody.innerHTML = '';
+            
+            if (items.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="7" style="text-align:center;">No items saved yet</td>`;
+                itemsTableBody.appendChild(row);
+                return;
+            }
+            
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                
+                // Format size
+                let sizeDisplay = item.size;
+                if (item.weightUnit) sizeDisplay += ` ${item.weightUnit}`;
+                if (item.volumeUnit) sizeDisplay += ` ${item.volumeUnit}`;
+                if (item.clothingUnit) sizeDisplay += ` ${item.clothingUnit}`;
+                if (item.lengthUnit) sizeDisplay += ` ${item.lengthUnit}`;
+                
+                row.innerHTML = `
+                    <td><img src="${item.images[0]}" style="width:50px;height:50px;object-fit:cover;"></td>
+                    <td>${item.name}</td>
+                    <td>${item.price} ${item.currency}</td>
+                    <td>${sizeDisplay}</td>
+                    <td><div style="width:20px;height:20px;background-color:${getColorValue(item.color)};border:1px solid #ccc;"></div> ${item.color}</td>
+                    <td>${new Date(item.date).toLocaleDateString()}</td>
+                    <td>
+                        <button class="view-item" data-id="${item.id}">View</button>
+                        <button class="delete-item" data-id="${item.id}">Delete</button>
+                    </td>
+                `;
+                itemsTableBody.appendChild(row);
+            });
+            
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    viewItemDetails(this.dataset.id);
+                });
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete this item?')) {
+                        deleteItem(this.dataset.id);
+                    }
+                });
+            });
+        }
+        
+        // Get color value for display
+        function getColorValue(color) {
+            const colorMap = {
+                'Red': '#FF0000',
+                'Blue': '#0000FF',
+                'Green': '#008000',
+                'Yellow': '#FFFF00',
+                'Black': '#000000',
+                'White': '#FFFFFF',
+                'Gray': '#808080',
+                'Purple': '#800080',
+                'Orange': '#FFA500',
+                'Pink': '#FFC0CB',
+                'Brown': '#A52A2A'
+            };
+            return colorMap[color] || color;
+        }
+        
+        // View item details
+        function viewItemDetails(id) {
+            const items = JSON.parse(localStorage.getItem('items')) || [];
+            const item = items.find(i => i.id == id);
+            
+            if (!item) {
+                alert('Item not found');
+                return;
+            }
+            
+            currentEditingId = id;
+            
+            // Set detail view values
+            document.getElementById('detailImage').src = item.images[0];
+            document.getElementById('detailName').value = item.name;
+            document.getElementById('detailPrice').value = item.price;
+            document.getElementById('detailCurrency').value = item.currency;
+            
+            // Format size
+            let sizeDisplay = item.size;
+            if (item.weightUnit) sizeDisplay += ` ${item.weightUnit}`;
+            if (item.volumeUnit) sizeDisplay += ` ${item.volumeUnit}`;
+            if (item.clothingUnit) sizeDisplay += ` ${item.clothingUnit}`;
+            if (item.lengthUnit) sizeDisplay += ` ${item.lengthUnit}`;
+            document.getElementById('detailSize').value = sizeDisplay;
+            
+            // Set color
+            document.getElementById('detailSelectedColor').value = item.color;
+            
+            // Create color selector in detail view
+            const detailColorSelector = document.getElementById('detailColorSelector');
+            detailColorSelector.innerHTML = '';
+            
+            const colors = ['Red', 'Blue', 'Green', 'Yellow', 'Black', 'White', 'Gray', 'Purple', 'Orange', 'Pink', 'Brown', 'Custom'];
+            colors.forEach(color => {
+                const option = document.createElement('div');
+                option.className = 'color-option';
+                option.dataset.color = color;
+                
+                if (color === 'Custom') {
+                    option.innerHTML = '<input type="color" style="width:100%;height:100%;opacity:0;" title="Custom color">';
+                    if (!colors.includes(item.color)) {
+                        option.style.backgroundColor = item.color;
+                        option.classList.add('selected');
+                    }
+                } else {
+                    option.style.backgroundColor = getColorValue(color);
+                    if (color === item.color) {
+                        option.classList.add('selected');
+                    }
+                }
+                
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('#detailColorSelector .color-option').forEach(el => el.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    if (this.dataset.color === 'Custom') {
+                        const colorPicker = this.querySelector('input[type="color"]');
+                        colorPicker.click();
+                        colorPicker.addEventListener('change', function() {
+                            document.getElementById('detailSelectedColor').value = this.value;
+                            colorPicker.parentElement.style.backgroundColor = this.value;
+                        });
+                    } else {
+                        document.getElementById('detailSelectedColor').value = this.dataset.color;
+                    }
+                });
+                
+                detailColorSelector.appendChild(option);
+            });
+            
+            // Load multiple images
+            const detailMultiImageContainer = document.getElementById('detailMultiImageContainer');
+            detailMultiImageContainer.innerHTML = '';
+            item.images.forEach((img, index) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = img;
+                imgElement.className = 'multi-image-preview';
+                if (index === 0) {
+                    imgElement.classList.add('active-image');
+                }
+                imgElement.addEventListener('click', () => {
+                    document.querySelectorAll('#detailMultiImageContainer .multi-image-preview').forEach(el => el.classList.remove('active-image'));
+                    imgElement.classList.add('active-image');
+                    document.getElementById('detailImage').src = img;
+                });
+                detailMultiImageContainer.appendChild(imgElement);
+            });
+            
+            itemsTable.style.display = 'none';
+            itemDetailView.style.display = 'block';
+        }
+        
+        // Update item
+        document.getElementById('updateItem').addEventListener('click', () => {
+            const items = JSON.parse(localStorage.getItem('items')) || [];
+            const itemIndex = items.findIndex(i => i.id == currentEditingId);
+            
+            if (itemIndex === -1) {
+                alert('Item not found');
+                return;
+            }
+            
+            // Parse the size field (this is simplified - in a real app you'd want better parsing)
+            const sizeInput = document.getElementById('detailSize').value;
+            const sizeParts = sizeInput.split(' ');
+            
+            items[itemIndex] = {
+                ...items[itemIndex],
+                name: document.getElementById('detailName').value,
+                price: document.getElementById('detailPrice').value,
+                currency: document.getElementById('detailCurrency').value,
+                size: sizeParts[0] || '',
+                weightUnit: sizeParts[1] === 'g' || sizeParts[1] === 'kg' ? sizeParts[1] : '',
+                volumeUnit: sizeParts[1] === 'ml' || sizeParts[1] === 'l' ? sizeParts[1] : 
+                          (sizeParts[2] === 'ml' || sizeParts[2] === 'l' ? sizeParts[2] : ''),
+                clothingUnit: sizeParts.find(p => ['XS','S','M','L','XL','XXL','3XL','4XL','5XL'].includes(p)) || '',
+                lengthUnit: sizeParts.find(p => p === 'cm' || p === 'inch') || '',
+                color: document.getElementById('detailSelectedColor').value
+            };
+            
+            localStorage.setItem('items', JSON.stringify(items));
+            loadItemsTable();
+            itemDetailView.style.display = 'none';
+            itemsTable.style.display = 'table';
+            alert('Item updated successfully!');
+        });
+        
+        // Close detail view
+        document.getElementById('closeDetail').addEventListener('click', () => {
+            itemDetailView.style.display = 'none';
+            itemsTable.style.display = 'table';
+        });
+        
+        // Delete item
+        function deleteItem(id) {
+            let items = JSON.parse(localStorage.getItem('items')) || [];
+            items = items.filter(item => item.id != id);
+            localStorage.setItem('items', JSON.stringify(items));
+            loadItemsTable();
+        }
+        
+        // Print report
+        printReportBtn.addEventListener('click', () => {
+            const items = JSON.parse(localStorage.getItem('items')) || [];
+            const itemCount = items.length;
+            
+            let reportContent = `
+                <h1>Item Report</h1>
+                <p>Total items: ${itemCount}</p>
+                <table border="1" cellpadding="5" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Size</th>
+                            <th>Color</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            items.forEach(item => {
+                // Format size
+                let sizeDisplay = item.size;
+                if (item.weightUnit) sizeDisplay += ` ${item.weightUnit}`;
+                if (item.volumeUnit) sizeDisplay += ` ${item.volumeUnit}`;
+                if (item.clothingUnit) sizeDisplay += ` ${item.clothingUnit}`;
+                if (item.lengthUnit) sizeDisplay += ` ${item.lengthUnit}`;
+                
+                reportContent += `
+                    <tr>
+                        <td><img src="${item.images[0]}" width="50" height="50"></td>
+                        <td>${item.name}</td>
+                        <td>${item.price} ${item.currency}</td>
+                        <td>${sizeDisplay}</td>
+                        <td>${item.color}</td>
+                        <td>${new Date(item.date).toLocaleDateString()}</td>
+                    </tr>
+                `;
+            });
+            
+            reportContent += `</tbody></table>`;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Item Report</title>
+                        <style>
+                            body { font-family: Arial; margin: 20px; }
+                            table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+                            th { background-color: #009500; color: white; text-align: left; }
+                            td, th { border: 1px solid #ddd; padding: 8px; }
+                            tr:nth-child(even) { background-color: #f2f2f2; }
+                            img { object-fit: cover; }
+                            @media print {
+                                body { margin: 0; padding: 10px; }
+                                button { display: none; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${reportContent}
+                        <button onclick="window.print()" style="margin-top:20px;padding:10px;background-color:#009500;color:white;border:none;cursor:pointer;">Print Report</button>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+        });
+        
+        // Filter by date
+        filterByDateBtn.addEventListener('click', () => {
+            if (!startDate.value || !endDate.value) {
+                alert('Please select both start and end dates');
+                return;
+            }
+            
+            loadItemsTable(startDate.value, endDate.value);
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initCamera();
+            
+            // Set default dates for filter (today)
+            const today = new Date().toISOString().split('T')[0];
+            startDate.value = today;
+            endDate.value = today;
+        });
+    </script>
+</body>
+                          </html>
