@@ -460,7 +460,7 @@ submitUserIdBtn.addEventListener('click', async () => {
   loginError.style.display = 'none';
 
   try {
-    const response = await fetch(`https://enormous-cream-transport.glitch.me/businesses/${input}.json`);
+    const response = await fetch(`https://nearbys-business.replit.app/businesses/${input}.json`);
     if (!response.ok) throw new Error();
 
     const data = await response.json();
@@ -643,7 +643,7 @@ function renderOrders() {
   async function markStatus(orderNumber, status) {
     if (!orders[orderNumber] || orders[orderNumber].userId !== userId) return;
 
-    const res = await fetch("https://2054aa2a-6551-4f0a-9ac6-b19b03010851-00-cc96cho83st2.sisko.replit.dev/update", {
+    const res = await fetch("https://08c7407f-0c9c-4924-aa57-2454a3cf21a8-00-325hlmbdzqk5d.pike.replit.dev/update", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ orderNumber, status })
@@ -670,7 +670,7 @@ async function fetchOrders() {
   if (!userId) return;
 
   try {
-    const res = await fetch("https://2054aa2a-6551-4f0a-9ac6-b19b03010851-00-cc96cho83st2.sisko.replit.dev/orders");
+    const res = await fetch("https://08c7407f-0c9c-4924-aa57-2454a3cf21a8-00-325hlmbdzqk5d.pike.replit.dev/orders");
     const orderList = await res.json();
 
     const newOrders = orderList.filter(order =>
@@ -790,7 +790,7 @@ async function fetchAndSetCoverImage(userId, triedFallback = false) {
   const idToUse = userId || fallbackUserId;
 
   try {
-    const response = await fetch(`https://enormous-cream-transport.glitch.me/businesses/${idToUse}.json`);
+    const response = await fetch(`https://nearbys-business.replit.app/businesses/${idToUse}.json`);
     if (!response.ok) throw new Error("Failed to fetch");
 
     const data = await response.json();
@@ -878,7 +878,7 @@ async function submitPrepTime() {
 
   const status = `Ready in - ${selected}`;  // Capital R to match normalizeStatus
 
-  const res = await fetch("https://2054aa2a-6551-4f0a-9ac6-b19b03010851-00-cc96cho83st2.sisko.replit.dev/update", {
+  const res = await fetch("https://08c7407f-0c9c-4924-aa57-2454a3cf21a8-00-325hlmbdzqk5d.pike.replit.dev/update", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ orderNumber: confirmOrderNumber, status })
