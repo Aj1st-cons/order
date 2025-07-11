@@ -8,5 +8,5 @@ let vendors = {
   "nbys-Electronics": { lat: 25.301058, lng: 55.3759718, categories: ["Electronics"] },
   "nbys-Fashion": { lat: 25.301058, lng: 55.3759718, categories: ["Fashion"] },
   "nbys-Shoes": { lat: 25.301058, lng: 55.3759718, categories: ["Shoes"] },
-  "nbys-Cakes": { lat: 25.301058, lng: 55.3759718, categories: ["Cakes"] }
+  "nbysCakes": { lat: 25.301058, lng: 55.3759718, categories: ["Cakes"] }
   };
