@@ -1,4 +1,5 @@
 let vendors = {
+  "DawarAlDhaid": { lat: 25.300490, lng: 55.376445, categories: ["Cosmetics"] },
   "BestCafe": { lat: 25.300452, lng: 55.376473, categories: ["Cafeteria"] },
   "NoorAlAmee": { lat: 25.3010164, lng: 55.3759871, categories: ["Grocery"] },
   "Occations": { lat: 25.3006599, lng: 55.3750735, categories: ["Cakes"] },
