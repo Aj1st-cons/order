@@ -30,6 +30,11 @@ const categoryUrls = {
             "ladies": "https://nearbysx.pages.dev/Ladies",
             "men": "https://nearbysx.pages.dev/Men",
             "iphones": "https://nearbysx.pages.dev/iphones.html",
-             "xiomiMobiles": "https://nearbysx.pages.dev/xiomiMobiles.html",
+            "xiomiMobiles": "https://nearbysx.pages.dev/xiomiMobiles.html",
+            "nothing": "https://nearbysx.pages.dev/nothing.html",
+            "sonyMobiles": "https://nearbysx.pages.dev/sonyMobiles.html",
+            "oppo": "https://nearbysx.pages.dev/oppo.html",
+            "vivo": "https://nearbysx.pages.dev/vivo.html",
+            "lgMobiles": "https://nearbysx.pages.dev/lgMobiles.html",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
