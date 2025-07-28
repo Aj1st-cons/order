@@ -30,5 +30,6 @@ const categoryUrls = {
             "ladies": "https://nearbysx.pages.dev/Ladies",
             "men": "https://nearbysx.pages.dev/Men",
             "iphones": "https://nearbysx.pages.dev/iphones.html",
+             "xiomiMobiles": "https://nearbysx.pages.dev/xiomiMobiles.html",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
