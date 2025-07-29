@@ -36,5 +36,6 @@ const categoryUrls = {
             "oppo": "https://nearbysx.pages.dev/oppo.html",
             "vivo": "https://nearbysx.pages.dev/vivo.html",
             "lgMobiles": "https://nearbysx.pages.dev/lgMobiles.html",
+            "otherBrands": "https://nearbysx.pages.dev/otherBrands.html",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
