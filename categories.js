@@ -37,5 +37,8 @@ const categoryUrls = {
             "vivo": "https://nearbysx.pages.dev/vivo.html",
             "lgMobiles": "https://nearbysx.pages.dev/lgMobiles.html",
             "otherBrands": "https://nearbysx.pages.dev/otherBrands.html",
+            "Huawei": "https://nearbysx.pages.dev/Huawei.html",
+            "Honor": "https://nearbysx.pages.dev/Honor.html",
+            "Realme": "https://nearbysx.pages.dev/Realme.html",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
