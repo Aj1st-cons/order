@@ -40,5 +40,15 @@ const categoryUrls = {
             "Huawei": "https://nearbysx.pages.dev/Huawei.html",
             "Honor": "https://nearbysx.pages.dev/Honor.html",
             "Realme": "https://nearbysx.pages.dev/Realme.html",
+            "Huawei-Tabs": "https://nearbysx.pages.dev/Huawei-Tabs.html",
+            "Honor-Tabs": "https://nearbysx.pages.dev/Honor-Tabs.html",
+            "Lenova-Tabs": "https://nearbysx.pages.dev/Lenova-Tabs.html",
+            "Samsung-Tabs": "https://nearbysx.pages.dev/Samsung-Tabs.html",
+            "iphones-Tabs": "https://nearbysx.pages.dev/iphones-Tabs.html",
+            "Xiomi-Tabs": "https://nearbysx.pages.dev/Xiomi-Tabs.html",
+            "Oppo-Tabs": "https://nearbysx.pages.dev/Oppo-Tabs.html",
+            "Vivo-Tabs": "https://nearbysx.pages.dev/Vivo-Tabs.html",
+            "Lg-Tabs": "https://nearbysx.pages.dev/Lg-Tabs.html",
+            "Other-Tabs": "https://nearbysx.pages.dev/Other-Tabs.html",  
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
