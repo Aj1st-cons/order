@@ -29,6 +29,7 @@ const categoryUrls = {
             "kids": "https://nearbysx.pages.dev/Kids",
             "ladies": "https://nearbysx.pages.dev/Ladies",
             "men": "https://nearbysx.pages.dev/Men",
+            "all-devices": "https://nearbysx.pages.dev/all-devices.html",
             "iphones": "https://nearbysx.pages.dev/iphones.html",
             "xiomiMobiles": "https://nearbysx.pages.dev/xiomiMobiles.html",
             "nothing": "https://nearbysx.pages.dev/nothing.html",
