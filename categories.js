@@ -51,5 +51,17 @@ const categoryUrls = {
             "Vivo-Tabs": "https://nearbysx.pages.dev/Vivo-Tabs.html",
             "Lg-Tabs": "https://nearbysx.pages.dev/Lg-Tabs.html",
             "Other-Tabs": "https://nearbysx.pages.dev/Other-Tabs.html",  
+            "Dell": "https://nearbysx.pages.dev/Dell.html",
+            "Macbook": "https://nearbysx.pages.dev/Macbook.html",
+            "Acer": "https://nearbysx.pages.dev/Acer.html",
+            "Asus": "https://nearbysx.pages.dev/Asus.html",
+            "Lenova-Lap": "https://nearbysx.pages.dev/Lenova-Lap.html",
+            "Samsung-Lap": "https://nearbysx.pages.dev/Samsung-Lap.html",
+            "Hp": "https://nearbysx.pages.dev/Hp.html",
+            "Huawei-Lap": "https://nearbysx.pages.dev/Huawei-Lap.html",
+            "Microsoft": "https://nearbysx.pages.dev/Microsoft.html",
+            "Panasonic": "https://nearbysx.pages.dev/Panasonic.html",
+            "LG-Lap": "https://nearbysx.pages.dev/LG-Lap.html",
+            "Mi": "https://nearbysx.pages.dev/Mi.html",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
