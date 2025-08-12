@@ -64,5 +64,6 @@ const categoryUrls = {
             "LG-Lap": "https://nearbysx.pages.dev/LG-Lap.html",
             "Mi": "https://nearbysx.pages.dev/Mi.html",
             "Other-Laps": "https://nearbysx.pages.dev/OtherBrand-Laps.html",
+            "Starters": "https://order-1ib.pages.dev/Starters.html",
             "stores": "https://order-1ib.pages.dev/Stores.html"
         };
