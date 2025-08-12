@@ -1,5 +1,5 @@
 const categoryUrls = {
-            "Starters": "https://order-1ib.pages.dev/Starters.html",
+            "Starters": "https://nearbysx.pages.dev/Starters.html",
             "vegetables": "https://order-1ib.pages.dev/Vegetables.html",
             "fruits": "https://order-1ib.pages.dev/Fruits.html",
             "oils": "https://order-1ib.pages.dev/Oils.html",
