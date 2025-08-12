@@ -1,6 +1,6 @@
 const categoryUrls = {
-            "starters": "https://order-1ib.pages.dev/Starters.html",
-            "shorteats": "https://order-1ib.pages.dev/shorteats.html",
+            "Starters": "https://order-1ib.pages.dev/Starters.html",
+            "Shorteats": "https://order-1ib.pages.dev/Shorteats.html",
             "Breakfast": "https://order-1ib.pages.dev/Breakfast.html",
             "Lunch": "https://order-1ib.pages.dev/Lunch.html",
             "Dinner": "https://order-1ib.pages.dev/Dinner.html",
