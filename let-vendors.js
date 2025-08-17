@@ -12,6 +12,5 @@ let vendors = {
   "nbys-Fashion": { lat: 25.301058, lng: 55.3759718, categories: ["Fashion"] },
   "nbys-Cosmetics": { lat: 25.301058, lng: 55.3759718, categories: ["Cosmetics"] },
   "nbys-Shoes": { lat: 25.301058, lng: 55.3759718, categories: ["Shoes"] },
-  "nbys-Cakes": { lat: 25.301058, lng: 55.3759718, categories: ["Cakes"] },
-  "Ajanth":{ lat :25.3010517, lng : 55.3758435, categories : ["Grocery"], image : "https://res.cloudinary.com/dhekmzldg/image/upload/v1755458596/hlz6w4choh1usxxtp8bh.jpg , uploaderId : AAA888 }
+  "nbys-Cakes": { lat: 25.301058, lng: 55.3759718, categories: ["Cakes"] }
   };
