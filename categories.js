@@ -75,5 +75,8 @@ const categoryUrls = {
             "stores": "https://order-1ib.pages.dev/Stores.html",
             "mobiles": "https://order-1ib.pages.dev/Mobiles.html",
             "laptops": "https://order-1ib.pages.dev/Laptops.html",
-            "tablets": "https://order-1ib.pages.dev/Tablets.html"
+            "tablets": "https://order-1ib.pages.dev/Tablets.html",
+            "smartwatches": "https://order-1ib.pages.dev/Smartwatches.html",
+            "appliences": "https://order-1ib.pages.dev/Appliences.html",
+            "accessories": "https://order-1ib.pages.dev/Accessories.html"
         };
