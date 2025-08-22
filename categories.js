@@ -73,5 +73,6 @@ const categoryUrls = {
             "Mi": "https://nearbysx.pages.dev/Mi.html",
             "Other-Laps": "https://nearbysx.pages.dev/OtherBrand-Laps.html",
             "stores": "https://order-1ib.pages.dev/Stores.html",
-            "mobiles": "https://order-1ib.pages.dev/Mobiles.html"
+            "mobiles": "https://order-1ib.pages.dev/Mobiles.html",
+            "laptops": "https://order-1ib.pages.dev/Laptops.html"
         };
