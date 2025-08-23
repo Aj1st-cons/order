@@ -18,7 +18,7 @@ let vendors = {
   "BestGiftsCenter": { lat: 25.300350, lng: 55.376534, categories: ["Grocery", "Electronics"] },
   "AlSahabMobile": { lat: 25.300671, lng: 55.376350, categories: ["Electronics"] },
   "NaqaaCafe": { lat: 25.300202, lng: 55.376650, categories: ["Cafeteria"] },
-  "NaqaaAlMadina": { lat: 25.300106, lng: 55.376435, categories: [""Grocery", "Electronics""] },
+  "NaqaaAlMadina": { lat: 25.300106, lng: 55.376435, categories: ["Grocery", "Electronics""] },
   "HelenBeautySalon": { lat: 25.300078, lng: 55.376300, categories: ["Salon"] },
   "AjmalTasty": { lat: 25.299663, lng: 55.376975, categories: ["Restaurant"] },
   "FitnessHour": { lat: 25.299849, lng: 55.376748, categories: ["Gym"] },
