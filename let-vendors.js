@@ -21,6 +21,7 @@ let vendors = {
   "NaqaaAlMadina": { lat: 25.300106, lng: 55.376435, categories: [""Grocery", "Electronics""] },
   "HelenBeautySalon": { lat: 25.300078, lng: 55.376300, categories: ["Salon"] },
   "AjmalTasty": { lat: 25.299663, lng: 55.376975, categories: ["Restaurant"] },
-  "XFitGymSwim": { lat: 25.299849, lng: 55.376748, categories: ["Electronics"] },
+  "FitnessHour": { lat: 25.299849, lng: 55.376748, categories: ["Gym"] },
+  "XFitGymSwim": { lat: 25.299848, lng: 55.376718, categories: ["Gym"] },
   "DaliaNursery": { lat: 25.299427, lng: 55.376764, categories: ["Nursery"] }  
 }
