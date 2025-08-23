@@ -14,6 +14,7 @@ let vendors = {
   "nbys-Shoes": { lat: 25.301058, lng: 55.3759718, categories: ["Shoes"] },
   "nbys-Cakes": { lat: 25.301058, lng: 55.3759718, categories: ["Cakes"] },
   "NovoPharmacy": { lat: 25.301091, lng: 55.376087, categories: ["Pharmacy"] },
-  "NoorAlAmeen": { lat: 25.300963, lng: 55.376158, categories: ["Grocery"] }
+  "NoorAlAmeen": { lat: 25.300963, lng: 55.376158, categories: ["Grocery"] },
+  "AlSahabMobile": { lat: 25.300671, lng: 55.376350, categories: ["Electronics"] }
 
 }
