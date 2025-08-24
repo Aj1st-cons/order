@@ -60,9 +60,11 @@ let vendors = {
 "AlWajbah": { lat: 25.301617, lng: 55.375354, categories: ["Cafeteria"] },
 "WowMomo": { lat: 25.301634, lng: 55.375298, categories: ["Cafeteria"] },
 "HotSpot": { lat: 25.301652, lng: 55.375222, categories: ["Cafeteria"] },
-"Texas": { lat: 25.301672, lng: 55.375151, categories: ["Business"] },
+"Texas": { lat: 25.301672, lng: 55.375151, categories: ["Businessmen"] },
 "AlFakir": { lat: 25.301685, lng: 55.375111, categories: ["Grocery"] },
-"ChinaPark": { lat: 25.301712, lng: 55.375012, categories: ["Restaurant"] }
+"ChinaPark": { lat: 25.301712, lng: 55.375012, categories: ["Restaurant"] },
+"Ashirwad": { lat: 25.301715, lng: 55.374983, categories: ["Restaurant"] },
+"MariaPaz": { lat: 25.301731, lng: 55.374931, categories: ["Bakery"] }
 }
 
   
