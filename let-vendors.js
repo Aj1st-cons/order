@@ -50,5 +50,6 @@ let vendors = {
   "DawaAlNahda": { lat: 25.300839, lng: 55.374463, categories: ["Pharmacy"] }, 
   "OrientGrill": { lat: 25.299831, lng: 55.375002, categories: ["Restaurant"] }, 
   "AlBatoolKey": { lat: 25.300892, lng: 55.374433, categories: ["Keys"] }, 
+  "AlNaQi": { lat: 25.300963, lng: 55.374387, categories: ["Electronics"] },
   "ManilaSM": { lat: 25.301025, lng: 55.374351, categories: ["Grocery"] }
 }
