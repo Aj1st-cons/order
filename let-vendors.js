@@ -41,7 +41,7 @@ let vendors = {
   "DarAlBasmah": { lat: 25.300091, lng: 55.375084, categories: ["Furniture"] }, 
   "AlTareeq": { lat: 25.300297, lng: 55.374979, categories: ["Grocery"] }, 
   "AfdhalKhabaz": { lat: 25.300321, lng: 55.374963, categories: ["Bakery"] }, 
-  "HootAl": { lat: 25.300514, lng: 55.374884, categories: ["Restaurant"] },   
+  "HootAlBahar": { lat: 25.300514, lng: 55.374884, categories: ["Restaurant"] },   
   "AlAndhima": { lat: 25.300397, lng: 55.374948, categories: ["Electronics"] }, 
   "GoldenCutting": { lat: 25.300582, lng: 55.374846, categories: ["Salon"] }, 
   "EyesOfBeauty": { lat: 25.300230, lng: 55.374756, categories: ["Salon"] }, 
