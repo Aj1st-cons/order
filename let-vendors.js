@@ -52,5 +52,17 @@ let vendors = {
   "AlBatoolKey": { lat: 25.300892, lng: 55.374433, categories: ["Keys"] }, 
   "AlNaQi": { lat: 25.300963, lng: 55.374387, categories: ["Electronics"] },
   "ManilaSM": { lat: 25.301025, lng: 55.374351, categories: ["Grocery"] },
-  "SmileTea": { lat: 25.300834, lng: 55.375310, categories: ["Cafeteria"] }
+  "SmileTea": { lat: 25.300834, lng: 55.375310, categories: ["Cafeteria"] },
+  "HelenBeauty2": { lat: 25.301465, lng: 55.375671, categories: ["Salon"] },
+"ShamsAlNahda": { lat: 25.301477, lng: 55.375610, categories: ["Pharmacy"] },
+"FanAlHayat": { lat: 25.301516, lng: 55.375501, categories: ["Grocery"] },
+"AlNajm": { lat: 25.301528, lng: 55.375416, categories: ["Grocery"] },
+"AlWajbah": { lat: 25.301617, lng: 55.375354, categories: ["Cafeteria"] },
+"WowMomo": { lat: 25.301634, lng: 55.375298, categories: ["Cafeteria"] },
+"HotSpot": { lat: 25.301652, lng: 55.375222, categories: ["Cafeteria"] },
+"Texas": { lat: 25.301672, lng: 55.375151, categories: ["Business"] },
+"AlFakir": { lat: 25.301685, lng: 55.375111, categories: ["Grocery"] },
+"ChinaPark": { lat: 25.301712, lng: 55.375012, categories: ["Restaurant"] }
 }
+
+  
