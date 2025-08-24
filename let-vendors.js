@@ -24,7 +24,7 @@ let vendors = {
   "FitnessHour": { lat: 25.299849, lng: 55.376748, categories: ["Gym"] },
   "XFitGymSwim": { lat: 25.299848, lng: 55.376718, categories: ["Gym"] },
   "MisterDapper": { lat: 25.300038, lng: 55.376232, categories: ["Salon"] }, 
-  "AlaModa": { lat: 25.300019, lng: 55.376157, categories: ["Fassion", "Shoes"] }, 
+  "AlaModa": { lat: 25.300019, lng: 55.376157, categories: ["Fasion", "Shoes"] }, 
   "AlShamal": { lat: 25.300015, lng: 55.376053, categories: ["Pharmacy"] }, 
   "DaliaNursery": { lat: 25.299427, lng: 55.376764, categories: ["Nursery"] }, 
   "ShareeAlWahda": { lat: 25.300037, lng: 55.376054, categories: ["Grocery"] }, 
