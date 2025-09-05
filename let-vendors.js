@@ -65,7 +65,7 @@ let vendors = {
 "ChinaPark": { lat: 25.301712, lng: 55.375012, categories: ["Restaurant"] },
 "Ashirwad": { lat: 25.301715, lng: 55.374983, categories: ["Restaurant"] },
 "MariaPaz": { lat: 25.301731, lng: 55.374931, categories: ["Bakery"] },
-"Althahbiahrest": { lat: 25.3428301, lng: 55.3939319, categories: ["Restaurant"] },
+"AlThahbiahRest": { lat: 25.3428301, lng: 55.3939319, categories: ["Restaurant"] },
   "Blackroseladies": { lat: 25.3427946, lng: 55.3939412, categories: ["Salon"] },
   "Syedalbiriyani": { lat: 25.3428775, lng: 55.3938986, categories: ["Restaurant"] },
   "Nooralforsan": { lat: 25.3427039, lng: 55.3942313, categories: ["Cosmetics"] },
