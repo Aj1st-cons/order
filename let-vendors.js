@@ -67,7 +67,7 @@ let vendors = {
 "MariaPaz": { lat: 25.301731, lng: 55.374931, categories: ["Bakery"] },
 "AlThahbiahRest": { lat: 25.3428301, lng: 55.3939319, categories: ["Restaurant"] },
   "BlackRoseLadies": { lat: 25.3427946, lng: 55.3939412, categories: ["Salon"] },
-  "SyedAlBiriyani": { lat: 25.3428775, lng: 55.3938986, categories: ["Restaurant"] },
+  "Syedalbiriyani": { lat: 25.3428775, lng: 55.3938986, categories: ["Restaurant"] },
   "Nooralforsan": { lat: 25.3427039, lng: 55.3942313, categories: ["Cosmetics"] },
   "Madina": { lat: 25.3426443, lng: 55.3931101, categories: ["Grocery"] },
   "Alhadaieq": { lat: 25.3429442, lng: 55.3923457, categories: ["Restaurant"] },
@@ -106,8 +106,16 @@ let vendors = {
   "Mohammadsharif": { lat: 25.3434335, lng: 55.3942758, categories: ["Tailors"] },
   "Vegetarianworld": { lat: 25.3433126, lng: 55.394539, categories: ["Restaurant"] },
   "Alzatarspices": { lat: 25.3430082, lng: 55.3946585, categories: ["Grocery"] },
-  "Alshaheen": { lat: 25.3428779, lng: 55.3947598, categories: ["Grocery"] }
+  "Alshaheen": { lat: 25.3428779, lng: 55.3947598, categories: ["Grocery"] },
+  "Alruknfashions": { lat: 25.3430536, lng: 55.3947566, categories: ["Fashion"] },
+  "Nouhsupermarket": { lat: 25.3422712, lng: 55.3941671, categories: ["Grocery"] },
+  "Almadinasuper": { lat: 25.3422979, lng: 55.3940736, categories: ["Grocery"] },
+  "Ruchikottu": { lat: 25.3421858, lng: 55.3941788, categories: ["Restaurant"] },
+  "Rosesdeeladiess": { lat: 25.3420876, lng: 55.3940297, categories: ["Salon"] },
+  "Alkhalililaunde": { lat: 25.341817, lng: 55.3936362, categories: ["Laundry"] },
+  "Shuaaalmadina": { lat: 25.3427212, lng: 55.3928169, categories: ["Grocery"] },
+  "Teacampcafeteri": { lat: 25.3425698, lng: 55.3922995, categories: ["Cafeteria"] },
+  "Istanbul": { lat: 25.3424619, lng: 55.3922593, categories: ["Grocery"] },
+  "Alarbaanawaeer": { lat: 25.3433327, lng: 55.3930495, categories: ["Grocery"] },
+  "Hyderabadiz": { lat: 25.3434624, lng: 55.3928154, categories: ["Restaurant"] }
 };
-}
-
-  
