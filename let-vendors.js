@@ -117,5 +117,14 @@ let vendors = {
   "TeaCamp": { lat: 25.3425698, lng: 55.3922995, categories: ["Cafeteria"] },
   "Istanbul": { lat: 25.3424619, lng: 55.3922593, categories: ["Grocery"] },
   "AlArbaaNawaeer": { lat: 25.3433327, lng: 55.3930495, categories: ["Grocery"] },
-  "VivaQasmiya": { lat: 25.3434624, lng: 55.3928154, categories: ["Restaurant"] }
-};
+  "VivaQasmiya": { lat: 25.3434624, lng: 55.3928154, categories: ["Restaurant"] },
+  "nbys": { lat: 25.301058, lng: 55.3759718, categories: [""] },
+  "nbys-Grocery": { lat: 25.301058, lng: 55.3759718, categories: ["Grocery"] },
+  "nbys-Cafeteria": { lat: 25.301058, lng: 55.3759718, categories: ["Cafeteria"] },
+  "nbys-Restaurant": { lat: 25.301058, lng: 55.3759718, categories: ["Restaurant"] },
+  "nbys-Electronics": { lat: 25.301058, lng: 55.3759718, categories: ["Electronics"] },
+  "nbys-Fashion": { lat: 25.301058, lng: 55.3759718, categories: ["Fashion"] },
+  "nbys-Cosmetics": { lat: 25.301058, lng: 55.3759718, categories: ["Cosmetics"] },
+  "nbys-Shoes": { lat: 25.301058, lng: 55.3759718, categories: ["Shoes"] },
+  "nbys-Cakes": { lat: 25.301058, lng: 55.3759718, categories: ["Cakes"] }
+}
