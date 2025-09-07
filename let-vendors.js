@@ -119,7 +119,7 @@ let vendors = {
   "AlArbaaNawaeer": { lat: 25.3433327, lng: 55.3930495, categories: ["Grocery"] },
   "VivaQasmiya": { lat: 25.3434624, lng: 55.3928154, categories: ["Restaurant"] },
   "nbys": { lat: 25.34528, lng: 55.3920231, categories: [""] },
-  "nbys-Grocery": { lat: 25.34528, lng: 55.3920231, categories: ["Grocery"] },
+  
   "nbys-Cafeteria": { lat: 25.34528, lng: 55.3920231, categories: ["Cafeteria"] },
   "nbys-Restaurant": { lat: 25.34528, lng: 55.3920231, categories: ["Restaurant"] },
   "nbys-Electronics": { lat: 25.34528, lng: 55.3920231, categories: ["Electronics"] },
@@ -128,7 +128,7 @@ let vendors = {
   "nbys-Shoes": { lat: 25.34528, lng: 55.3920231, categories: ["Shoes"] },
   "nbys-Cakes": { lat: 25.34528, lng: 55.3920231, categories: ["Cakes"] },
   "nbys": { lat: 25.3433126, lng: 55.394539, categories: [""] },
-  "nbys-Grocery": { lat: 25.3433126, lng: 55.394539, categories: ["Grocery"] },
+  
   "nbys-Cafeteria": { lat: 25.3433126, lng: 55.394539, categories: ["Cafeteria"] },
   "nbys-Restaurant": { lat: 25.3433126, lng: 55.394539, categories: ["Restaurant"] },
   "nbys-Electronics": { lat: 25.3433126, lng: 55.394539, categories: ["Electronics"] },
