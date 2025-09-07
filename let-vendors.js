@@ -4,15 +4,60 @@ let vendors = {
   "Occations": { lat: 25.3006599, lng: 55.3750735, categories: ["Cakes"] },
   "Rapid": { lat: 25.3018266, lng: 55.378627, categories: ["Salon"] },
   "AlRas": { lat: 25.3006599, lng: 55.3750735, categories: ["Salon"] },
-  "nbys": { lat: 25.301058, lng: 55.3759718, categories: [""] },
-  "nbys-Grocery": { lat: 25.301058, lng: 55.3759718, categories: ["Grocery"] },
-  "nbys-Cafeteria": { lat: 25.301058, lng: 55.3759718, categories: ["Cafeteria"] },
-  "nbys-Restaurant": { lat: 25.301058, lng: 55.3759718, categories: ["Restaurant"] },
-  "nbys-Electronics": { lat: 25.301058, lng: 55.3759718, categories: ["Electronics"] },
-  "nbys-Fashion": { lat: 25.301058, lng: 55.3759718, categories: ["Fashion"] },
-  "nbys-Cosmetics": { lat: 25.301058, lng: 55.3759718, categories: ["Cosmetics"] },
-  "nbys-Shoes": { lat: 25.301058, lng: 55.3759718, categories: ["Shoes"] },
-  "nbys-Cakes": { lat: 25.301058, lng: 55.3759718, categories: ["Cakes"] },
+  // Grouped NBYS branches
+  "nbys": {
+    branch1: { lat: 25.301058, lng: 55.3759718, categories: [] },
+    branch2: { lat: 25.34528, lng: 55.3920231, categories: [] },
+    branch3: { lat: 25.3433126, lng: 55.394539, categories: [] }
+  },
+
+  "nbys-Grocery": {
+    branch1: { lat: 25.301058, lng: 55.3759718, categories: ["Grocery"] },
+    branch2: { lat: 25.34528, lng: 55.3920231, categories: ["Grocery"] }
+  },
+
+  "nbys-Cafeteria": {
+    branch1: { lat: 25.301058, lng: 55.3759718, categories: ["Cafeteria"] },
+    branch2: { lat: 25.34528, lng: 55.3920231, categories: ["Cafeteria"] },
+    branch3: { lat: 25.3433126, lng: 55.394539, categories: ["Cafeteria"] }
+  },
+
+  "nbys-Restaurant": {
+    branch1: { lat: 25.301058, lng: 55.3759718, categories: ["Restaurant"] },
+    branch2: { lat: 25.34528, lng: 55.3920231, categories: ["Restaurant"] },
+    branch3: { lat: 25.3433126, lng: 55.394539, categories: ["Restaurant"] }
+  },
+
+  "nbys-Electronics": {
+    branch1: { lat: 25.301058, lng: 55.3759718, categories: ["Electronics"] },
+    branch2: { lat: 25.34528, lng: 55.3920231, categories: ["Electronics"] },
+    branch3: { lat: 25.3433126, lng: 55.394539, categories: ["Electronics"] }
+  },
+
+  "nbys-Fashion": {
+    branch1: { lat: 25.301058, lng: 55.3759718, categories: ["Fashion"] },
+    branch2: { lat: 25.34528, lng: 55.3920231, categories: ["Fashion"] },
+    branch3: { lat: 25.3433126, lng: 55.394539, categories: ["Fashion"] }
+  },
+
+  "nbys-Cosmetics": {
+    branch1: { lat: 25.301058, lng: 55.3759718, categories: ["Cosmetics"] },
+    branch2: { lat: 25.34528, lng: 55.3920231, categories: ["Cosmetics"] },
+    branch3: { lat: 25.3433126, lng: 55.394539, categories: ["Cosmetics"] }
+  },
+
+  "nbys-Shoes": {
+    branch1: { lat: 25.301058, lng: 55.3759718, categories: ["Shoes"] },
+    branch2: { lat: 25.34528, lng: 55.3920231, categories: ["Shoes"] },
+    branch3: { lat: 25.3433126, lng: 55.394539, categories: ["Shoes"] }
+  },
+
+  "nbys-Cakes": {
+    branch1: { lat: 25.301058, lng: 55.3759718, categories: ["Cakes"] },
+    branch2: { lat: 25.34528, lng: 55.3920231, categories: ["Cakes"] },
+    branch3: { lat: 25.3433126, lng: 55.394539, categories: ["Cakes"] }
+  },
+
   "NovoPharmacy": { lat: 25.301091, lng: 55.376087, categories: ["Pharmacy"] },
   "NoorAlAmeen": { lat: 25.300963, lng: 55.376158, categories: ["Grocery"] },
   "BestGiftsCenter": { lat: 25.300350, lng: 55.376534, categories: ["Grocery", "Electronics","Fashion", "Shoes" ] },
@@ -117,23 +162,5 @@ let vendors = {
   "TeaCamp": { lat: 25.3425698, lng: 55.3922995, categories: ["Cafeteria"] },
   "Istanbul": { lat: 25.3424619, lng: 55.3922593, categories: ["Grocery"] },
   "AlArbaaNawaeer": { lat: 25.3433327, lng: 55.3930495, categories: ["Grocery"] },
-  "VivaQasmiya": { lat: 25.3434624, lng: 55.3928154, categories: ["Restaurant"] },
-  "nbys": { lat: 25.34528, lng: 55.3920231, categories: [""] },
-  "nbys-Grocery": { lat: 25.34528, lng: 55.3920231, categories: ["Grocery"] },
-  "nbys-Cafeteria": { lat: 25.34528, lng: 55.3920231, categories: ["Cafeteria"] },
-  "nbys-Restaurant": { lat: 25.34528, lng: 55.3920231, categories: ["Restaurant"] },
-  "nbys-Electronics": { lat: 25.34528, lng: 55.3920231, categories: ["Electronics"] },
-  "nbys-Fashion": { lat: 25.34528, lng: 55.3920231, categories: ["Fashion"] },
-  "nbys-Cosmetics": { lat: 25.34528, lng: 55.3920231, categories: ["Cosmetics"] },
-  "nbys-Shoes": { lat: 25.34528, lng: 55.3920231, categories: ["Shoes"] },
-  "nbys-Cakes": { lat: 25.34528, lng: 55.3920231, categories: ["Cakes"] },
-  "nbys": { lat: 25.3433126, lng: 55.394539, categories: [""] },
-  "nbys-Grocery": { lat: 25.34528, lng: 55.3920231, categories: ["Grocery"] },
-  "nbys-Cafeteria": { lat: 25.3433126, lng: 55.394539, categories: ["Cafeteria"] },
-  "nbys-Restaurant": { lat: 25.3433126, lng: 55.394539, categories: ["Restaurant"] },
-  "nbys-Electronics": { lat: 25.3433126, lng: 55.394539, categories: ["Electronics"] },
-  "nbys-Fashion": { lat: 25.3433126, lng: 55.394539, categories: ["Fashion"] },
-  "nbys-Cosmetics": { lat: 25.3433126, lng: 55.394539, categories: ["Cosmetics"] },
-  "nbys-Shoes": { lat: 25.3433126, lng: 55.394539, categories: ["Shoes"] },
-  "nbys-Cakes": { lat: 25.3433126, lng: 55.394539, categories: ["Cakes"] }
+  "VivaQasmiya": { lat: 25.3434624, lng: 55.3928154, categories: ["Restaurant"] }
 }
