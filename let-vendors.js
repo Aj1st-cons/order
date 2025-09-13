@@ -1,3 +1,4 @@
+
 let vendors = {  
   "DawarAlDhaid": { lat: 25.300490, lng: 55.376445, categories: ["Cosmetics"] },
   "BestCafe": { lat: 25.300452, lng: 55.376473, categories: ["Cafeteria"] },
@@ -106,7 +107,6 @@ let vendors = {
   "MohammadSharif": { lat: 25.3434335, lng: 55.3942758, categories: ["Tailors"] },
   "VegetarianWorld": { lat: 25.3433126, lng: 55.394539, categories: ["Restaurant"] },
   "AlzatarSpices": { lat: 25.3430082, lng: 55.3946585, categories: ["Grocery"] },
-  "AlShaheen": { lat: 25.3428779, lng: 55.3947598, categories: ["Grocery"] },
   "AlRuknFashions": { lat: 25.3430536, lng: 55.3947566, categories: ["Fashion"] },
   "NouhSupermarket": { lat: 25.3422712, lng: 55.3941671, categories: ["Grocery"] },
   "AlMadinaSuper": { lat: 25.3422979, lng: 55.3940736, categories: ["Grocery"] },
@@ -127,6 +127,7 @@ let vendors = {
   "nbys-Cosmetics": { lat: 25.3433327, lng: 55.3930495, categories: ["Cosmetics"] },
   "nbys-Shoes": { lat: 25.3433327, lng: 55.3930495, categories: ["Shoes"] },
   "nbys-Cakes": { lat: 25.3433327, lng: 55.3930495, categories: ["Cakes"] },
+  "AlShaheen": { lat: 25.3428779, lng: 55.3947598, categories: ["Grocery"] },
   "TareeqAlFalak": { lat: 25.3427786, lng: 55.3943809, categories: ["Electronics"] },
   "WadiSalalah": { lat: 25.3424405, lng: 55.3942964, categories: ["Electronics"] },
   "ThareeqAlRamtha": { lat: 25.3439153, lng: 55.3920511, categories: ["Electronics"] },
