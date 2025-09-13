@@ -1,4 +1,3 @@
-
 let vendors = {  
   "DawarAlDhaid": { lat: 25.300490, lng: 55.376445, categories: ["Cosmetics"] },
   "BestCafe": { lat: 25.300452, lng: 55.376473, categories: ["Cafeteria"] },
