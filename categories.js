@@ -12,6 +12,7 @@ const categoryUrls = {
             "beverages": "https://order-1ib.pages.dev/Beverages.html",           
             "delicatessen": "https://order-1ib.pages.dev/Delicatessen.html",
             "eggs": "https://order-1ib.pages.dev/Eggs.html",
+            "eggs & dairy": "https://order-1ib.pages.dev/Eggs & Dairy.html",
             "meat": "https://order-1ib.pages.dev/Meat.html",
             "bakery": "https://order-1ib.pages.dev/Bakery.html",
             "spices": "https://order-1ib.pages.dev/Spices.html",
