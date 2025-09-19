@@ -43,28 +43,23 @@ let vendors = {
   "PinkTouch": { lat: 25.3443493, lng: 55.3916349, categories: ["Fashion"] },
   "AlSorourBakery": { lat: 25.3437422, lng: 55.3938773, categories: ["Cakes"] },
   "MohammadSharif": { lat: 25.3434335, lng: 55.3942758, categories: ["Tailors"] },
-  "RosesDew": { lat: 25.3420876, lng: 55.3940297, categories: ["Beauty Salon"] },
-  
+  "RosesDew": { lat: 25.3420876, lng: 55.3940297, categories: ["Beauty Salon"] }, 
   "nbys": { lat: 25.3464765, lng: 55.3947598, categories: [] },
   "nbys-Grocery": { lat: 25.3464765, lng: 55.3947598, categories: ["Grocery"] },
   "nbys-Cafeteria": { lat: 25.3464765, lng: 55.3947598, categories: ["Cafeteria"] },
   "nbys-Restaurant": { lat: 25.3464765, lng: 55.3947598, categories: ["Restaurant"] },
-  
   "nbys002": { lat: 25.3428779, lng: 55.3993052, categories: [] },
   "nbys002-Grocery": { lat: 25.3428779, lng: 55.3993052, categories: ["Grocery"] },
   "nbys002-Cafeteria": { lat: 25.3428779, lng: 55.3993052, categories: ["Cafeteria"] },
   "nbys002-Restaurant": { lat: 25.3428779, lng: 55.3993052, categories: ["Restaurant"] },
-  
   "nbys003": { lat: 25.3392793, lng: 55.3947598, categories: [] },
   "nbys003-Grocery": { lat: 25.3392793, lng: 55.3947598, categories: ["Grocery"] },
   "nbys003-Cafeteria": { lat: 25.3392793, lng: 55.3947598, categories: ["Cafeteria"] },
   "nbys003-Restaurant": { lat: 25.3392793, lng: 55.3947598, categories: ["Restaurant"] },
-  
   "nbys004": { lat: 25.3428779, lng: 55.3902144, categories: [] },
   "nbys004-Grocery": { lat: 25.3428779, lng: 55.3902144, categories: ["Grocery"] },
   "nbys004-Cafeteria": { lat: 25.3428779, lng: 55.3902144, categories: ["Cafeteria"] },
   "nbys004-Restaurant": { lat: 25.3428779, lng: 55.3902144, categories: ["Restaurant"] },
-  
   "AlShaheen": { lat: 25.3428779, lng: 55.3947598, categories: ["Grocery"] },
   "ThareeqAlRamtha": { lat: 25.3439153, lng: 55.3920511, categories: ["Electronics"] },
   "ShiningPoint": { lat: 25.3440098, lng: 55.3918451, categories: ["Electronics"] },
