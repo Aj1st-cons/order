@@ -49,11 +49,11 @@ let vendors = {
   "nbys-Grocery": { lat: 25.3464765, lng: 55.3947598, categories: ["Grocery"] },
   "nbys-Cafeteria": { lat: 25.3464765, lng: 55.3947598, categories: ["Cafeteria"] },
   "nbys-Restaurant": { lat: 25.3464765, lng: 55.3947598, categories: ["Restaurant"] },
-  
-  "nbys006": { lat: 25.3428779, lng: 55.3993052, categories: [] },
-  "nbys006-Grocery": { lat: 25.3428779, lng: 55.3993052, categories: ["Grocery"] },
-  "nbys006-Cafeteria": { lat: 25.3428779, lng: 55.3993052, categories: ["Cafeteria"] },
-  "nbys006-Restaurant": { lat: 25.3428779, lng: 55.3993052, categories: ["Restaurant"] },
+
+  "nbys002": { lat: 25.3428779, lng: 55.3902144, categories: [] },
+  "nbys002-Grocery": { lat: 25.3428779, lng: 55.3902144, categories: ["Grocery"] },
+  "nbys002-Cafeteria": { lat: 25.3428779, lng: 55.3902144, categories: ["Cafeteria"] },
+  "nbys002-Restaurant": { lat: 25.3428779, lng: 55.3902144, categories: ["Restaurant"] },
   
   "nbys003": { lat: 25.344675, lng: 55.392482, categories: [] },
   "nbys003-Grocery": { lat: 25.344675, lng: 55.392482, categories: ["Grocery"] },
@@ -70,10 +70,20 @@ let vendors = {
   "nbys005-Cafeteria": { lat: 25.3392793, lng: 55.3947598, categories: ["Cafeteria"] },
   "nbys005-Restaurant": { lat: 25.3392793, lng: 55.3947598, categories: ["Restaurant"] },
 
-  "nbys002": { lat: 25.3428779, lng: 55.3902144, categories: [] },
-  "nbys002-Grocery": { lat: 25.3428779, lng: 55.3902144, categories: ["Grocery"] },
-  "nbys002-Cafeteria": { lat: 25.3428779, lng: 55.3902144, categories: ["Cafeteria"] },
-  "nbys002-Restaurant": { lat: 25.3428779, lng: 55.3902144, categories: ["Restaurant"] },
+  "nbys006": { lat: 25.3428779, lng: 55.3993052, categories: [] },
+  "nbys006-Grocery": { lat: 25.3428779, lng: 55.3993052, categories: ["Grocery"] },
+  "nbys006-Cafeteria": { lat: 25.3428779, lng: 55.3993052, categories: ["Cafeteria"] },
+  "nbys006-Restaurant": { lat: 25.3428779, lng: 55.3993052, categories: ["Restaurant"] },
+
+  "nbys201": { lat: 25.301068, lng: 55.374075, categories: [] },
+  "nbys201-Grocery": { lat: 25.301068, lng: 55.374075, categories: ["Grocery"] },
+  "nbys201-Cafeteria": { lat: 25.301068, lng: 55.374075, categories: ["Cafeteria"] },
+  "nbys201-Restaurant": { lat: 25.301068, lng: 55.374075, categories: ["Restaurant"] },
+
+  "nbys202": { lat: 25.301054, lng: 55.370131, categories: [] },
+  "nbys202-Grocery": { lat: 25.301054, lng: 55.370131, categories: ["Grocery"] },
+  "nbys202-Cafeteria": { lat: 25.301054, lng: 55.370131, categories: ["Cafeteria"] },
+  "nbys202-Restaurant": { lat: 25.301054, lng: 55.370131, categories: ["Restaurant"] },
   
   "AlShaheen": { lat: 25.3428779, lng: 55.3947598, categories: ["Grocery"] },
   "ThareeqAlRamtha": { lat: 25.3439153, lng: 55.3920511, categories: ["Electronics"] },
