@@ -44,7 +44,7 @@ let vendors = {
   "AlSorourBakery": { lat: 25.3437422, lng: 55.3938773, categories: ["Cakes"] },
   "MohammadSharif": { lat: 25.3434335, lng: 55.3942758, categories: ["Tailors"] },
   "RosesDew": { lat: 25.3420876, lng: 55.3940297, categories: ["Beauty Salon"] },  
-  "nbys": { lat: 25.3464765, lng: 55.3947598, categories: [] },
+  "nbys": { lat: 25.3464765, lng: 55.3947598, categories: ["Grocery"] },
   "nbys-Grocery": { lat: 25.3464765, lng: 55.3947598, categories: ["Grocery"] },
   "nbys-Cafeteria": { lat: 25.3464765, lng: 55.3947598, categories: ["Cafeteria"] },
   "nbys-Restaurant": { lat: 25.3464765, lng: 55.3947598, categories: ["Restaurant"] }, 
