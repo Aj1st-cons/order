@@ -75,10 +75,10 @@ let vendors = {
   "nbys006-Cafeteria": { lat: 25.3428779, lng: 55.3993052, categories: ["Cafeteria"] },
   "nbys006-Restaurant": { lat: 25.3428779, lng: 55.3993052, categories: ["Restaurant"] },
 
-  "nbys201": { Lat: 25.300552, Lng: 55.375848, categories: [] },
-  "nbys201-Grocery": { lat: 25.300552, lng: 55.375848, categories: ["Grocery"] },
-  "nbys201-Cafeteria": { lat: 25.300552, lng: 55.375848, categories: ["Cafeteria"] },
-  "nbys201-Restaurant": { lat: 25.300552, lng: 55.375848, categories: ["Restaurant"] },
+  "nbys201": { Lat: 25.300310, Lng: 55.375300, categories: [] },
+  "nbys201-Grocery": { lat: 25.300310, lng: 55.375300, categories: ["Grocery"] },
+  "nbys201-Cafeteria": { lat: 25.300310, lng: 55.375300, categories: ["Cafeteria"] },
+  "nbys201-Restaurant": { lat: 25.300310, lng: 55.375300, categories: ["Restaurant"] },
 
   "nbys202": { lat: 25.301054, lng: 55.370131, categories: [] },
   "nbys202-Grocery": { lat: 25.301054, lng: 55.370131, categories: ["Grocery"] },
