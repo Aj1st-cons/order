@@ -50,10 +50,10 @@ let vendors = {
   "nbys201-Cafeteria": { lat: 25.344675, lng: 55.392482, categories: ["Cafeteria"] },
   "nbys201-Restaurant": { lat: 25.344675, lng: 55.392482, categories: ["Restaurant"] },
   
-  "nbys201": { lat: 25.300310, lng: 55.375300, categories: [] },
-  "nbys201-Grocery": { lat: 25.300310, lng: 55.375300, categories: ["Grocery"] },
-  "nbys201-Cafeteria": { lat: 25.300310, lng: 55.375300, categories: ["Cafeteria"] },
-  "nbys201-Restaurant": { lat: 25.300310, lng: 55.375300, categories: ["Restaurant"] },
+  "nbys202": { lat: 25.300310, lng: 55.375300, categories: [] },
+  "nbys202-Grocery": { lat: 25.300310, lng: 55.375300, categories: ["Grocery"] },
+  "nbys202-Cafeteria": { lat: 25.300310, lng: 55.375300, categories: ["Cafeteria"] },
+  "nbys202-Restaurant": { lat: 25.300310, lng: 55.375300, categories: ["Restaurant"] },
 
   "AlShaheen": { lat: 25.3428779, lng: 55.3947598, categories: ["Grocery"] },
   "ThareeqAlRamtha": { lat: 25.3439153, lng: 55.3920511, categories: ["Electronics"] },
