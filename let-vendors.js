@@ -55,5 +55,5 @@ let vendors = {
   "nbys202-Cafeteria": { lat: 25.300310, lng: 55.375300, categories: ["Cafeteria"] },
   "nbys202-Restaurant": { lat: 25.300310, lng: 55.375300, categories: ["Restaurant"] },
 
-  "AlShaheen": { lat: 25.3428779, lng: 55.3947598, categories: ["Grocery"] }
+  "AlShaheen": { lat: 255.3428779, lng: 55.3947598, categories: ["Grocery"] }
 }
