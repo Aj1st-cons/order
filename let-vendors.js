@@ -49,6 +49,7 @@ let vendors = {
   "nbys201-Grocery": { lat: 25.344675, lng: 55.392482, categories: ["Grocery"] },
   "nbys201-Cafeteria": { lat: 25.344675, lng: 55.392482, categories: ["Cafeteria"] },
   "nbys201-Restaurant": { lat: 25.344675, lng: 55.392482, categories: ["Restaurant"] },
+  "nbys-veg": { lat: 25.344675, lng: 55.392482, categories: ["Grocery"] },
   
   "nbys202": { lat: 25.300310, lng: 55.375300, categories: [] },
   "nbys202-Grocery": { lat: 25.300310, lng: 55.375300, categories: ["Grocery"] },
