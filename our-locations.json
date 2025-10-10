@@ -1,52 +1,7 @@
 [
-  {
-    "name": "Qasmiya, Sharjah",
-    "lat": 25.343289,
-    "lon": 55.392822
-  },
-  {
-    "name": "Al Nadah, Sharjah",
-    "lat": 25.302686,
-    "lon": 55.375371
-  },
-  {
-    "name": "Abu Shagara, Sharjah",
-    "lat": 25.343289,
-    "lon": 55.397792
-  }, 
-  {
-    "name": "Coming Soon",
-    "lat": 25.200000,
-    "lon": 55.400000
-  },
-  {
-    "name": "Coming Soon",
-    "lat": 25.250000,
-    "lon": 55.350000
-  },
-  {
-    "name": "Coming Soon",
-    "lat": 25.250000,
-    "lon": 55.350000
-  },
-  {
-    "name": "Coming Soon",
-    "lat": 25.250000,
-    "lon": 55.350000
-  },
-  {
-    "name": "Coming Soon",
-    "lat": 25.250000,
-    "lon": 55.350000
-  },
-  {
-    "name": "Coming Soon",
-    "lat": 25.250000,
-    "lon": 55.350000
-  },
-  {
-    "name": "Coming Soon",
-    "lat": 25.250000,
-    "lon": 55.350000
-  }
+  { "name": "Qasmiya, SHJ", "lat": 25.343289,"lon": 55.392822 },
+  { "name": "Al Nadah, SHJ", "lat": 25.302686, "lon": 55.375371 },
+  { "name": "Abu Shagara, SHJ", "lat": 25.343289, "lon": 55.397792 }, 
+  { "name": "Coming Soon", "lat": 25.200000, "lon": 55.400000 },
+  { "name": "Coming Soon", "lat": 25.200000, "lon": 55.400000 }
 ]
