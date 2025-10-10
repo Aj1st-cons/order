@@ -40,7 +40,7 @@ let vendors = {
   "GoodLifeReady": { lat: 255.3427636, lng: 55.3915915, categories: ["Fashion"] },
   "CityBurger": { lat: 25.3435662, lng: 55.3920218, categories: ["Cafeteria"] },
   "GreenMoon": { lat: 25.3436724, lng: 55.3922138, categories: ["Grocery"] },
-  "PinkTouch": { lat: 255.3443493, lng: 55.3916349, categories: ["Fashion"] },
+  "SoftCotton": { lat: 25.3443493, lng: 55.3916349, categories: ["Fashion"] },
   "AlSorourBakery": { lat: 25.3437422, lng: 55.3938773, categories: ["Cakes"] },
   "MohammadSharif": { lat: 25.3434335, lng: 55.3942758, categories: ["Tailors"] },
   "RosesDew": { lat: 25.3420876, lng: 55.3940297, categories: ["Beauty Salon"] }, 
@@ -59,5 +59,5 @@ let vendors = {
 
   "AlShaheen": { lat: 255.3428779, lng: 55.3947598, categories: ["Grocery"] },
   "AlRawahil": { lat: 25.343817, lng: 55.393955, categories: ["Studio"] },
-  "SoftCotton": { lat: 25.343817, lng: 55.393955, categories: ["Fashion"] }
+  "SoftCotton2": { lat: 25.343817, lng: 55.393955, categories: ["Fashion"] }
 }
