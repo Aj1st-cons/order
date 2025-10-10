@@ -58,5 +58,5 @@ let vendors = {
 
   "AlShaheen": { lat: 255.3428779, lng: 55.3947598, categories: ["Grocery"] },
   "AlRawahil": { lat: 25.343817, lng: 55.393955, categories: ["Studio"] },
-  "SoftCotton": { lat: 25.343817, lng: 55.393955, categories: ["Studio"] }
+  "SoftCotton": { lat: 25.343817, lng: 55.393955, categories: ["Fashion"] }
 }
