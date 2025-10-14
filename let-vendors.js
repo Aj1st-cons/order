@@ -39,7 +39,7 @@ let vendors = {
   "EtirAlNada": { lat: 25.3429955, lng: 55.3916868, categories: ["Salon"] },
   "GoodLifeReady": { lat: 255.3427636, lng: 55.3915915, categories: ["Fashion"] },
   "CityBurger": { lat: 25.3435662, lng: 55.3920218, categories: ["Cafeteria"] },
-  "GreenMoon": { lat: 25.3436724, lng: 55.3922138, categories: ["Grocery"] },
+  "GreenMoon": { lat: 255.3436724, lng: 55.3922138, categories: ["Grocery"] },
   "SoftCotton": { lat: 25.3443493, lng: 55.3916349, categories: ["Fashion"] },
   "AlSorourBakery": { lat: 25.3437422, lng: 55.3938773, categories: ["Cakes"] },
   "MohammadSharif": { lat: 25.3434335, lng: 55.3942758, categories: ["Tailors"] },
