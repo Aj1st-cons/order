@@ -46,7 +46,7 @@ let vendors = {
   "RosesDew": { lat: 25.3420876, lng: 55.3940297, categories: ["Beauty Salon"] }, 
   
   "nbys201": { lat: 25.344675, lng: 55.392482, categories: [] },
-  "AlShaheen": { lat: 25.344675, lng: 55.392482, categories: ["Grocery"] },
+  "xx": { lat: 25.344675, lng: 55.392482, categories: ["Grocery"] },
   "nbys201-Cafeteria": { lat: 25.344675, lng: 55.392482, categories: ["Cafeteria"] },
   "nbys201-Restaurant": { lat: 25.344675, lng: 55.392482, categories: ["Restaurant"] },
   "nbys-veg": { lat: 255.344675, lng: 55.392482, categories: ["Grocery"] },
@@ -57,7 +57,7 @@ let vendors = {
   "nbys202-Cafeteria": { lat: 25.300310, lng: 55.375300, categories: ["Cafeteria"] },
   "nbys202-Restaurant": { lat: 25.300310, lng: 55.375300, categories: ["Restaurant"] },
 
-  "AlShaheen2": { lat: 255.3428779, lng: 55.3947598, categories: ["Grocery"] },
+  "AlShaheen": { lat: 255.3428779, lng: 55.3947598, categories: ["Grocery"] },
   "AlRawahil": { lat: 25.343817, lng: 55.393955, categories: ["Studio"] },
   "SoftCotton2": { lat: 25.343817, lng: 55.393955, categories: ["Fashion"] }
 }
